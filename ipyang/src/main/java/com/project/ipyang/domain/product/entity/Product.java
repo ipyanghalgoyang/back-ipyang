@@ -4,6 +4,7 @@ import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.product.entity.Product_Img;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,11 +45,4 @@ public class Product extends BaseEntity {
 
     @OneToMany(mappedBy = "product")
     private List<Product_Img> product_imgs = new ArrayList<>();
-
-
-
-
-
-
-
 }

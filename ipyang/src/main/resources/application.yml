@@ -9,7 +9,7 @@ spring:
         format_sql: true
     open-in-view: false
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 
 ########### ?? DB ??(H2)####################
   h2:
