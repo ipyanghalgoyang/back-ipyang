@@ -43,7 +43,7 @@ public class Inquire {   //문의게시판
     private Member member;
 
 
-    @OneToMany(mappedBy = "inquire_img")
+    @OneToMany(mappedBy = "inquire")
     private List<Inquire_Img> inquire_imgs = new ArrayList<>();
 
 

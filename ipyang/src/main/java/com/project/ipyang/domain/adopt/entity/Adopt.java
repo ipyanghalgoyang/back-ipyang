@@ -19,10 +19,6 @@ public class Adopt {
     @Column(name = "adopt_id")
     private Long id;
 
-
-
-
-
     @Column(name = "a_title")
     private String title;
 
@@ -64,10 +60,11 @@ public class Adopt {
     @JoinColumn(name = "cat_id")
     private CatType catType;
 
-    @OneToMany(mappedBy = "adopt_img")
+    @OneToMany(mappedBy = "adopt")
+    @OrderColumn(name = "adopt_img_order")
     private List<Adopt_Img> adopt_imgs = new ArrayList<>();
 
-    @OneToMany(mappedBy = "apply")
+    @OneToMany(mappedBy = "adopt")
     private List<Apply> applies = new ArrayList<>();
 
 
