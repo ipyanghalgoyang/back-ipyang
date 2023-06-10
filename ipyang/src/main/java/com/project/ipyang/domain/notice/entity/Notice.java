@@ -35,6 +35,6 @@ public class Notice {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "notice_img")
+    @OneToMany(mappedBy = "notice")
     private List<Notice_Img> notice_imgs = new ArrayList<>();
 }

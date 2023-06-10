@@ -52,31 +52,34 @@ public class Member extends BaseEntity {
     @Column(name = "m_img_context")
     private String img_context;
 
-    @Column(name = "m_original_fil  e")
+    @Column(name = "m_original_file")
     private String original_file;
 
     @Column(name = "m_img_stored_file")
     private String img_stored_file;
 
-    @OneToMany(mappedBy = "point")
+    @OneToMany(mappedBy = "member")
     private List<Point> points = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "member")
     private List<Product> products = new ArrayList<>();
 
-     @OneToMany(mappedBy = "board")
+     @OneToMany(mappedBy = "member")
     private List<Board> boards = new ArrayList<>();
 
-     @OneToMany(mappedBy = "inquire")
+     @OneToMany(mappedBy = "member")
     private List<Inquire> inquires = new ArrayList<>();
 
-     @OneToMany(mappedBy = "notice")
+     @OneToMany(mappedBy = "member")
+     @OrderColumn(name = "notice_order")
     private List<Notice> notices = new ArrayList<>();
 
-     @OneToMany(mappedBy = "warning")
+     @OneToMany(mappedBy = "member")
+     @OrderColumn(name = "warning_order")
     private List<Warning> warnings = new ArrayList<>();
 
-    @OneToMany(mappedBy = "adopt")
+    @OneToMany(mappedBy = "member")
+    @OrderColumn(name = "adopt_order")
     private List<Adopt> adopts = new ArrayList<>();
 
 

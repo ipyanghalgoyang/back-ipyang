@@ -48,7 +48,7 @@ public class Board {   //공유하기 제보하기  홍보하기
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "board_img")
+    @OneToMany(mappedBy = "board")
     private List<Board_Img> board_imgs = new ArrayList<>();
 
 

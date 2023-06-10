@@ -23,6 +23,6 @@ public class Adopt_Img {
     @Column(name = "img_original_file")
     private String original_file;
 
-    @Column(name = "img_stored_file;")
+    @Column(name = "img_stored_file")
     private String stored_file;
 }

@@ -41,7 +41,7 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "product_img")
+    @OneToMany(mappedBy = "product")
     private List<Product_Img> product_imgs = new ArrayList<>();
 
 
