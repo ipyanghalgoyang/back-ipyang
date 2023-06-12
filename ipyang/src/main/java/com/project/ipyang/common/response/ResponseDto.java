@@ -17,14 +17,14 @@ public class ResponseDto<T> implements Serializable {
     private Long ResultCount;
     private ErrorDto error;
 
-    private ResponseDto(T resultData){
+    public ResponseDto(T resultData){
         this.ResultData = resultData;
     }
-    private ResponseDto(T resultData, Long resultCount){
+    public ResponseDto(T resultData, Long resultCount){
         this.ResultData = resultData;
         this.ResultCount = resultCount;
     }
-    private ResponseDto(ErrorDto errorDto){
+    public ResponseDto(ErrorDto errorDto){
         this.ResultData = null;
         this.error = errorDto;
     }

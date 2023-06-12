@@ -7,6 +7,7 @@ import com.project.ipyang.domain.point.entity.Point;
 import com.project.ipyang.domain.product.entity.Product;
 import com.project.ipyang.domain.warning.entity.Warning;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -18,57 +19,25 @@ import java.util.List;
 @Setter
 @Getter
 @ToString
+@RequiredArgsConstructor
 public class MemberDto {
     private Long id;
-
     private String email;
-
-
     private String nickname;
-
-
     private String passwd;
-
-
     private String name;
-
-
     private String phone;
-
-
     private String common_role;
-
-
     private String address;
-
-
     private String point;
-
-
     private String img_context;
-
-
     private String original_file;
-
-
     private String img_stored_file;
-
-
     private List<Point> points = new ArrayList<>();
-
-
     private List<Product> products = new ArrayList<>();
-
-
     private List<Board> boards = new ArrayList<>();
-
-
     private List<Inquire> inquires = new ArrayList<>();
-
-
     private List<Notice> notices = new ArrayList<>();
-
-
     private List<Warning> warnings = new ArrayList<>();
 
 
