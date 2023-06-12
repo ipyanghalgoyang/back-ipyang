@@ -9,6 +9,7 @@ import com.project.ipyang.domain.point.entity.Point;
 import com.project.ipyang.domain.product.entity.Product;
 import com.project.ipyang.domain.warning.entity.Warning;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
@@ -19,6 +20,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
