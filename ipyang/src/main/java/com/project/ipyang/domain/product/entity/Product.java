@@ -2,11 +2,7 @@ package com.project.ipyang.domain.product.entity;
 
 import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.member.entity.Member;
-import com.project.ipyang.domain.product.entity.Product_Img;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -17,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Setter
 public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,4 +42,8 @@ public class Product extends BaseEntity {
 
     @OneToMany(mappedBy = "product")
     private List<Product_Img> product_imgs = new ArrayList<>();
+    public void SetMember(Member member){
+        this.member = member;
+        member.getProducts().add(this);
+    }
 }
