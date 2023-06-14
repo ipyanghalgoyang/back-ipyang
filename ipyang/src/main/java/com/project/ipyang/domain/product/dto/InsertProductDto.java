@@ -15,5 +15,5 @@ public class InsertProductDto extends BaseEntity {
     private String loc;
 
     private Long member_id;
-//    private List<MultipartFile> imageFiles;
+   private List<MultipartFile> imageFiles;
 }

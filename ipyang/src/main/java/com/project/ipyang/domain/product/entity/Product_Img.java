@@ -1,6 +1,8 @@
 package com.project.ipyang.domain.product.entity;
 
+import com.project.ipyang.common.entity.BaseEntity;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,8 +12,8 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class Product_Img {
+@Builder
+public class Product_Img extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "img_id")

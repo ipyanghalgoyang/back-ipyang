@@ -2,6 +2,7 @@ package com.project.ipyang.domain.board.dto;
 
 import com.project.ipyang.domain.board.entity.Board_Img;
 import com.project.ipyang.domain.member.entity.Member;
+import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -10,34 +11,21 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Setter
-@Getter
+@Data
+@RequiredArgsConstructor
 
 public class BoardDto {
 
     private Long id;
-
-
     private String title;
-
-
     private String content;
-
-
     private int view_cnt;
-
     private int like_cnt;
-
     private String common_board;
-
     private int ref;
-
     private int re_step;
-
     private int re_level;
-
     private Member member;
-
     private List<Board_Img> board_imgs = new ArrayList<>();
 
     public BoardDto(Long id, String title, String content, int view_cnt,
