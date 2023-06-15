@@ -1,6 +1,7 @@
-package com.project.ipyang.domain.adopt.entity;
+package com.project.ipyang.domain.catType.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class CatType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,9 +20,5 @@ public class CatType {
 
     @Column(name = "c_type")
     private String type;
-
-    @Column(name = "c_trait")
-    private String trait;
-
 
 }

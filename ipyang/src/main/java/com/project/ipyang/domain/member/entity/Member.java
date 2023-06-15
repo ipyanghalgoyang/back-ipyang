@@ -2,6 +2,7 @@ package com.project.ipyang.domain.member.entity;
 
 import com.project.ipyang.common.entity.*;
 import com.project.ipyang.domain.adopt.entity.Adopt;
+import com.project.ipyang.domain.apply.entity.Apply;
 import com.project.ipyang.domain.board.entity.Board;
 import com.project.ipyang.domain.inquire.entity.Inquire;
 import com.project.ipyang.domain.notice.entity.Notice;
@@ -83,6 +84,10 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member")
     @OrderColumn(name = "adopt_order")
     private List<Adopt> adopts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Apply> applies = new ArrayList<>();
+
 
 
 
