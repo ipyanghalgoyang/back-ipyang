@@ -9,7 +9,7 @@ import javax.validation.constraints.*;
 @Setter
 @Getter
 @ToString(exclude = "passwd")
-public class InsertMemberDto extends BaseEntity {
+public class InsertMemberDto  {
     @NotBlank(message = "이메일은 필수 값 입니다.")
     @Email(message = "올바른 이메일 형식이 아닙니다.")
     private String email;

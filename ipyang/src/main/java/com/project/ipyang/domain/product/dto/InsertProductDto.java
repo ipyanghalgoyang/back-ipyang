@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Data
-public class InsertProductDto extends BaseEntity {
+public class InsertProductDto  {
     private String name;
     private String status;
     private int price;

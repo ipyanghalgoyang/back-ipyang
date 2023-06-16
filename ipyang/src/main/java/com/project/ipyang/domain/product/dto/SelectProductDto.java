@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 @Data
-public class SelectProductDto extends BaseEntity {
+public class SelectProductDto  {
     private  long id;
     private String name;
     private String status;

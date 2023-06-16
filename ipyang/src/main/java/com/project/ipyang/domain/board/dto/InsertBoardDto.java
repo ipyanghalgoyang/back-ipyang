@@ -4,7 +4,7 @@ import com.project.ipyang.common.entity.BaseEntity;
 import lombok.Data;
 
 @Data
-public class InsertBoardDto extends BaseEntity {
+public class InsertBoardDto  {
     private String title;
     private String content;
     private int view_cnt;
