@@ -76,15 +76,10 @@ public class MemberService {
 
         boolean isDuplicate = memberRepository.existsByEmail(email);
         if (isDuplicate) {
-
-            return ResponseDto.ERROR("중복된 이메일입니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseDto("중복된 이메일입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
         } else {
-           // return new ResponseDto()
+            return new ResponseDto("중복되지 않은 이메일입니다." , HttpStatus.OK.value());
         }
-        return null;
 
-//        - (성공 시) 코드 값 200
-//                - (중복 또는 실패 시) 코드 값 500
-//                - 결과에 따른 메시지
     }
 }
