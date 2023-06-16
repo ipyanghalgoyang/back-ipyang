@@ -4,12 +4,15 @@ import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.domain.product.dto.InsertProductDto;
 import com.project.ipyang.domain.product.dto.InsertProduct_ImgDto;
 import com.project.ipyang.domain.product.dto.ProductDto;
+import com.project.ipyang.domain.product.dto.SelectProductDto;
 import com.project.ipyang.domain.product.entity.Product;
 import com.project.ipyang.domain.product.repository.ProductRepository;
 import com.project.ipyang.domain.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,8 +31,7 @@ public class ProductController {
         private final ProductService productService;
 
         @PostMapping(value = "/v1/product")
-        public ResponseDto<ProductDto> createProduct(InsertProductDto request
- )  {
+        public ResponseDto<ProductDto> createProduct(InsertProductDto request)  {
 
 //                String img_context = "images"+File.separator+"product" + File.separator;
 //                for (MultipartFile multipartFile : file1) {
@@ -62,7 +64,11 @@ public class ProductController {
 //                FileCopyUtils.copy(fileData,target);
 //                return img_stored_file;
 //        }
+@GetMapping(value = "/v1/product")
+public ResponseDto<ProductDto> selectAllProduct(SelectProductDto id) throws ChangeSetPersister.NotFoundException {
 
+    return new ResponseDto(productService.selectAllProduct(id));
+}
 
 
 }

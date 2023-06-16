@@ -45,6 +45,10 @@ public class Member extends BaseEntity {
     @Column(name = "m_common_role")
     private String common_role;
 
+//    @Column(name = "m_common_role")
+//    @Enumerated(EnumType.STRING)
+//    private String member_role;
+
     @Column(name = "m_address")
     private String address;
 

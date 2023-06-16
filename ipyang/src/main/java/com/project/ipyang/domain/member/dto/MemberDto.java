@@ -65,4 +65,19 @@ public class MemberDto {
         this.notices = notices;
         this.warnings = warnings;
     }
+
+    public MemberDto(Long id, String email, String nickname, String passwd, String name, String phone, String commonRole, String address, String point, String imgContext, String originalFile, String imgStoredFile) {
+        this.id = id;
+        this.email = email;
+        this.nickname = nickname;
+        this.passwd = passwd;
+        this.name = name;
+        this.phone = phone;
+        this.common_role = common_role;
+        this.address = address;
+        this.point = point;
+        this.img_context = img_context;
+        this.original_file = original_file;
+        this.img_stored_file = img_stored_file;
+    }
 }

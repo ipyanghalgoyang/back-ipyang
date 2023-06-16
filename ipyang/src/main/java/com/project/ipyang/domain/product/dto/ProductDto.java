@@ -20,7 +20,7 @@ public class ProductDto   {
     private int price;
     private String type;
     private String loc;
-    private Member member;
+    private Long member_id;
     private List<Product_Img> product_imgs = new ArrayList<>();
 
     public ProductDto(Long id, String name, String status,
@@ -32,7 +32,30 @@ public class ProductDto   {
         this.price = price;
         this.type = type;
         this.loc = loc;
-        this.member = member;
+
         this.product_imgs = product_imgs;
+    }
+
+
+    public ProductDto(Long id, String name, String status, int price, String type, String loc, Long member_id, List<Product_Img> product_imgs) {
+        this.id = id;
+        this.name = name;
+        this.status = status;
+        this.price = price;
+        this.type = type;
+        this.loc = loc;
+        this.member_id = member_id;
+        this.product_imgs = product_imgs;
+    }
+
+    public ProductDto(Long id, String name, String status, int price, String type, String loc, Long member_id) {
+        this.id = id;
+        this.name = name;
+        this.status = status;
+        this.price = price;
+        this.type = type;
+        this.loc = loc;
+        this.member_id = member_id;
+
     }
 }

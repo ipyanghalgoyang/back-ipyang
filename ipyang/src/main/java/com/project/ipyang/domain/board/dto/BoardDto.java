@@ -26,6 +26,7 @@ public class BoardDto {
     private int re_step;
     private int re_level;
     private Member member;
+    private Long member_id;
     private List<Board_Img> board_imgs = new ArrayList<>();
 
     public BoardDto(Long id, String title, String content, int view_cnt,
@@ -42,5 +43,19 @@ public class BoardDto {
         this.re_level = re_level;
         this.member = member;
         this.board_imgs = board_imgs;
+    }
+
+    public BoardDto(Long id, String title, String content, int viewCnt, int likeCnt,
+                    String commonBoard, int ref, int reStep, int reLevel, Long member_id) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.view_cnt = view_cnt;
+        this.like_cnt = like_cnt;
+        this.common_board = common_board;
+        this.ref = ref;
+        this.re_step = re_step;
+        this.re_level = re_level;
+        this.member_id = member_id;
     }
 }
