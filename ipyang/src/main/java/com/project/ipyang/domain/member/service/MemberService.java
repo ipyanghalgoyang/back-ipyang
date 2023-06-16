@@ -1,6 +1,7 @@
 package com.project.ipyang.domain.member.service;
 
 
+import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.domain.member.dto.InsertMemberDto;
 import com.project.ipyang.domain.member.dto.MemberDto;
 import com.project.ipyang.domain.member.dto.SelectMemberDto;
@@ -8,6 +9,7 @@ import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.member.entity.MemberRoleType;
 import com.project.ipyang.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -68,5 +70,21 @@ public class MemberService {
 
                 )
                 .collect(Collectors.toList());
+    }
+
+    public ResponseDto checkDuplicateEmail(String email) {
+
+        boolean isDuplicate = memberRepository.existsByEmail(email);
+        if (isDuplicate) {
+
+            return ResponseDto.ERROR("중복된 이메일입니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+           // return new ResponseDto()
+        }
+        return null;
+
+//        - (성공 시) 코드 값 200
+//                - (중복 또는 실패 시) 코드 값 500
+//                - 결과에 따른 메시지
     }
 }
