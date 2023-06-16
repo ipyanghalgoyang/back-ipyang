@@ -5,6 +5,7 @@ import com.project.ipyang.domain.member.dto.InsertMemberDto;
 import com.project.ipyang.domain.member.dto.MemberDto;
 import com.project.ipyang.domain.member.dto.SelectMemberDto;
 import com.project.ipyang.domain.member.entity.Member;
+import com.project.ipyang.domain.member.entity.MemberRoleType;
 import com.project.ipyang.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class MemberService {
                 .passwd(memberDto.getPasswd())
                 .name(memberDto.getName())
                 .phone(memberDto.getPhone())
-                .common_role(memberDto.getCommon_role())
+                .member_role(MemberRoleType.USER)
                 .address(memberDto.getAddress())
                 .point(String.valueOf(memberDto.getPoint()))
                 .build();
@@ -38,21 +39,34 @@ public class MemberService {
         List<Member> memberList = memberRepository.findAll();
 
         return memberList.stream()
-                .map(member -> new MemberDto(
-                        member.getId(),
-                        member.getEmail(),
-                        member.getNickname(),
-                        member.getPasswd(),
-                        member.getName(),
-                        member.getPhone(),
-                        member.getCommon_role(),
-                        member.getAddress(),
-                        member.getPoint(),
-                        member.getImg_context(),
-                        member.getOriginal_file(),
-                        member.getImg_stored_file()
+                .map(member -> MemberDto.builder()
+                                .id(member.getId())
+                                .email(member.getEmail())
+                                .nickname(member.getNickname())
+                                .name(member.getName())
+                                .phone(member.getPhone())
+                                .member_role(member.getMember_role())
+                                .address(member.getAddress())
+                                .point(member.getPoint())
+                                .img_context(member.getImg_context())
+                                .img_stored_file(member.getImg_stored_file())
+                                .build()
 
-                ))
+//                        new MemberDto(
+//                        member.getId(),
+//                        member.getEmail(),
+//                        member.getNickname(),
+//                        member.getPasswd(),
+//                        member.getName(),
+//                        member.getPhone(),
+//                        member.getMember_role(),
+//                        member.getAddress(),
+//                        member.getPoint(),
+//                        member.getImg_context(),
+//                        member.getOriginal_file(),
+//                        member.getImg_stored_file()
+
+                )
                 .collect(Collectors.toList());
     }
 }

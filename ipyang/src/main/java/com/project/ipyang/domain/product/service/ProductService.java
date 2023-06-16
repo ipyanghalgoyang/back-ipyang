@@ -63,17 +63,27 @@ public class ProductService {
 
         // Entity를 DTO로 변환하여 반환합니다.
         return productList.stream()
-                .map(product -> new ProductDto(
-                        product.getId(),
-                        product.getName(),
-                        product.getStatus(),
-                        product.getPrice(),
-                        product.getType(),
-                        product.getLoc(),
-                        product.getMember().getId()
+                .map(product -> ProductDto.builder()
+                                .id(product.getId())
+                                .name(product.getName())
+                                .status(product.getStatus())
+                                .price(product.getPrice())
+                                .type(product.getType())
+                                .loc(product.getLoc())
+                                .member_id(product.getMember().getId())
+                                .build()
 
 
-                ))
+//                        product.getId(),
+//                        product.getName(),
+//                        product.getStatus(),
+//                        product.getPrice(),
+//                        product.getType(),
+//                        product.getLoc(),
+//                        product.getMember().getId()
+
+
+                )
                 .collect(Collectors.toList());
     }
 
