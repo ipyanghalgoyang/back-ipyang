@@ -1,6 +1,7 @@
 package com.project.ipyang.domain.board.entity;
 
 
+import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.board.entity.Board;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Board_Img {
+public class Board_Img extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "img_id")

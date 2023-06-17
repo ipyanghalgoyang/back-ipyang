@@ -1,9 +1,8 @@
 package com.project.ipyang.domain.notice.entity;
 
+import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.member.entity.Member;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,8 +12,10 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@Setter
 
-public class Notice {
+public class Notice extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notice_id")
