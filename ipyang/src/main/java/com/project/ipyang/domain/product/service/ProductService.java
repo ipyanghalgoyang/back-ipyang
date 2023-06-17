@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-
+    //김시아
     private final ProductRepository productRepository;
     private final MemberRepository memberRepository;
     private final Product_ImgRepository productImgRepository;
@@ -72,16 +72,6 @@ public class ProductService {
                                 .loc(product.getLoc())
                                 .member_id(product.getMember().getId())
                                 .build()
-
-
-//                        product.getId(),
-//                        product.getName(),
-//                        product.getStatus(),
-//                        product.getPrice(),
-//                        product.getType(),
-//                        product.getLoc(),
-//                        product.getMember().getId()
-
 
                 )
                 .collect(Collectors.toList());

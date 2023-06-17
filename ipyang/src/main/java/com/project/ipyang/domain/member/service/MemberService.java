@@ -54,19 +54,6 @@ public class MemberService {
                                 .img_stored_file(member.getImg_stored_file())
                                 .build()
 
-//                        new MemberDto(
-//                        member.getId(),
-//                        member.getEmail(),
-//                        member.getNickname(),
-//                        member.getPasswd(),
-//                        member.getName(),
-//                        member.getPhone(),
-//                        member.getMember_role(),
-//                        member.getAddress(),
-//                        member.getPoint(),
-//                        member.getImg_context(),
-//                        member.getOriginal_file(),
-//                        member.getImg_stored_file()
 
                 )
                 .collect(Collectors.toList());
