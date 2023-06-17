@@ -1,8 +1,12 @@
 package com.project.ipyang.domain.adopt.entity;
 
 import com.project.ipyang.common.entity.BaseEntity;
+import com.project.ipyang.domain.apply.entity.Apply;
+import com.project.ipyang.domain.catType.entity.CatType;
 import com.project.ipyang.domain.member.entity.Member;
+import com.project.ipyang.domain.vaccine.entity.Vaccine;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +18,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Adopt extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
