@@ -18,7 +18,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder //확인용
 public class Adopt extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
