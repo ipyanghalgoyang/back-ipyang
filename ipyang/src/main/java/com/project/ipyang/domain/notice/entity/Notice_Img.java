@@ -1,6 +1,5 @@
 package com.project.ipyang.domain.notice.entity;
 
-import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.notice.entity.Notice;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +11,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Notice_Img extends BaseEntity {
+public class Notice_Img {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "img_id")

@@ -42,5 +42,8 @@ public class Product extends BaseEntity {
 
     @OneToMany(mappedBy = "product")
     private List<Product_Img> product_imgs = new ArrayList<>();
-
+    public void SetMember(Member member){
+        this.member = member;
+        member.getProducts().add(this);
+    }
 }

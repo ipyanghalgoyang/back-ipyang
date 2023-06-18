@@ -1,6 +1,5 @@
 package com.project.ipyang.domain.warning.entity;
 
-import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class Warning extends BaseEntity {
+public class Warning {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "warning_id")

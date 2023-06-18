@@ -42,12 +42,8 @@ public class Member extends BaseEntity {
     @Column(name = "m_phone")
     private String phone;
 
-//    @Column(name = "m_common_role")
-//    private String common_role;
-
     @Column(name = "m_common_role")
-   @Enumerated(EnumType.STRING)
-    private MemberRoleType member_role;
+    private String common_role;
 
     @Column(name = "m_address")
     private String address;

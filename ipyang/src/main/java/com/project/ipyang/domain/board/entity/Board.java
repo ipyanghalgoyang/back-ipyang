@@ -1,9 +1,10 @@
 package com.project.ipyang.domain.board.entity;
 
 
-import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.member.entity.Member;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,9 +14,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Setter
-public class Board  extends BaseEntity {   //공유하기 제보하기  홍보하기
+public class Board {   //공유하기 제보하기  홍보하기
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
