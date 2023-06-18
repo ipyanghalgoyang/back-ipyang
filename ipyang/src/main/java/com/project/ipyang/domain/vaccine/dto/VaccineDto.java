@@ -1,10 +1,12 @@
-package com.project.ipyang.domain.adopt.dto;
+package com.project.ipyang.domain.vaccine.dto;
 
+import lombok.Data;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
+@RequiredArgsConstructor
 public class VaccineDto {
     private Long id;
     private String name;

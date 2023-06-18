@@ -1,10 +1,11 @@
 package com.project.ipyang.domain.adopt.entity;
 
 import com.project.ipyang.common.entity.BaseEntity;
+import com.project.ipyang.domain.apply.entity.Apply;
+import com.project.ipyang.domain.catType.entity.CatType;
 import com.project.ipyang.domain.member.entity.Member;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.project.ipyang.domain.vaccine.entity.Vaccine;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,8 +13,9 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
 public class Adopt extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
