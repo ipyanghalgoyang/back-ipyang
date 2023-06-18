@@ -6,14 +6,21 @@ import com.project.ipyang.domain.member.dto.InsertMemberDto;
 import com.project.ipyang.domain.member.dto.MemberDto;
 import com.project.ipyang.domain.member.dto.SelectMemberDto;
 import com.project.ipyang.domain.member.dto.UpdateMemberDto;
+import com.project.ipyang.domain.member.dto.SignUpMemberDto;
 import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.member.entity.MemberRoleType;
 import com.project.ipyang.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -21,6 +28,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MemberService {
     private  final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public MemberDto createMember(InsertMemberDto memberDto) {
 
@@ -61,6 +69,29 @@ public class MemberService {
                 .collect(Collectors.toList());
     }
 
+    //회원가입 시 유효성 검사
+    public Map<String, String> validateHandling(Errors errors) {
+        Map<String, String> validatorResult = new HashMap<>();
+
+        for(FieldError error : errors.getFieldErrors()) {
+            String validKeyName = String.format("%s", error.getField());
+            validatorResult.put(validKeyName, error.getDefaultMessage());
+        }
+        return  validatorResult;
+    }
+
+    //회원가입 시 닉네임 중복 체크
+    public boolean checkNickname(SignUpMemberDto signUpMemberDto) {
+        return memberRepository.existsByNickname(signUpMemberDto.getNickname());
+    }
+
+    //회원가입 정보 저장
+    public void memberInfoSave(SignUpMemberDto signUpMemberDto, PasswordEncoder passwordEncoder) {
+        Member member = signUpMemberDto.toEntity(passwordEncoder);
+        Member savedMember = memberRepository.save(member);
+    }
+
+
     public ResponseDto checkDuplicateEmail(String email) {
 
         boolean isDuplicate = memberRepository.existsByEmail(email);
@@ -71,6 +102,7 @@ public class MemberService {
             }
 
     }
+
     public ResponseDto loginMember(String email, String passwd) {
         Member member = memberRepository.findByEmail(email);
 

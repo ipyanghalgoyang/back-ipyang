@@ -1,15 +1,14 @@
-package com.project.ipyang.domain.adopt.entity;
+package com.project.ipyang.domain.catType.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
 public class CatType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,9 +17,5 @@ public class CatType {
 
     @Column(name = "c_type")
     private String type;
-
-    @Column(name = "c_trait")
-    private String trait;
-
 
 }

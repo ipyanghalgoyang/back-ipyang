@@ -1,9 +1,10 @@
-package com.project.ipyang.domain.adopt.entity;
+package com.project.ipyang.domain.apply.entity;
 
 import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.adopt.entity.Adopt;
 import com.project.ipyang.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Apply extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -22,8 +22,8 @@ public class Adopt_Img extends BaseEntity {
     private Adopt adopt;
 
     @Column(name = "img_original_file")
-    private String original_file;
+    private String originFileName;
 
     @Column(name = "img_stored_file")
-    private String stored_file;
+    private String storedFileName;
 }

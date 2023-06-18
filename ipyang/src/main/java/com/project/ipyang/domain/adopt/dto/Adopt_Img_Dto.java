@@ -1,21 +1,22 @@
 package com.project.ipyang.domain.adopt.dto;
 
+import com.project.ipyang.common.entity.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Adopt_Img_Dto {
+public class Adopt_Img_Dto extends BaseEntity {
     private Long id;
-    private String original_file;
-    private String stored_file;
+    private String originFileName;
+    private String storedFileName;
 
     public Adopt_Img_Dto(Long id,
-                         String original_file,
-                         String stored_file) {
+                         String originFileName,
+                         String storedFileName) {
         this.id = id;
-        this.original_file = original_file;
-        this.stored_file = stored_file;
+        this.originFileName = originFileName;
+        this.storedFileName = storedFileName;
     }
 
 }
