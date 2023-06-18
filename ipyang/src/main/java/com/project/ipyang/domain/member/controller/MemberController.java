@@ -5,6 +5,7 @@ import com.project.ipyang.domain.member.dto.InsertMemberDto;
 import com.project.ipyang.domain.member.dto.MemberDto;
 import com.project.ipyang.domain.member.dto.SelectMemberDto;
 import com.project.ipyang.domain.member.dto.SignUpMemberDto;
+import com.project.ipyang.domain.member.dto.UpdateMemberDto;
 import com.project.ipyang.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,18 +37,21 @@ public class MemberController {
 
 
 
-    @GetMapping(value = "v1/member")
+    @GetMapping(value = "/v1/member")
     public ResponseDto<MemberDto> selectAllMember(SelectMemberDto id) {
         return new ResponseDto(memberService.selectAllMember(id));
     }
 
     @GetMapping(value = "/v1/dup-email")
     public ResponseDto duplicateMember(@RequestParam String email) {
+
+
         return memberService.checkDuplicateEmail(email);
     }
 
     @GetMapping(value = "/v1/login")
     public ResponseDto loginMember(@RequestParam String email,@RequestParam String passwd) {
+
         return memberService.loginMember(email,passwd);
     }
 
@@ -78,5 +85,13 @@ public class MemberController {
         memberService.memberInfoSave(requestDto, passwordEncoder);
         return "redirect:/v1/login";
     }
+    @PutMapping(value = "/v1/member")
+    public ResponseDto<MemberDto> updateMember(UpdateMemberDto memberDto) {
+        return new ResponseDto(memberService.updateMember(memberDto));
+    }
+
+
+
+
 
 }
