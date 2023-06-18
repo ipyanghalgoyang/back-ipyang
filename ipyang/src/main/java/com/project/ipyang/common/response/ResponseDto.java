@@ -15,10 +15,10 @@ public class ResponseDto<T> implements Serializable {
     private static final long serialVersionUID = 1289378297382227732L;
     private T ResultData;
     private Long ResultCount;
-    private HttpStatus status;
+    private int status;
     private ErrorDto error;
 
-    public ResponseDto(T resultData, HttpStatus status){
+    public ResponseDto(T resultData, int status){
         this.ResultData = resultData;
         this.status = status;
     }
