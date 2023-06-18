@@ -2,6 +2,7 @@ package com.project.ipyang.domain.member.dto;
 
 import com.project.ipyang.domain.board.entity.Board;
 import com.project.ipyang.domain.inquire.entity.Inquire;
+import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.member.entity.MemberRoleType;
 import com.project.ipyang.domain.notice.entity.Notice;
 import com.project.ipyang.domain.point.entity.Point;
@@ -39,7 +40,32 @@ public class MemberDto {
     private List<Inquire> inquires = new ArrayList<>();
     private List<Notice> notices = new ArrayList<>();
     private List<Warning> warnings = new ArrayList<>();
-
+    public Member toEntity(MemberDto dto){
+        return Member.builder()
+                .id(dto.getId())
+                .email(dto.getEmail())
+                .nickname(dto.getNickname())
+                .passwd(dto.getPasswd())
+                .name(dto.getName())
+                .phone(dto.getPhone())
+                .member_role(dto.getMember_role())
+                .address(dto.getAddress())
+                .point(dto.getPoint())
+                .build();
+    }
+    public Member toEntity(){
+        return Member.builder()
+                .id(id)
+                .email(email)
+                .nickname(nickname)
+                .passwd(passwd)
+                .name(name)
+                .phone(phone)
+                .member_role(member_role)
+                .address(address)
+                .point(point)
+                .build();
+    }
 
 
 }

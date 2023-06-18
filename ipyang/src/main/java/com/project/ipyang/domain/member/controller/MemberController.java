@@ -4,14 +4,12 @@ import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.domain.member.dto.InsertMemberDto;
 import com.project.ipyang.domain.member.dto.MemberDto;
 import com.project.ipyang.domain.member.dto.SelectMemberDto;
+import com.project.ipyang.domain.member.dto.UpdateMemberDto;
 import com.project.ipyang.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,7 +24,7 @@ public class MemberController {
 
 
 
-    @GetMapping(value = "v1/member")
+    @GetMapping(value = "/v1/member")
     public ResponseDto<MemberDto> selectAllMember(SelectMemberDto id) {
         return new ResponseDto(memberService.selectAllMember(id));
     }
@@ -43,6 +41,14 @@ public class MemberController {
 
         return memberService.loginMember(email,passwd);
     }
+
+    @PutMapping(value = "/v1/member")
+    public ResponseDto<MemberDto> updateMember(UpdateMemberDto memberDto) {
+        return new ResponseDto(memberService.updateMember(memberDto));
+    }
+
+
+
 
 
 }

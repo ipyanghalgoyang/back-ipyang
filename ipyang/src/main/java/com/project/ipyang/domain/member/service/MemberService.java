@@ -5,6 +5,7 @@ import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.domain.member.dto.InsertMemberDto;
 import com.project.ipyang.domain.member.dto.MemberDto;
 import com.project.ipyang.domain.member.dto.SelectMemberDto;
+import com.project.ipyang.domain.member.dto.UpdateMemberDto;
 import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.member.entity.MemberRoleType;
 import com.project.ipyang.domain.member.repository.MemberRepository;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -91,5 +93,27 @@ public class MemberService {
         }
 
 
+    }
+
+    public ResponseDto updateMember(UpdateMemberDto memberDto) {
+        // 회원 정보를 데이터베이스에서 조회합니다.
+        Optional<Member> memberOptional = memberRepository.findById(memberDto.getId());
+        if (!memberOptional.isPresent()) {
+            // 해당 회원이 존재하지 않는 경우 에러 응답을 반환합니다.
+            return new ResponseDto("존재하지 않는 회원입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+
+        // 기존 회원 정보를 가져옵니다.
+        Member member = memberOptional.get();
+        MemberDto updateMember = member.convertDto();
+        updateMember.setNickname(memberDto.getNickname());
+        updateMember.setPasswd(memberDto.getPasswd());
+        updateMember.setPhone(memberDto.getPhone());
+        updateMember.setAddress(memberDto.getAddress());
+
+        memberRepository.save(updateMember.toEntity());
+
+        // 성공 응답을 반환합니다.
+        return new ResponseDto("회원 정보가 업데이트되었습니다.", HttpStatus.OK.value());
     }
 }

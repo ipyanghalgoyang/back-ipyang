@@ -4,6 +4,7 @@ import com.project.ipyang.common.entity.*;
 import com.project.ipyang.domain.adopt.entity.Adopt;
 import com.project.ipyang.domain.board.entity.Board;
 import com.project.ipyang.domain.inquire.entity.Inquire;
+import com.project.ipyang.domain.member.dto.MemberDto;
 import com.project.ipyang.domain.notice.entity.Notice;
 import com.project.ipyang.domain.point.entity.Point;
 import com.project.ipyang.domain.product.entity.Product;
@@ -55,6 +56,9 @@ public class Member extends BaseEntity {
     @Column(name = "m_point")
     private String point;
 
+    @Column(name = "m_withdraw")
+    private String withdraw;  //회원탈퇴여부  y면 y일때 30일뒤에 삭제 n이면 현상태유지
+
     @Column(name = "m_img_context")
     private String img_context;
 
@@ -89,7 +93,19 @@ public class Member extends BaseEntity {
     private List<Adopt> adopts = new ArrayList<>();
 
 
-
+    public MemberDto convertDto(){
+        return MemberDto.builder()
+                .id(id)
+                .email(email)
+                .nickname(nickname)
+                .passwd(passwd)
+                .name(name)
+                .phone(phone)
+                .member_role(member_role)
+                .address(address)
+                .point(point)
+                .build();
+    }
 
 
 
