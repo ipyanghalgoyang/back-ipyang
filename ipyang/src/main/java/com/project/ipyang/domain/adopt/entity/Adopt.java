@@ -5,10 +5,7 @@ import com.project.ipyang.domain.apply.entity.Apply;
 import com.project.ipyang.domain.catType.entity.CatType;
 import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.vaccine.entity.Vaccine;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,9 +13,9 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder //확인용
+@Builder
 public class Adopt extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

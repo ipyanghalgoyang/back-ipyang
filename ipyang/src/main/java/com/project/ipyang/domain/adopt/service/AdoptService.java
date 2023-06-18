@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,10 +50,14 @@ public class AdoptService {
         return new AdoptDto();
     }
 
-
     public List<GetAdoptDto> selectAdopt(GetAdoptDto request) {
         List<Adopt> adopts = adoptRepository.findAll();
-        List<GetAdoptDto> getAdoptDtos = adopts.stream().map(a -> new GetAdoptDto(a)).collect(Collectors.toList());
-        return getAdoptDtos;
+
+        List<GetAdoptDto> getAdoptDtos = adopts.stream().map(GetAdoptDto::new).collect(Collectors.toList());
+
+        return Optional.of(getAdoptDtos)
+                       .filter(list -> !list.isEmpty())
+                       .orElseThrow(() -> new RuntimeException("가져올 데이터가 없습니다"));
     }
+
 }
