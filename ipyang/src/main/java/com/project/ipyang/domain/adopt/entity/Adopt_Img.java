@@ -1,6 +1,5 @@
 package com.project.ipyang.domain.adopt.entity;
 
-import com.project.ipyang.common.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Adopt_Img extends BaseEntity {
+public class Adopt_Img {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "img_id")

@@ -1,6 +1,5 @@
 package com.project.ipyang.domain.inquire.entity;
 
-import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.inquire.entity.Inquire;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class Inquire_Img extends BaseEntity {
+public class Inquire_Img {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
