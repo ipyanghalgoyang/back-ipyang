@@ -5,6 +5,7 @@ import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.domain.member.dto.InsertMemberDto;
 import com.project.ipyang.domain.member.dto.MemberDto;
 import com.project.ipyang.domain.member.dto.SelectMemberDto;
+import com.project.ipyang.domain.member.dto.UpdateMemberDto;
 import com.project.ipyang.domain.member.dto.SignUpMemberDto;
 import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.member.entity.MemberRoleType;
@@ -20,6 +21,7 @@ import org.springframework.validation.FieldError;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -108,14 +110,16 @@ public class MemberService {
         } else {
             return new ResponseDto("중복되지 않은 이메일입니다.", HttpStatus.OK.value());
             }
+
     }
-    
+
     public ResponseDto loginMember(String email, String passwd) {
         Member member = memberRepository.findByEmail(email);
 
         boolean isDuplicate = memberRepository.existsByEmail(email);
 
         if (isDuplicate) {
+
             if (member.getPasswd().equals(passwd)) {
                 // 패스워드가 일치하면 로그인 성공으로 처리합니다.
                 return new ResponseDto("로그인 되었습니다", HttpStatus.OK.value());
@@ -125,11 +129,35 @@ public class MemberService {
             }
         }
         else {
+
             return new ResponseDto("일치하는 회원이 없습니다" , HttpStatus.INTERNAL_SERVER_ERROR.value());
+
         }
 
+
+    }
+
+    public ResponseDto updateMember(UpdateMemberDto memberDto) {
+        // 회원 정보를 데이터베이스에서 조회합니다.
+        Optional<Member> memberOptional = memberRepository.findById(memberDto.getId());
+        if (!memberOptional.isPresent()) {
+            // 해당 회원이 존재하지 않는 경우 에러 응답을 반환합니다.
+            return new ResponseDto("존재하지 않는 회원입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+
+        // 기존 회원 정보를 가져옵니다.
+        Member member = memberOptional.get();
+        MemberDto updateMember = member.convertDto();
+        updateMember.setNickname(memberDto.getNickname());
+        updateMember.setPasswd(memberDto.getPasswd());
+        updateMember.setPhone(memberDto.getPhone());
+        updateMember.setAddress(memberDto.getAddress());
+
+        memberRepository.save(updateMember.toEntity());
+
+        // 성공 응답을 반환합니다.
+        return new ResponseDto("회원 정보가 업데이트되었습니다.", HttpStatus.OK.value());
     }
 
 
 }
-
