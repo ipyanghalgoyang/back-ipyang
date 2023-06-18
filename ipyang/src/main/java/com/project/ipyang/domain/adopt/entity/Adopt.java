@@ -1,5 +1,6 @@
 package com.project.ipyang.domain.adopt.entity;
 
+import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Adopt {
+public class Adopt extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "adopt_id")

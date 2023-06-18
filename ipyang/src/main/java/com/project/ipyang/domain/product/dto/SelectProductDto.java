@@ -5,9 +5,9 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-
 @Data
-public class InsertProductDto  {
+public class SelectProductDto  {
+    private  long id;
     private String name;
     private String status;
     private int price;
@@ -15,5 +15,5 @@ public class InsertProductDto  {
     private String loc;
 
     private Long member_id;
-   private List<MultipartFile> imageFiles;
+    private List<MultipartFile> imageFiles;
 }
