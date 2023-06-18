@@ -38,6 +38,11 @@ public class MemberController {
         return memberService.checkDuplicateEmail(email);
     }
 
+    @GetMapping(value = "/v1/login")
+    public ResponseDto loginMember(@RequestParam String email,@RequestParam String passwd) {
+
+        return memberService.loginMember(email,passwd);
+    }
 
 
 }

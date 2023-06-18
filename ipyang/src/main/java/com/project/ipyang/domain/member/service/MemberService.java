@@ -65,8 +65,31 @@ public class MemberService {
         if (isDuplicate) {
             return new ResponseDto("중복된 이메일입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
         } else {
-            return new ResponseDto("중복되지 않은 이메일입니다." , HttpStatus.OK.value());
+            return new ResponseDto("중복되지 않은 이메일입니다.", HttpStatus.OK.value());
+            }
+
+    }
+    public ResponseDto loginMember(String email, String passwd) {
+        Member member = memberRepository.findByEmail(email);
+
+        boolean isDuplicate = memberRepository.existsByEmail(email);
+
+        if (isDuplicate) {
+
+            if (member.getPasswd().equals(passwd)) {
+                // 패스워드가 일치하면 로그인 성공으로 처리합니다.
+                return new ResponseDto("로그인 되었습니다", HttpStatus.OK.value());
+            } else {
+                // 패스워드가 일치하지 않으면 로그인 실패로 처리합니다.
+                return new ResponseDto("비밀번호가 일치하지 않습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            }
         }
+        else {
+
+            return new ResponseDto("일치하는 회원이 없습니다" , HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+        }
+
 
     }
 }

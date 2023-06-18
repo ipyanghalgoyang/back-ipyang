@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-    //김시아
+
     private final ProductRepository productRepository;
     private final MemberRepository memberRepository;
     private final Product_ImgRepository productImgRepository;
