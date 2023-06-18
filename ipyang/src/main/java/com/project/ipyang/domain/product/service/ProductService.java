@@ -73,16 +73,6 @@ public class ProductService {
                                 .member_id(product.getMember().getId())
                                 .build()
 
-
-//                        product.getId(),
-//                        product.getName(),
-//                        product.getStatus(),
-//                        product.getPrice(),
-//                        product.getType(),
-//                        product.getLoc(),
-//                        product.getMember().getId()
-
-
                 )
                 .collect(Collectors.toList());
     }

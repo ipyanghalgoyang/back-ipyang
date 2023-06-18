@@ -41,6 +41,17 @@ public class MemberController {
         return new ResponseDto(memberService.selectAllMember(id));
     }
 
+    @GetMapping(value = "/v1/dup-email")
+    public ResponseDto duplicateMember(@RequestParam String email) {
+
+        return memberService.checkDuplicateEmail(email);
+    }
+
+    @GetMapping(value = "/v1/login")
+    public ResponseDto loginMember(@RequestParam String email,@RequestParam String passwd) {
+
+        return memberService.loginMember(email,passwd);
+    }
 
     //회원 가입창 이동
     @GetMapping(value = "/sign")
