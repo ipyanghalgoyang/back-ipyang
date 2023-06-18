@@ -12,10 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Arrays;
@@ -43,13 +40,11 @@ public class MemberController {
 
     @GetMapping(value = "/v1/dup-email")
     public ResponseDto duplicateMember(@RequestParam String email) {
-
         return memberService.checkDuplicateEmail(email);
     }
 
     @GetMapping(value = "/v1/login")
     public ResponseDto loginMember(@RequestParam String email,@RequestParam String passwd) {
-
         return memberService.loginMember(email,passwd);
     }
 

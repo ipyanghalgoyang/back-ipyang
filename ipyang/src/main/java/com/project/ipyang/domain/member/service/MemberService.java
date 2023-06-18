@@ -78,8 +78,9 @@ public class MemberService {
         return  validatorResult;
     }
 
+    //회원가입 시 닉네임 중복 체크
     public boolean checkNickname(SignUpMemberDto signUpMemberDto) {
-        return  memberRepository.existsByNickname(signUpMemberDto.getNickname());
+        return memberRepository.existsByNickname(signUpMemberDto.getNickname());
     }
 
     //회원가입 정보 저장
@@ -97,15 +98,14 @@ public class MemberService {
         } else {
             return new ResponseDto("중복되지 않은 이메일입니다.", HttpStatus.OK.value());
             }
-
     }
+    
     public ResponseDto loginMember(String email, String passwd) {
         Member member = memberRepository.findByEmail(email);
 
         boolean isDuplicate = memberRepository.existsByEmail(email);
 
         if (isDuplicate) {
-
             if (member.getPasswd().equals(passwd)) {
                 // 패스워드가 일치하면 로그인 성공으로 처리합니다.
                 return new ResponseDto("로그인 되었습니다", HttpStatus.OK.value());
@@ -115,11 +115,8 @@ public class MemberService {
             }
         }
         else {
-
             return new ResponseDto("일치하는 회원이 없습니다" , HttpStatus.INTERNAL_SERVER_ERROR.value());
-
         }
-
 
     }
 }
