@@ -78,15 +78,25 @@ public class MemberService {
         return  validatorResult;
     }
 
-    //회원가입 시 닉네임 중복 체크
-    public boolean checkNickname(SignUpMemberDto signUpMemberDto) {
-        return memberRepository.existsByNickname(signUpMemberDto.getNickname());
+
+    //닉네임 중복 확인
+    public ResponseDto checkDuplicateNickname(String nickname) {
+        boolean isDuplicate = memberRepository.existsByNickname(nickname);
+        if (isDuplicate) {
+            return new ResponseDto("중복된 닉네임입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        } else {
+            return new ResponseDto("중복되지 않은 닉네임입니다.", HttpStatus.OK.value());
+        }
     }
 
+
     //회원가입 정보 저장
-    public void memberInfoSave(SignUpMemberDto signUpMemberDto, PasswordEncoder passwordEncoder) {
+    public ResponseDto memberInfoSave(SignUpMemberDto signUpMemberDto, PasswordEncoder passwordEncoder) {
         Member member = signUpMemberDto.toEntity(passwordEncoder);
         Member savedMember = memberRepository.save(member);
+        if(savedMember != null) {
+            return new ResponseDto("회원가입이 성공했습니다.", HttpStatus.OK.value());
+        } else return new ResponseDto("회원가입을 실패했습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
 
@@ -119,5 +129,7 @@ public class MemberService {
         }
 
     }
+
+
 }
 
