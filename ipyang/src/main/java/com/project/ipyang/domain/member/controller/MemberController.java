@@ -1,11 +1,7 @@
 package com.project.ipyang.domain.member.controller;
 
 import com.project.ipyang.common.response.ResponseDto;
-import com.project.ipyang.domain.member.dto.InsertMemberDto;
-import com.project.ipyang.domain.member.dto.MemberDto;
-import com.project.ipyang.domain.member.dto.SelectMemberDto;
-import com.project.ipyang.domain.member.dto.SignUpMemberDto;
-import com.project.ipyang.domain.member.dto.UpdateMemberDto;
+import com.project.ipyang.domain.member.dto.*;
 import com.project.ipyang.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.Map;
@@ -82,6 +79,8 @@ public class MemberController {
         return memberService.memberInfoSave(requestDto, passwordEncoder);
 
     }
+
+
 
 
 }

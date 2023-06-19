@@ -17,7 +17,7 @@ public class Adopt_Img extends BaseEntity {
     @Column(name = "img_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "adopt_id")
     private Adopt adopt;
 

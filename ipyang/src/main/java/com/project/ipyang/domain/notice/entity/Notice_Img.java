@@ -24,7 +24,7 @@ public class Notice_Img extends BaseEntity {
     @Column(name = "img_stored_file")
     private String stored_file;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "notice_id")
     private Notice notice;
 }

@@ -25,7 +25,7 @@ public class Board_Img extends BaseEntity {
     @Column(name = "img_stored_file")
     private String stored_file;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "board_id")
     private Board board;
 }

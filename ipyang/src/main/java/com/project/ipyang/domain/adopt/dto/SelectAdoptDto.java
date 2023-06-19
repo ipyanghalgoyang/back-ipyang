@@ -10,7 +10,7 @@ import java.util.List;
 
 @Data
 @RequiredArgsConstructor
-public class GetAdoptDto {
+public class SelectAdoptDto {
     private Long id;
     private String title;
     private String content;
@@ -26,7 +26,7 @@ public class GetAdoptDto {
     private Long vacId;
     private Long catId;
 
-    public GetAdoptDto(Adopt adopt) {
+    public SelectAdoptDto(Adopt adopt) {
         this.id = adopt.getId();
         this.title = adopt.getTitle();
         this.content = adopt.getContent();
