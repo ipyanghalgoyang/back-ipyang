@@ -2,7 +2,7 @@ package com.project.ipyang.domain.adopt.controller;
 
 import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.domain.adopt.dto.AdoptDto;
-import com.project.ipyang.domain.adopt.dto.GetAdoptDto;
+import com.project.ipyang.domain.adopt.dto.SelectAdoptDto;
 import com.project.ipyang.domain.adopt.dto.InsertAdoptDto;
 import com.project.ipyang.domain.adopt.service.AdoptService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,8 @@ public class AdoptController {
     }
 
     @GetMapping(value = "/v1/getAdopt")
-    public ResponseDto<List<GetAdoptDto>> selectAdopt(GetAdoptDto request) {
-        return new ResponseDto(adoptService.selectAdopt(request));
+    public ResponseDto<List<SelectAdoptDto>> selectAdopt(SelectAdoptDto request) {
+        List<SelectAdoptDto> selectAdoptDtos = adoptService.selectAdopt(request);
+        return new ResponseDto<>(selectAdoptDtos);
     }
 }

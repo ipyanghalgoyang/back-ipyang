@@ -133,8 +133,6 @@ public class MemberService {
             return new ResponseDto("일치하는 회원이 없습니다" , HttpStatus.INTERNAL_SERVER_ERROR.value());
 
         }
-
-
     }
 
     public ResponseDto updateMember(UpdateMemberDto memberDto) {

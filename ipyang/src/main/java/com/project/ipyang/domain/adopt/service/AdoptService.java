@@ -1,7 +1,7 @@
 package com.project.ipyang.domain.adopt.service;
 
 import com.project.ipyang.domain.adopt.dto.AdoptDto;
-import com.project.ipyang.domain.adopt.dto.GetAdoptDto;
+import com.project.ipyang.domain.adopt.dto.SelectAdoptDto;
 import com.project.ipyang.domain.adopt.dto.InsertAdoptDto;
 import com.project.ipyang.domain.adopt.entity.Adopt;
 import com.project.ipyang.domain.catType.entity.CatType;
@@ -50,14 +50,15 @@ public class AdoptService {
         return new AdoptDto();
     }
 
-    public List<GetAdoptDto> selectAdopt(GetAdoptDto request) {
+    public List<SelectAdoptDto> selectAdopt(SelectAdoptDto request) {
         List<Adopt> adopts = adoptRepository.findAll();
 
-        List<GetAdoptDto> getAdoptDtos = adopts.stream().map(GetAdoptDto::new).collect(Collectors.toList());
+        List<SelectAdoptDto> selectAdoptDtos = adopts.stream().map(SelectAdoptDto::new).collect(Collectors.toList());
 
-        return Optional.of(getAdoptDtos)
-                       .filter(list -> !list.isEmpty())
-                       .orElseThrow(() -> new RuntimeException("가져올 데이터가 없습니다"));
+        if(selectAdoptDtos.isEmpty()) {
+            throw new RuntimeException("가져올 데이터가 없습니다");
+        }
+        return selectAdoptDtos;
     }
 
 }
