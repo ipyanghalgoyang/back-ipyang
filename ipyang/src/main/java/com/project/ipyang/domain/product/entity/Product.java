@@ -2,6 +2,7 @@ package com.project.ipyang.domain.product.entity;
 
 import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.member.entity.Member;
+import com.project.ipyang.domain.product.dto.SelectProductDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,7 +20,6 @@ public class Product extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
     private Long id;
-
 
     @Column(name = "p_name")
     private String name;
@@ -42,5 +42,17 @@ public class Product extends BaseEntity {
 
     @OneToMany(mappedBy = "product")
     private List<Product_Img> product_imgs = new ArrayList<>();
+
+    public SelectProductDto convertDto() {
+        return SelectProductDto.builder()
+                                        .id(id)
+                                        .name(name)
+                                        .status(status)
+                                        .price(price)
+                                        .type(type)
+                                        .loc(loc)
+                                        .memberId(member.getId())
+                                        .build();
+    }
 
 }

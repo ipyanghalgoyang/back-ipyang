@@ -1,5 +1,6 @@
 package com.project.ipyang.domain.product.service;
 
+import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.member.repository.MemberRepository;
 import com.project.ipyang.domain.product.dto.*;
@@ -10,6 +11,7 @@ import com.project.ipyang.domain.product.repository.Product_ImgRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -57,26 +59,15 @@ public class ProductService {
     }
 
 
-    public List<ProductDto> selectAllProduct(SelectProductDto selectProductDto) {
-        // 검색 조건에 따라 필요한 로직을 추가하세요.
-        List<Product> productList = productRepository.findAll();
+    //전체 상품 데이터 가져오기
+    public ResponseDto selectAllProduct(SelectProductDto request) {
+        List<Product> products = productRepository.findAll();
+        List<SelectProductDto> selectProductDtos = products.stream().map(SelectProductDto::new).collect(Collectors.toList());
 
-        // Entity를 DTO로 변환하여 반환합니다.
-        return productList.stream()
-                .map(product -> ProductDto.builder()
-                                .id(product.getId())
-                                .name(product.getName())
-                                .status(product.getStatus())
-                                .price(product.getPrice())
-                                .type(product.getType())
-                                .loc(product.getLoc())
-                                .member_id(product.getMember().getId())
-                                .build()
-
-                )
-                .collect(Collectors.toList());
+        if(!selectProductDtos.isEmpty()) {
+            return new ResponseDto(selectProductDtos, HttpStatus.OK.value());
+        } else return new ResponseDto("가져올 데이터가 없습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
-
 }
 
 

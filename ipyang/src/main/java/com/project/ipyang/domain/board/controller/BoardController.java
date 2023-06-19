@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class BoardController {
@@ -22,9 +24,10 @@ public class BoardController {
     }
 
 
+    //전체 게시판 게시글 가져오기
     @GetMapping(value = "/v1/board")
-    public ResponseDto<BoardDto> selectAllBoard(SelectBoardDto id) {
-        return new ResponseDto(boardService.selectAllBoard(id));
+    public ResponseDto<List<BoardDto>> selectAllBoard(SelectBoardDto request) {
+        return boardService.selectAllBoard(request);
     }
 
 

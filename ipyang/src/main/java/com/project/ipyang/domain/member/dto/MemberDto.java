@@ -30,7 +30,7 @@ public class MemberDto {
     private String phone;
     private MemberRoleType member_role;
     private String address;
-    private String point;
+    private int point;
     private String img_context;
     private String original_file;
     private String img_stored_file;

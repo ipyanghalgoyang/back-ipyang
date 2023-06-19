@@ -2,6 +2,7 @@ package com.project.ipyang.domain.board.entity;
 
 
 import com.project.ipyang.common.entity.BaseEntity;
+import com.project.ipyang.domain.board.dto.SelectBoardDto;
 import com.project.ipyang.domain.member.entity.Member;
 import lombok.*;
 
@@ -15,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Setter
-public class Board  extends BaseEntity {   //공유하기 제보하기  홍보하기
+public class Board extends BaseEntity {   //공유하기 제보하기  홍보하기
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
@@ -51,6 +52,21 @@ public class Board  extends BaseEntity {   //공유하기 제보하기  홍보�
 
     @OneToMany(mappedBy = "board")
     private List<Board_Img> board_imgs = new ArrayList<>();
+
+    public SelectBoardDto convertDto() {
+        return SelectBoardDto.builder()
+                                     .id(id)
+                                     .title(title)
+                                     .content(content)
+                                     .viewCnt(view_cnt)
+                                     .likeCnt(like_cnt)
+                                     .commonBoard(common_board)
+                                     .ref(ref)
+                                     .reStep(re_step)
+                                     .reLevel(re_level)
+                                     .memberId(member.getId())
+                                     .build();
+    }
 
 
 

@@ -1,5 +1,6 @@
 package com.project.ipyang.domain.adopt.service;
 
+import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.domain.adopt.dto.AdoptDto;
 import com.project.ipyang.domain.adopt.dto.SelectAdoptDto;
 import com.project.ipyang.domain.adopt.dto.InsertAdoptDto;
@@ -12,6 +13,7 @@ import com.project.ipyang.domain.vaccine.repository.VaccineRepository;
 import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +29,7 @@ public class AdoptService {
     private final VaccineRepository vaccineRepository;
     private final CatTypeRepository catTypeRepository;
 
+    //입양 게시글 데이터 삽입
     public AdoptDto createAdopt(InsertAdoptDto adoptDto) {
         Member member = memberRepository.findById(adoptDto.getMember_id()).get();
         Vaccine vaccine = vaccineRepository.findById(adoptDto.getVaccine_id()).get();
@@ -50,15 +53,14 @@ public class AdoptService {
         return new AdoptDto();
     }
 
-    public List<SelectAdoptDto> selectAdopt(SelectAdoptDto request) {
+    //전체 입양 게시글 가져오기
+    public ResponseDto selectAllAdopt(SelectAdoptDto request) {
         List<Adopt> adopts = adoptRepository.findAll();
-
         List<SelectAdoptDto> selectAdoptDtos = adopts.stream().map(SelectAdoptDto::new).collect(Collectors.toList());
 
-        if(selectAdoptDtos.isEmpty()) {
-            throw new RuntimeException("가져올 데이터가 없습니다");
-        }
-        return selectAdoptDtos;
+        if (!selectAdoptDtos.isEmpty()) {
+            return new ResponseDto(selectAdoptDtos, HttpStatus.OK.value());
+        } else return new ResponseDto("가져올 데이터가 없습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
 }

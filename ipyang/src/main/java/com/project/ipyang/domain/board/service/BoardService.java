@@ -1,5 +1,6 @@
 package com.project.ipyang.domain.board.service;
 
+import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.domain.board.dto.BoardDto;
 import com.project.ipyang.domain.board.dto.InsertBoardDto;
 import com.project.ipyang.domain.board.dto.SelectBoardDto;
@@ -8,6 +9,7 @@ import com.project.ipyang.domain.board.repository.BoardRepository;
 import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +23,7 @@ public class BoardService {
 
     public BoardDto createBoard(InsertBoardDto boardDto) {
 
-        Member member = memberRepository.findById(boardDto.getMember_id()) .get();
+        Member member = memberRepository.findById(boardDto.getMember_id()).get();
 
         Board board = Board.builder().title(boardDto.getTitle())
                 .content(boardDto.getContent())
@@ -34,30 +36,19 @@ public class BoardService {
                 .member(member)
                 .build();
         boardRepository.save(board);
-        return  new BoardDto();
+        return new BoardDto();
 
 
     }
 
-    public List<BoardDto> selectAllBoard(SelectBoardDto selectBoardDto) {
+    //전체 게시판 게시글 가져오기
+    public ResponseDto selectAllBoard(SelectBoardDto request) {
+        List<Board> boards = boardRepository.findAll();
+        List<SelectBoardDto> selectBoardDtos = boards.stream().map(SelectBoardDto::new).collect(Collectors.toList());
 
-        List<Board> boardList = boardRepository.findAll();
-
-        return boardList.stream()
-                .map(board -> new BoardDto(
-                        board.getId(),
-                        board.getTitle(),
-                        board.getContent(),
-                        board.getView_cnt(),
-                        board.getLike_cnt(),
-                        board.getCommon_board(),
-                        board.getRef(),
-                        board.getRe_step(),
-                        board.getRe_level(),
-                        board.getMember().getId()
-                ))
-                .collect(Collectors.toList());
-
+        if(!selectBoardDtos.isEmpty()) {
+            return new ResponseDto(selectBoardDtos, HttpStatus.OK.value());
+        } else return new ResponseDto("가져올 데이터가 없습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
 
     }
 }

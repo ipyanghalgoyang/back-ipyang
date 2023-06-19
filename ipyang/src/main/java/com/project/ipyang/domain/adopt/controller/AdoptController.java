@@ -18,14 +18,15 @@ public class AdoptController {
 
     private final AdoptService adoptService;
 
+    //입양 게시글 데이터 삽입
     @PostMapping(value = "/v1/adopt")
     public ResponseDto<AdoptDto> createAdopt(InsertAdoptDto request) {
         return new ResponseDto(adoptService.createAdopt(request));
     }
 
+    //전체 입양 게시글 가져오기
     @GetMapping(value = "/v1/getAdopt")
-    public ResponseDto<List<SelectAdoptDto>> selectAdopt(SelectAdoptDto request) {
-        List<SelectAdoptDto> selectAdoptDtos = adoptService.selectAdopt(request);
-        return new ResponseDto<>(selectAdoptDtos);
+    public ResponseDto<List<SelectAdoptDto>> selectAllAdopt(SelectAdoptDto request) {
+        return adoptService.selectAllAdopt(request);
     }
 }

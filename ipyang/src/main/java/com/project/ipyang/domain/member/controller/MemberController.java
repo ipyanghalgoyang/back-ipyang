@@ -11,13 +11,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,9 +29,10 @@ public class MemberController {
         return new ResponseDto(memberService.createMember(request));
     }
 
+    //전체 사용자 데이터 가져오기
     @GetMapping(value = "/v1/member")
-    public ResponseDto<MemberDto> selectAllMember(SelectMemberDto id) {
-        return new ResponseDto(memberService.selectAllMember(id));
+    public ResponseDto<List<SelectMemberDto>> selectAllMember(SelectMemberDto request) {
+        return memberService.selectAllMember(request);
     }
 
     @PutMapping(value = "/v1/member")

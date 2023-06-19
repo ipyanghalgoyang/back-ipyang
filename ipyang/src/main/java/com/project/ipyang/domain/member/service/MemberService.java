@@ -40,33 +40,21 @@ public class MemberService {
                 .phone(memberDto.getPhone())
                 .member_role(MemberRoleType.USER)
                 .address(memberDto.getAddress())
-                .point(String.valueOf(memberDto.getPoint()))
+                .point(memberDto.getPoint())
                 .build();
         memberRepository.save(member);
         return new MemberDto();
     }
 
-    public List<MemberDto> selectAllMember(SelectMemberDto selectMemberDto) {
+    //전체 멤버 데이터 가져오기
+    public ResponseDto selectAllMember(SelectMemberDto request) {
+        List<Member> members = memberRepository.findAll();
+        List<SelectMemberDto> selectMemberDtos = members.stream().map(SelectMemberDto::new).collect(Collectors.toList());
 
-        List<Member> memberList = memberRepository.findAll();
+        if(!selectMemberDtos.isEmpty()) {
+            return new ResponseDto(selectMemberDtos, HttpStatus.OK.value());
+        } else return new ResponseDto("가져올 데이터가 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
 
-        return memberList.stream()
-                .map(member -> MemberDto.builder()
-                                .id(member.getId())
-                                .email(member.getEmail())
-                                .nickname(member.getNickname())
-                                .name(member.getName())
-                                .phone(member.getPhone())
-                                .member_role(member.getMember_role())
-                                .address(member.getAddress())
-                                .point(member.getPoint())
-                                .img_context(member.getImg_context())
-                                .img_stored_file(member.getImg_stored_file())
-                                .build()
-
-
-                )
-                .collect(Collectors.toList());
     }
 
     //회원가입 시 유효성 검사
