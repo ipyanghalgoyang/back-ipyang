@@ -35,38 +35,37 @@ public class MemberController {
         return new ResponseDto(memberService.createMember(request));
     }
 
-
-
     @GetMapping(value = "/v1/member")
     public ResponseDto<MemberDto> selectAllMember(SelectMemberDto id) {
         return new ResponseDto(memberService.selectAllMember(id));
     }
 
+    @PutMapping(value = "/v1/member")
+    public ResponseDto<MemberDto> updateMember(UpdateMemberDto memberDto) {
+        return new ResponseDto(memberService.updateMember(memberDto));
+    }
+
     @GetMapping(value = "/v1/dup-email")
     public ResponseDto duplicateMember(@RequestParam String email) {
-
-
         return memberService.checkDuplicateEmail(email);
+    }
+
+    //닉네임 중복 확인
+    @GetMapping(value = "/v1/dup-nickname")
+    public ResponseDto duplicateNickname(@RequestParam String nickname) {
+        return memberService.checkDuplicateNickname(nickname);
     }
 
     @GetMapping(value = "/v1/login")
     public ResponseDto loginMember(@RequestParam String email,@RequestParam String passwd) {
-
         return memberService.loginMember(email,passwd);
     }
 
-    //회원 가입창 이동
-    @GetMapping(value = "/sign")
-    public String goSign(@ModelAttribute SignUpMemberDto requestDto, Model model) {
-        model.addAttribute("member", requestDto);
-        return "추후 생성하는 회원 가입 페이지 이름";
-    }
 
-
-    //회원 가입 요청 처리
+    //회원 가입 요청
     @PostMapping(value = "/v1/sign")
-    public String sign(@Valid @ModelAttribute("member") SignUpMemberDto requestDto, BindingResult errors, Model model) {
-
+    public ResponseDto signUp(@Valid @ModelAttribute("member") SignUpMemberDto requestDto, BindingResult errors, Model model) {
+        //에러 처리
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
                 log.info("Object name: {}", error.getObjectName());
@@ -79,19 +78,10 @@ public class MemberController {
             for(String key : validatorResult.keySet()) {
                 model.addAttribute(key, validatorResult.get(key));
             }
-            return "추후 생성하는 회원 가입 페이지 이름";
         }
+        return memberService.memberInfoSave(requestDto, passwordEncoder);
 
-        memberService.memberInfoSave(requestDto, passwordEncoder);
-        return "redirect:/v1/login";
     }
-    @PutMapping(value = "/v1/member")
-    public ResponseDto<MemberDto> updateMember(UpdateMemberDto memberDto) {
-        return new ResponseDto(memberService.updateMember(memberDto));
-    }
-
-
-
 
 
 }
