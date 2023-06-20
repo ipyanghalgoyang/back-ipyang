@@ -64,11 +64,12 @@ public class ProductController {
 //                FileCopyUtils.copy(fileData,target);
 //                return img_stored_file;
 //        }
-@GetMapping(value = "/v1/product")
-public ResponseDto<ProductDto> selectAllProduct(SelectProductDto id) throws ChangeSetPersister.NotFoundException {
 
-    return new ResponseDto(productService.selectAllProduct(id));
-}
+        //전체 상품 데이터 가져오기
+        @GetMapping(value = "/v1/product")
+        public ResponseDto<List<ProductDto>> selectAllProduct(SelectProductDto request)  {
+            return productService.selectAllProduct(request);
+        }
 
 
 }

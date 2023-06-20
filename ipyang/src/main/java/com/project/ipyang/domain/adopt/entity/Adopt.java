@@ -1,6 +1,7 @@
 package com.project.ipyang.domain.adopt.entity;
 
 import com.project.ipyang.common.entity.BaseEntity;
+import com.project.ipyang.domain.adopt.dto.SelectAdoptDto;
 import com.project.ipyang.domain.apply.entity.Apply;
 import com.project.ipyang.domain.catType.entity.CatType;
 import com.project.ipyang.domain.member.entity.Member;
@@ -69,6 +70,24 @@ public class Adopt extends BaseEntity {
 
     @OneToMany(mappedBy = "adopt")
     private List<Apply> applies = new ArrayList<>();
+
+    public SelectAdoptDto convertDto() {
+        return new SelectAdoptDto().builder()
+                                            .id(id)
+                                            .title(title)
+                                            .content(content)
+                                            .view(view)
+                                            .name(name)
+                                            .gender(gender)
+                                            .weight(weight)
+                                            .gender(gender)
+                                            .neu(neu)
+                                            .yn(yn)
+                                            .memberId(member.getId())
+                                            .vacId(vaccine.getId())
+                                            .catId(catType.getId())
+                                            .build();
+    }
 
 
 }

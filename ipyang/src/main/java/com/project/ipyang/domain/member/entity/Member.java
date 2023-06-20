@@ -53,7 +53,7 @@ public class Member extends BaseEntity {
     private String address;
 
     @Column(name = "m_point")
-    private String point;
+    private int point;
 
     @Column(name = "m_withdraw")
     private String withdraw;  //회원탈퇴여부  y면 y일때 30일뒤에 삭제 n이면 현상태유지
@@ -94,20 +94,18 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member")
     private List<Apply> applies = new ArrayList<>();
 
-
-
     public MemberDto convertDto(){
         return MemberDto.builder()
-                .id(id)
-                .email(email)
-                .nickname(nickname)
-                .passwd(passwd)
-                .name(name)
-                .phone(phone)
-                .member_role(member_role)
-                .address(address)
-                .point(point)
-                .build();
+                                .id(id)
+                                .email(email)
+                                .nickname(nickname)
+                                .passwd(passwd)
+                                .name(name)
+                                .phone(phone)
+                                .member_role(member_role)
+                                .address(address)
+                                .point(point)
+                                .build();
     }
 
 

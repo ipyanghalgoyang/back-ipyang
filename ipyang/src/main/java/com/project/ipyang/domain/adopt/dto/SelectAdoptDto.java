@@ -2,6 +2,8 @@ package com.project.ipyang.domain.adopt.dto;
 
 import com.project.ipyang.domain.adopt.entity.Adopt;
 import com.project.ipyang.domain.adopt.entity.Adopt_Img;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -10,6 +12,8 @@ import java.util.List;
 
 @Data
 @RequiredArgsConstructor
+@AllArgsConstructor
+@Builder
 public class SelectAdoptDto {
     private Long id;
     private String title;
