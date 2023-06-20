@@ -66,10 +66,5 @@ public class MainService {
 
         } else return new ResponseDto("가져올 데이터가 없습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
 
-
-
-
-
-
     }
 }

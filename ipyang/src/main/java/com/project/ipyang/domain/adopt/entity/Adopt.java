@@ -81,6 +81,7 @@ public class Adopt extends BaseEntity {
                                             .gender(gender)
                                             .weight(weight)
                                             .gender(gender)
+                                            .age(age)
                                             .neu(neu)
                                             .yn(yn)
                                             .memberId(member.getId())
