@@ -17,11 +17,11 @@ public class NoticeService {
 
     public NoticeDto createNotice(InsertNoticeDto noticeDto) {
 
-        Member member = memberRepository.findById(noticeDto.getMember_id()).get();
+        Member member = memberRepository.findById(noticeDto.getMemberId()).get();
 
         Notice notice = Notice.builder().title(noticeDto.getTitle())
                 .content(noticeDto.getContent())
-                .common_notice(noticeDto.getCommon_notice())
+                .commonNotice(noticeDto.getCommonNotice())
                 .member(member)
                 .build();
         noticeRepository.save(notice);

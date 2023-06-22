@@ -2,26 +2,16 @@ package com.project.ipyang.domain.product.controller;
 
 import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.domain.product.dto.InsertProductDto;
-import com.project.ipyang.domain.product.dto.InsertProduct_ImgDto;
 import com.project.ipyang.domain.product.dto.ProductDto;
 import com.project.ipyang.domain.product.dto.SelectProductDto;
-import com.project.ipyang.domain.product.entity.Product;
-import com.project.ipyang.domain.product.repository.ProductRepository;
 import com.project.ipyang.domain.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor

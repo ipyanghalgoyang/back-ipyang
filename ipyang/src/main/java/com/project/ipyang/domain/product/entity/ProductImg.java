@@ -9,21 +9,22 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "product_img")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Product_Img extends BaseEntity {
+public class ProductImg extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "img_id")
     private Long id;
 
     @Column(name = "img_original_file")
-    private String original_file;
+    private String imgOriginFile;
 
     @Column(name = "img_stored_file")
-    private String stored_file;
+    private String imgStoredFile;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")

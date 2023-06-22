@@ -14,6 +14,6 @@ public class InsertProductDto  {
     private String type;
     private String loc;
 
-    private Long member_id;
+    private Long memberId;
    private List<MultipartFile> imageFiles;
 }

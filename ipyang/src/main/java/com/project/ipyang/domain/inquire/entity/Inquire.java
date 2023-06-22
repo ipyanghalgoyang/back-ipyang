@@ -22,23 +22,31 @@ public class Inquire extends BaseEntity {   //문의게시판
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "inquire_id")
     private Long id;
+
     @Column(name = "i_title")
     private String title;
+
     @Column(name = "i_content")
     private String content;
+
     @Column(name = "i_passwd")
     private int passwd;               //비밀번호 숫자4자리로만 받기
+
     @Column(name = "i_reply_yn")   //답변여부 1 아니면 0
-    private int reply_yn;
+    private int replyYn;
+
     @Column(name = "i_reply_content")
-    private String  reply_content;
+    private String  replyContent;
+
     @Column(name = "i_common_inquire")  //공통테이블로 문의글 종류
-    private String  common_inquire;
+    private String  commonInquire;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
     @OneToMany(mappedBy = "inquire")
-    private List<Inquire_Img> inquire_imgs = new ArrayList<>();
+    private List<InquireImg> inquireImgs = new ArrayList<>();
 
 
 

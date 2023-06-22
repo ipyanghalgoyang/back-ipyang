@@ -31,9 +31,9 @@ public class AdoptService {
 
     //입양 게시글 데이터 삽입
     public AdoptDto createAdopt(InsertAdoptDto adoptDto) {
-        Member member = memberRepository.findById(adoptDto.getMember_id()).get();
-        Vaccine vaccine = vaccineRepository.findById(adoptDto.getVaccine_id()).get();
-        CatType catType = catTypeRepository.findById(adoptDto.getCat_id()).get();
+        Member member = memberRepository.findById(adoptDto.getMemberId()).get();
+        Vaccine vaccine = vaccineRepository.findById(adoptDto.getVaccineId()).get();
+        CatType catType = catTypeRepository.findById(adoptDto.getCatId()).get();
 
         Adopt adopt = Adopt.builder().title(adoptDto.getTitle())
                                      .content(adoptDto.getContent())

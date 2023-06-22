@@ -1,8 +1,6 @@
-package com.project.ipyang.domain.board.entity;
-
+package com.project.ipyang.domain.inquire.entity;
 
 import com.project.ipyang.common.entity.BaseEntity;
-import com.project.ipyang.domain.board.entity.Board;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,22 +8,23 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "inquire_img")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Board_Img extends BaseEntity {
+public class InquireImg extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "img_id")
     private Long id;
 
     @Column(name = "img_original_file")
-    private String original_file;
+    private String imgOriginFile;
 
     @Column(name = "img_stored_file")
-    private String stored_file;
+    private String imgStoredFile;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "board_id")
-    private Board board;
+    @JoinColumn(name = "inquire_id")
+    private Inquire inquire;
 }

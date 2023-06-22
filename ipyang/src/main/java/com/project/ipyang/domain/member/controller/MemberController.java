@@ -79,6 +79,18 @@ public class MemberController {
     }
 
 
+    //회원탈퇴시 del_yn N->Y로 전환
+    @PutMapping(value = "/v1/memberdel")
+    public ResponseDto<MemberDto> deleteMember(DeleteMemberDto memberDto) {
+        return new ResponseDto(memberService.deleteWait(memberDto));
+    }
+    //회원탈퇴
+    @DeleteMapping(value = "/v1/member")
+    public ResponseDto<MemberDto> deleteMember( MemberDto memberDto){
+        return new ResponseDto (memberService.deleteMember(memberDto));
+    }
+
+
 
 
 }

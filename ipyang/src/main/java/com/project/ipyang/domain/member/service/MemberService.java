@@ -1,20 +1,15 @@
 package com.project.ipyang.domain.member.service;
 
 
+import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.response.ResponseDto;
-import com.project.ipyang.domain.member.dto.InsertMemberDto;
-import com.project.ipyang.domain.member.dto.MemberDto;
-import com.project.ipyang.domain.member.dto.SelectMemberDto;
-import com.project.ipyang.domain.member.dto.UpdateMemberDto;
-import com.project.ipyang.domain.member.dto.SignUpMemberDto;
+import com.project.ipyang.domain.member.dto.*;
 import com.project.ipyang.domain.member.entity.Member;
-import com.project.ipyang.domain.member.entity.MemberRoleType;
 import com.project.ipyang.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 
@@ -38,7 +33,8 @@ public class MemberService {
                 .passwd(memberDto.getPasswd())
                 .name(memberDto.getName())
                 .phone(memberDto.getPhone())
-                .member_role(MemberRoleType.USER)
+                .memberRole(IpyangEnum.MemberRoleType.USER)
+                .delYn(IpyangEnum.MemberDelYN.N)
                 .address(memberDto.getAddress())
                 .point(memberDto.getPoint())
                 .build();
@@ -144,6 +140,41 @@ public class MemberService {
         // 성공 응답을 반환합니다.
         return new ResponseDto("회원 정보가 업데이트되었습니다.", HttpStatus.OK.value());
     }
+
+
+    public ResponseDto<MemberDto> deleteMember(MemberDto memberDto) {
+        Optional<Member> memberOptional = memberRepository.findById(memberDto.getId());
+
+
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+            memberRepository.delete(member);
+            return new ResponseDto("회원탈퇴 성공", HttpStatus.OK.value());
+        }
+        else {
+            return new ResponseDto("회원탈퇴 실패", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+    }
+
+    public ResponseDto deleteWait(DeleteMemberDto memberDto) {
+        // 회원 정보를 데이터베이스에서 조회합니다.
+        Optional<Member> memberOptional = memberRepository.findById(memberDto.getId());
+        if (!memberOptional.isPresent()) {
+            // 해당 회원이 존재하지 않는 경우 에러 응답을 반환합니다.
+            return new ResponseDto("존재하지 않는 회원입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+
+        // 기존 회원 정보를 가져옵니다.
+        Member member = memberOptional.get();
+        DeleteMemberDto deleteMember = member.convertDelDto();
+        deleteMember.setDelYn(IpyangEnum.MemberDelYN.Y);
+
+        memberRepository.save(deleteMember.toEntity());
+
+        // 성공 응답을 반환합니다.
+        return new ResponseDto("30일뒤 회원이 탈퇴됩니다.", HttpStatus.OK.value());
+    }
+
 
 
 }

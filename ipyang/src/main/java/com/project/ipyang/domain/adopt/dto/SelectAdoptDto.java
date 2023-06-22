@@ -1,7 +1,7 @@
 package com.project.ipyang.domain.adopt.dto;
 
 import com.project.ipyang.domain.adopt.entity.Adopt;
-import com.project.ipyang.domain.adopt.entity.Adopt_Img;
+import com.project.ipyang.domain.adopt.entity.AdoptImg;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,7 +25,7 @@ public class SelectAdoptDto {
     private String age;
     private String neu;
     private String yn;
-    private List<Adopt_Img> adopt_imgs = new ArrayList<>();
+    private List<AdoptImg> adoptImgs = new ArrayList<>();
     private Long memberId;
     private Long vacId;
     private Long catId;

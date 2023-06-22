@@ -6,20 +6,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
 @Setter
 @Getter
 @RequiredArgsConstructor
-public class Board_ImgDto {
+public class BoardImgDto {
     private Long id;
-
-    private String original_file;
-
-    private String stored_file;
-
+    private String imgOriginFile;
+    private String imgStoredFile;
     private Board board;
 }
