@@ -17,7 +17,7 @@ public class MainController {
 
     //전체 게시판 게시글, 상품, 입양글 데이터 가져오기
     @GetMapping(value = "/api/main")
-    public ResponseDto<List<SelectTotalDto>> selectTotal(SelectTotalDto request) {
+    public ResponseDto<SelectTotalDto> selectTotal(SelectTotalDto request) {
         return mainService.selectTotal(request);
     }
 }

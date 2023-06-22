@@ -20,11 +20,11 @@ public class Point extends BaseEntity {
     private Long id;
 
     @Column(name = "point_type")
-    private String point_type;
+    private String pointType;
 
 
     @Column(name = "point_history")
-    private String point_history;
+    private String pointHistory;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

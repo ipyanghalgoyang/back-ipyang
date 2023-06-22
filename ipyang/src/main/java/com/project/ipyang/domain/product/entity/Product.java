@@ -41,7 +41,7 @@ public class Product extends BaseEntity {
     private Member member;
 
     @OneToMany(mappedBy = "product")
-    private List<Product_Img> product_imgs = new ArrayList<>();
+    private List<ProductImg> productImgs = new ArrayList<>();
 
     public SelectProductDto convertDto() {
         return SelectProductDto.builder()

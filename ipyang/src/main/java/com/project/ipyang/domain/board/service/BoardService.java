@@ -23,16 +23,16 @@ public class BoardService {
 
     public BoardDto createBoard(InsertBoardDto boardDto) {
 
-        Member member = memberRepository.findById(boardDto.getMember_id()).get();
+        Member member = memberRepository.findById(boardDto.getMemberId()).get();
 
         Board board = Board.builder().title(boardDto.getTitle())
                 .content(boardDto.getContent())
-                .view_cnt(boardDto.getView_cnt())
-                .like_cnt(boardDto.getLike_cnt())
-                .common_board(boardDto.getCommon_board())
+                .viewCnt(boardDto.getViewCnt())
+                .likeCnt(boardDto.getLikeCnt())
+                .commonBoard(boardDto.getCommonBoard())
                 .ref(boardDto.getRef())
-                .re_step(boardDto.getRe_step())
-                .re_level(boardDto.getRe_level())
+                .reStep(boardDto.getReStep())
+                .reLevel(boardDto.getReLevel())
                 .member(member)
                 .build();
         boardRepository.save(board);

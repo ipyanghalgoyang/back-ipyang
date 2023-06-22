@@ -1,8 +1,8 @@
 package com.project.ipyang.domain.member.dto;
 
 
+import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.domain.member.entity.Member;
-import com.project.ipyang.domain.member.entity.MemberRoleType;
 import lombok.*;
 
 @Setter
@@ -15,9 +15,9 @@ public class SelectMemberDto {
     private String passwd;
     private String name;
     private String phone;
-    private MemberRoleType memberRoleType;
+    private IpyangEnum.MemberRoleType memberRoleType;
     private String address;
-    private String withdraw;
+    private IpyangEnum.MemberDelYN delYn;
     private int point;
 
     public SelectMemberDto (Member member) {
@@ -26,9 +26,9 @@ public class SelectMemberDto {
         this.passwd = member.getPasswd();
         this.name = member.getName();
         this.phone = member.getPhone();
-        this.memberRoleType = member.getMember_role();
+        this.memberRoleType = member.getMemberRole();
         this.address = member.getAddress();
-        this.withdraw = member.getWithdraw();
+        this.delYn = member.getDelYn();
         this.point = member.getPoint();
     }
 

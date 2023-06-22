@@ -22,7 +22,7 @@ public class Notice extends BaseEntity {
     private Long id;
 
     @Column(name = "n_common_notice")
-    private String common_notice;
+    private String commonNotice;
 
     @Column(name = "n_title")
     private String title;
@@ -30,12 +30,10 @@ public class Notice extends BaseEntity {
     @Column(name = "n_content")
     private String content;
 
-
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
     @OneToMany(mappedBy = "notice")
-    private List<Notice_Img> notice_imgs = new ArrayList<>();
+    private List<NoticeImg> noticeImgs = new ArrayList<>();
 }

@@ -50,11 +50,9 @@ public class Adopt extends BaseEntity {
     @Column(name = "a_adopted_yn")
     private String yn;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vaccine_id")
@@ -66,7 +64,7 @@ public class Adopt extends BaseEntity {
 
     @OneToMany(mappedBy = "adopt")
     @OrderColumn(name = "adopt_img_order")
-    private List<Adopt_Img> adopt_imgs = new ArrayList<>();
+    private List<AdoptImg> adoptImgs = new ArrayList<>();
 
     @OneToMany(mappedBy = "adopt")
     private List<Apply> applies = new ArrayList<>();
@@ -81,6 +79,7 @@ public class Adopt extends BaseEntity {
                                             .gender(gender)
                                             .weight(weight)
                                             .gender(gender)
+                                            .age(age)
                                             .neu(neu)
                                             .yn(yn)
                                             .memberId(member.getId())

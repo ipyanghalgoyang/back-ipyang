@@ -1,11 +1,8 @@
 package com.project.ipyang.domain.product.dto;
 
-import com.project.ipyang.common.entity.BaseEntity;
-import com.project.ipyang.domain.member.entity.Member;
-import com.project.ipyang.domain.product.entity.Product_Img;
+import com.project.ipyang.domain.product.entity.ProductImg;
 import lombok.*;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 @Setter
@@ -21,8 +18,8 @@ public class ProductDto   {
     private int price;
     private String type;
     private String loc;
-    private Long member_id;
-    private List<Product_Img> product_imgs = new ArrayList<>();
+    private Long memberId;
+    private List<ProductImg> productImgs = new ArrayList<>();
 
 
 

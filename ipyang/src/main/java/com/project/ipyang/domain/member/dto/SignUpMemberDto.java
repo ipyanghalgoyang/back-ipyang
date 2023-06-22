@@ -49,9 +49,9 @@ public class SignUpMemberDto {
                                .name(this.name)
                                .phone(this.phone)
                                .address(this.address)
-                               .img_context(this.imgContext)
-                               .original_file(this.imgOriginFile)
-                               .img_stored_file(this.imgStoredFile)
+                               .imgContext(this.imgContext)
+                               .imgOriginFile(this.imgOriginFile)
+                               .imgStoredFile(this.imgStoredFile)
                                .build();
     }
 

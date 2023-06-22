@@ -1,7 +1,6 @@
-package com.project.ipyang.domain.notice.entity;
+package com.project.ipyang.domain.adopt.entity;
 
 import com.project.ipyang.common.entity.BaseEntity;
-import com.project.ipyang.domain.notice.entity.Notice;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,22 +8,23 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "adopt_img")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Notice_Img extends BaseEntity {
+public class AdoptImg extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "img_id")
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "adopt_id")
+    private Adopt adopt;
+
     @Column(name = "img_original_file")
-    private String original_file;
+    private String imgOriginFile;
 
     @Column(name = "img_stored_file")
-    private String stored_file;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "notice_id")
-    private Notice notice;
+    private String imgStoredFile;
 }

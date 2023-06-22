@@ -18,14 +18,14 @@ public class InquireService {
     private final MemberRepository memberRepository;
 
     public InquireDto createInquire(InsertInquireDto inquireDto) {
-        Member member = memberRepository.findById(inquireDto.getMember_id()) .get();
+        Member member = memberRepository.findById(inquireDto.getMemberId()) .get();
 
         Inquire inquire = Inquire.builder().title(inquireDto.getTitle())
                 .content(inquireDto.getContent())
                 .passwd(inquireDto.getPasswd())
-                .reply_yn(inquireDto.getReply_yn())
-                .reply_content(inquireDto.getReply_content())
-                .common_inquire(inquireDto.getCommon_inquire())
+                .replyYn(inquireDto.getReplyYn())
+                .replyContent(inquireDto.getReplyContent())
+                .commonInquire(inquireDto.getCommonInquire())
                 .member(member)
                 .build();
         inquireRepository.save(inquire);

@@ -5,9 +5,9 @@ import lombok.Data;
 
 @Data
 public class InsertAdoptDto extends BaseEntity {
-    private Long member_id;
-    private Long vaccine_id;
-    private Long cat_id;
+    private Long memberId;
+    private Long vaccineId;
+    private Long catId;
     private String title;
     private String content;
     private int view;
