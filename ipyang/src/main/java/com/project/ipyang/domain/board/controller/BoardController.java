@@ -4,12 +4,12 @@ import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.domain.board.dto.BoardDto;
 import com.project.ipyang.domain.board.dto.InsertBoardDto;
 import com.project.ipyang.domain.board.dto.SelectBoardDto;
+import com.project.ipyang.domain.board.dto.UpdateBoardDto;
 import com.project.ipyang.domain.board.repository.BoardRepository;
 import com.project.ipyang.domain.board.service.BoardService;
+import com.project.ipyang.domain.member.dto.UpdateMemberDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,6 +29,19 @@ public class BoardController {
     public ResponseDto<List<BoardDto>> selectAllBoard(SelectBoardDto request) {
         return boardService.selectAllBoard(request);
     }
+
+    //게시글 수정
+    @PutMapping(value = "/v1/board")
+    public ResponseDto<BoardDto> updateBoard(UpdateBoardDto boardDto) {
+        return new ResponseDto(boardService.updateBoard(boardDto));
+    }
+
+    //게시글 삭제
+    @DeleteMapping(value = "/v1/board")
+    public ResponseDto<BoardDto> deleteBoard(BoardDto boardDto) {
+        return new ResponseDto(boardService.deleteBoard(boardDto));
+    }
+
 
 
 }
