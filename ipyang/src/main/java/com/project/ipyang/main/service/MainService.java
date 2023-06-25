@@ -26,7 +26,8 @@ public class MainService {
     private final AdoptRepository adoptRepository;
 
     //전체 게시판 게시글, 상품, 입양글 데이터 가져오기
-    public ResponseDto selectTotal(SelectTotalDto selectTotalDto) {
+    public ResponseDto
+    selectTotal(SelectTotalDto selectTotalDto) {
         List<Board> boards = boardRepository.findAll();
         List<Product> products = productRepository.findAll();
         List<Adopt> adopts = adoptRepository.findAll();

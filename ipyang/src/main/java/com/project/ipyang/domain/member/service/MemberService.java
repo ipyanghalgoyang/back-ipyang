@@ -3,16 +3,19 @@ package com.project.ipyang.domain.member.service;
 
 import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.response.ResponseDto;
+import com.project.ipyang.config.SessionUser;
 import com.project.ipyang.domain.member.dto.*;
 import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +27,8 @@ import java.util.stream.Collectors;
 public class MemberService {
     private  final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final HttpSession session; // HttpSession 객체를 주입받습니다.
+
 
     public MemberDto createMember(InsertMemberDto memberDto) {
 
@@ -98,15 +103,16 @@ public class MemberService {
     }
 
     public ResponseDto loginMember(String email, String passwd) {
-        Member member = memberRepository.findByEmail(email);
+        Optional<Member> member = Optional.ofNullable(memberRepository.findByEmail(email));
 
-        boolean isDuplicate = memberRepository.existsByEmail(email);
-
-        if (isDuplicate) {
-
-            if (member.getPasswd().equals(passwd)) {
+        if (member.isPresent()) {
+            MemberDto memberDto = member.get().convertDto();
+            if (memberDto.getPasswd().equals(passwd)) {
                 // 패스워드가 일치하면 로그인 성공으로 처리합니다.
-                return new ResponseDto("로그인 되었습니다", HttpStatus.OK.value());
+                SessionUser sessionUser = new SessionUser(memberDto);
+                session.setAttribute("loggedInUser", sessionUser);
+
+                return new ResponseDto("로그인에 성공하였습니다.", HttpStatus.OK.value());
             } else {
                 // 패스워드가 일치하지 않으면 로그인 실패로 처리합니다.
                 return new ResponseDto("비밀번호가 일치하지 않습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
@@ -118,6 +124,18 @@ public class MemberService {
 
         }
     }
+
+    // 세션에서 로그인한 회원 객체 가져오기
+    public ResponseDto getLoggedInMember() {
+        SessionUser loggedInMember = (SessionUser) session.getAttribute("loggedInMember");
+
+        if (loggedInMember != null) {
+            return new ResponseDto<>(loggedInMember, HttpStatus.OK.value());
+        } else {
+            return new ResponseDto("로그인한 회원이 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+    }
+
 
     public ResponseDto updateMember(UpdateMemberDto memberDto) {
         // 회원 정보를 데이터베이스에서 조회합니다.

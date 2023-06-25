@@ -65,8 +65,6 @@ public class BoardService {
         }
 
         Board board = boardOptional.get();
-        log.info("board.getTitle()->"+board.getTitle());
-        log.info("board.getContent()->"+board.getContent());
         BoardDto updateBoard = board.convertUpdateDto();  //정보를 담고있음
         updateBoard.setTitle(boardDto.getTitle());//춘천-> 철원 분양글
         updateBoard.setContent(boardDto.getContent());
