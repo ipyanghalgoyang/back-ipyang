@@ -17,4 +17,11 @@ public class IpyangEnum {
         Report
 
     }
+
+    public enum InquireCategory {
+        Adopt,
+        Point,
+        Ad,
+        Else
+    }
 }

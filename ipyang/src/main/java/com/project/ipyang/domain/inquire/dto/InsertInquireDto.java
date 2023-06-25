@@ -1,5 +1,6 @@
 package com.project.ipyang.domain.inquire.dto;
 
+import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.entity.BaseEntity;
 import lombok.Data;
 
@@ -7,10 +8,10 @@ import lombok.Data;
 public class InsertInquireDto extends BaseEntity {
     private String title;
     private String content;
-    private int passwd;
+    private String passwd;
     private int replyYn;
     private String replyContent;
-    private String commonInquire;
+    private IpyangEnum.InquireCategory commonInquire;
     private Long memberId;
 
 }

@@ -1,10 +1,16 @@
 package com.project.ipyang.domain.adopt.dto;
 
 import com.project.ipyang.common.entity.BaseEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Data
-public class InsertAdoptDto extends BaseEntity {
+@Builder
+@AllArgsConstructor
+@RequiredArgsConstructor
+public class WriteAdoptDto extends BaseEntity {
     private Long memberId;
     private Long vaccineId;
     private Long catId;
@@ -16,5 +22,5 @@ public class InsertAdoptDto extends BaseEntity {
     private String weight;
     private String age;
     private String neu;
-    private String yn;
+    private int yn;
 }
