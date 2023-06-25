@@ -2,6 +2,7 @@ package com.project.ipyang.domain.board.dto;
 
 import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.domain.board.entity.Board;
+import com.project.ipyang.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +22,7 @@ public class SelectBoardDto {
     private int ref;   //글그룹
     private int reStep;  //들여쓰기
     private int reLevel;//1이 게시글 2가 댓글
-    private Long memberId;
+    private long memberId;
 
     public SelectBoardDto(Board board) {
         this.id = board.getId();
@@ -35,4 +36,20 @@ public class SelectBoardDto {
         this.reLevel = board.getReLevel();
         this.memberId = board.getMember().getId();
     }
+
+
+//    public Board toEntity() {
+//        return Board.builder()
+//                .id(id)
+//                .title(title)
+//                .content(content)
+//                .viewCnt(viewCnt)
+//                .likeCnt(likeCnt)
+//                .commonBoard(commonBoard)
+//                .ref(ref)
+//                .reStep(reStep)
+//                .reLevel(reLevel)
+//                .member(memberId)
+//                .build();
+//    }
 }

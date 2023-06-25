@@ -1,6 +1,6 @@
 package com.project.ipyang.domain.product.dto;
 
-import com.project.ipyang.domain.member.entity.Member;
+import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.domain.product.entity.Product;
 import com.project.ipyang.domain.product.entity.ProductImg;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.List;
 public class SelectProductDto  {
     private Long id;
     private String name;
-    private String status;
+    private IpyangEnum.ProductStatus status;
     private int price;
     private String type;
     private String loc;
@@ -32,6 +32,4 @@ public class SelectProductDto  {
         this.loc = product.getLoc();
         this.memberId = product.getMember().getId();
     }
-
-
 }

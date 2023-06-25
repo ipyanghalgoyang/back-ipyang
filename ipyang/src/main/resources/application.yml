@@ -13,7 +13,10 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: none
-
+  security:
+    user:
+      name: user
+      password: 1234
 ########### DB 설정####################
   profiles:
     include: aws
@@ -33,3 +36,5 @@ springdoc:
     disable-swagger-default-url: true
     display-request-duration: true
     operations-sorter: alpha
+
+
