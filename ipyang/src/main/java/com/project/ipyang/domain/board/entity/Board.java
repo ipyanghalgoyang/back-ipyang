@@ -83,7 +83,7 @@ public class Board extends BaseEntity {   //공유하기 제보하기  홍보하
                                      .ref(ref)
                                      .reStep(reStep)
                                      .reLevel(reLevel)
-                                     .memberId(member)
+                                    .memberId(member.getId())
                                      .build();
     }
 

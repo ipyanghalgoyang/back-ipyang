@@ -17,4 +17,14 @@ public class IpyangEnum {
         Report
 
     }
+
+    public enum ProductStatus {
+        Y,N
+    }
+
+    public enum ProductType{
+        Food,Toy,Snack,Toilet,Etc
+    }
+
+
 }

@@ -1,16 +1,22 @@
 package com.project.ipyang.domain.member.controller;
 
 import com.project.ipyang.common.response.ResponseDto;
+import com.project.ipyang.config.SessionUser;
 import com.project.ipyang.domain.member.dto.*;
+import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
@@ -23,6 +29,9 @@ public class MemberController {
 
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private HttpSession session; // HttpSession 객체를 주입받음
 
     @PostMapping(value = "/v1/member")
     public ResponseDto<MemberDto> createMember(InsertMemberDto request) {
@@ -51,11 +60,27 @@ public class MemberController {
         return memberService.checkDuplicateNickname(nickname);
     }
 
-    @GetMapping(value = "/v1/login")
-    public ResponseDto loginMember(@RequestParam String email,@RequestParam String passwd) {
-        return memberService.loginMember(email,passwd);
+    @GetMapping("/v1/login")
+    public ResponseEntity loginMember(@RequestParam String email, @RequestParam String passwd) {
+        ResponseDto response;
+
+        // 회원 로그인 서비스 호출
+        try {
+            response = memberService.loginMember(email, passwd);
+        }catch(Exception e ){
+            log.info(e.getMessage());
+            response = new ResponseDto("로그인에 실패하였습니다. 다시 시도해주세요.",HttpStatus.NOT_FOUND.value());
+        }
+        return new ResponseEntity<ResponseDto<?>>(response,HttpStatus.OK);
     }
 
+
+    @GetMapping("/v1/afterlogin")
+    public ResponseDto<MemberDto> getLoggedInMember(MemberDto memberDto) {
+        ResponseDto loggedInMember = memberService.getLoggedInMember();
+        // 필요한 경우 MemberDto로 변환하여 반환
+        return loggedInMember;
+    }
 
     //회원 가입 요청
     @PostMapping(value = "/v1/sign")

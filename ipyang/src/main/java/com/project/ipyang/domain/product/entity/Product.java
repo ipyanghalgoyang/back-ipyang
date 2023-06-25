@@ -1,8 +1,11 @@
 package com.project.ipyang.domain.product.entity;
 
+import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.product.dto.SelectProductDto;
+import com.project.ipyang.domain.product.dto.SoldProductDto;
+import com.project.ipyang.domain.product.dto.UpdateProductDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,13 +27,14 @@ public class Product extends BaseEntity {
     @Column(name = "p_name")
     private String name;
 
-    @Column(name = "p_status")
-    private String status;
+    @Column(name = "p_status")//구매가능 판매완료
+    @Enumerated(EnumType.STRING)
+    private IpyangEnum.ProductStatus status;
 
     @Column(name = "p_price")
     private int price;
 
-    @Column(name = "p_type")
+    @Column(name = "p_type")//품목
     private String type;
 
     @Column(name = "p_loc")
@@ -54,5 +58,31 @@ public class Product extends BaseEntity {
                                         .memberId(member.getId())
                                         .build();
     }
+
+    public UpdateProductDto convertUpdateDto(){
+        return UpdateProductDto.builder()
+                .id(id)
+                .name(name)
+                .status(status)
+                .price(price)
+                .type(type)
+                .loc(loc)
+                .memberId(member.getId())
+                .build();
+    }
+
+    public SoldProductDto convertSoldDto(){
+        return SoldProductDto.builder()
+                .id(id)
+                .name(name)
+                .status(status)
+                .price(price)
+                .type(type)
+                .loc(loc)
+                .memberId(member.getId())
+                .build();
+    }
+
+
 
 }
