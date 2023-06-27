@@ -11,7 +11,9 @@ import com.project.ipyang.domain.vaccine.entity.Vaccine;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -71,7 +73,7 @@ public class Adopt extends BaseEntity {
     @OneToMany(mappedBy = "adopt")
     private List<Apply> applies = new ArrayList<>();
 
-    public WriteAdoptDto convertWriteDto() {
+    public WriteAdoptDto convertWriteDto(Long memberId) {
         return new WriteAdoptDto().builder()
                                             .title(title)
                                             .content(content)
@@ -82,6 +84,8 @@ public class Adopt extends BaseEntity {
                                             .age(age)
                                             .neu(neu)
                                             .yn(0)
+                                            .adoptImgDtos(convertImgDto())
+                                            .memberId(memberId)
                                             .vaccineId(vaccine.getId())
                                             .catId(catType.getId())
                                             .build();
@@ -100,7 +104,8 @@ public class Adopt extends BaseEntity {
                                             .age(age)
                                             .neu(neu)
                                             .yn(yn)
-                                            .adoptImgs(convertImgDto(adoptImgs))
+                                            .createdAt(getCreatedAt())
+                                            .adoptImgs(convertImgDto())
                                             .memberId(member.getId())
                                             .vacId(vaccine.getId())
                                             .catId(catType.getId())
@@ -109,8 +114,8 @@ public class Adopt extends BaseEntity {
 
 
 
-    public List<AdoptImgDto> convertImgDto(List<AdoptImg> adoptImgs) {
-        if(adoptImgs.isEmpty()) return null;
+    public List<AdoptImgDto> convertImgDto() {
+        if(adoptImgs == null || adoptImgs.isEmpty()) return Collections.emptyList();
 
         List<AdoptImgDto> adoptImgDtoList = new ArrayList<>();
         AdoptImgDto adoptImgDto = null;

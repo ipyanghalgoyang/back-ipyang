@@ -5,7 +5,7 @@ import com.project.ipyang.common.entity.BaseEntity;
 import lombok.Data;
 
 @Data
-public class InsertInquireDto extends BaseEntity {
+public class WriteInquireDto extends BaseEntity {
     private String title;
     private String content;
     private String passwd;

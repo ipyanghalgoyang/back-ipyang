@@ -18,9 +18,8 @@ public class InsertProductDto  {
     private int price;
     private String type;
     private String loc;
-
     private Long memberId;
-   private List<MultipartFile> imageFiles;
+    private List<MultipartFile> imageFiles;
 
     public Long getMemberId() {
         return memberId;

@@ -1,13 +1,15 @@
 package com.project.ipyang.domain.adopt.controller;
 
 import com.project.ipyang.common.response.ResponseDto;
-import com.project.ipyang.domain.adopt.dto.AdoptDto;
+import com.project.ipyang.config.SessionUser;
 import com.project.ipyang.domain.adopt.dto.SelectAdoptDto;
 import com.project.ipyang.domain.adopt.dto.WriteAdoptDto;
 import com.project.ipyang.domain.adopt.service.AdoptService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -15,11 +17,16 @@ import java.util.List;
 public class AdoptController {
 
     private final AdoptService adoptService;
+    private final HttpServletRequest httpServletRequest;
 
-    //입양 게시글 데이터 삽입
+    //입양글 작성
     @PostMapping(value = "/v1/adopt/write")
-    public ResponseDto<AdoptDto> createAdopt(WriteAdoptDto request) {
-        return new ResponseDto(adoptService.createAdopt(request));
+    public ResponseDto<WriteAdoptDto> createAdopt(WriteAdoptDto request) {
+        HttpSession session = request.getSession();
+        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
+        Long memberId = loggedInUser.getId();
+
+        return adoptService.createAdopt(request, memberId);
     }
 
     //전체 입양글 조회

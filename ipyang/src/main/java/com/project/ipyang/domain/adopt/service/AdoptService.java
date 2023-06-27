@@ -13,6 +13,7 @@ import com.project.ipyang.domain.vaccine.repository.VaccineRepository;
 import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,33 +32,48 @@ public class AdoptService {
     private final CatTypeRepository catTypeRepository;
 
     //입양 게시글 데이터 삽입
-    public AdoptDto createAdopt(WriteAdoptDto request) {
-        Member member = memberRepository.findById(request.getMemberId()).get();
-        Vaccine vaccine = vaccineRepository.findById(request.getVaccineId()).get();
-        CatType catType = catTypeRepository.findById(request.getCatId()).get();
+    @Transactional
+    public ResponseDto createAdopt(WriteAdoptDto request, Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(()->new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
+        Vaccine vaccine = vaccineRepository.findById(request.getVaccineId()).orElseThrow(()->new IllegalArgumentException("데이터가 존재하지 않습니다."));
+        CatType catType = catTypeRepository.findById(request.getCatId()).orElseThrow(()->new IllegalArgumentException("데이터가 존재하지 않습니다."));
 
-        Adopt adopt = Adopt.builder().title(request.getTitle())
-                                     .content(request.getContent())
-                                     .view(request.getView())
-                                     .name(request.getName())
-                                     .gender(request.getGender())
-                                     .weight(request.getWeight())
-                                     .age(request.getAge())
-                                     .neu(request.getNeu())
-                                     .yn(request.getYn())
-                                     .member(member)
-                                     .vaccine(vaccine)
-                                     .catType(catType)
-                                     .build();
+        Adopt adopt = Adopt.builder()
+                                    .title(request.getTitle())
+                                    .content(request.getContent())
+                                    .view(0)
+                                    .name(request.getName())
+                                    .gender(request.getGender())
+                                    .weight(request.getWeight())
+                                    .age(request.getAge())
+                                    .neu(request.getNeu())
+                                    .yn(0)
+                                    .member(member)
+                                    .vaccine(vaccine)
+                                    .catType(catType)
+                                    .build();
 
-        adoptRepository.save(adopt);
-        return new AdoptDto();
+        Long savedId = adoptRepository.save(adopt).getId();
+        if(savedId != null) return new ResponseDto(adopt.convertWriteDto(memberId), HttpStatus.OK.value());
+        else return new ResponseDto("에러가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        /*WriteAdoptDto savedAdoptDto = savedAdopt.convertWriteDto(memberId);
+        if(savedAdopt != null) return new ResponseDto(savedAdoptDto, HttpStatus.OK.value());
+        else return new ResponseDto("글 작성을 실패하였습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());*/
+
+        /*Optional<Adopt> searchAdopt = adoptRepository.findById(adopt.getId());
+
+        if(!searchAdopt.isPresent()) {
+            return new ResponseDto("에러가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+        else return new ResponseDto(adopt.convertWriteDto(memberId), HttpStatus.OK.value());*/
+
+       /* return new ResponseDto("작성되었습니다", HttpStatus.OK.value());*/
     }
 
     @Transactional
     //전체 입양 게시글 가져오기
     public ResponseDto selectAllAdopt(SelectAdoptDto request) {
-        List<Adopt> adopts = adoptRepository.findAll();
+        List<Adopt> adopts = adoptRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
         List<SelectAdoptDto> selectAdoptDtos = adopts.stream().map(SelectAdoptDto::new).collect(Collectors.toList());
 
         if (!selectAdoptDtos.isEmpty()) {
