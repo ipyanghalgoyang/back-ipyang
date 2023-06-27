@@ -14,6 +14,7 @@ import com.project.ipyang.main.dto.SelectTotalDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +27,8 @@ public class MainService {
     private final AdoptRepository adoptRepository;
 
     //전체 게시판 게시글, 상품, 입양글 데이터 가져오기
-    public ResponseDto
-    selectTotal(SelectTotalDto selectTotalDto) {
+    @Transactional
+    public ResponseDto selectTotal(SelectTotalDto selectTotalDto) {
         List<Board> boards = boardRepository.findAll();
         List<Product> products = productRepository.findAll();
         List<Adopt> adopts = adoptRepository.findAll();
