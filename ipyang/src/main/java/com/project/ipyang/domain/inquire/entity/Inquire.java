@@ -34,8 +34,9 @@ public class Inquire extends BaseEntity {
     @Column(name = "i_passwd")
     private String passwd;
 
-    @Column(name = "i_reply_yn")         //미답변 : 0, 답변 : 1
-    private int replyYn;
+    @Column(name = "i_reply_yn")
+    @Enumerated(EnumType.STRING)
+    private IpyangEnum.InquireStatus status;
 
     @Column(name = "i_reply_content")
     private String replyContent;
@@ -53,10 +54,9 @@ public class Inquire extends BaseEntity {
                                     .title(title)
                                     .content(content)
                                     .passwd(passwd)
-                                    .replyYn(replyYn)
+                                    .status(status)
                                     .replyContent(replyContent)
                                     .member(member)
-
                                     .inquireImgDtos(convertImgDto())
                                     .build();
     }
@@ -66,7 +66,7 @@ public class Inquire extends BaseEntity {
                 .title(title)
                 .content(content)
                 .passwd(passwd)
-                .replyYn(0)
+                .status(IpyangEnum.InquireStatus.N)
                 .memberId(memberId)
                 .inquireImgDtos(convertImgDto())
                 .build();
@@ -114,7 +114,7 @@ public class Inquire extends BaseEntity {
 
     public void replyUpdate(String inputReplyContent) {
         this.replyContent = inputReplyContent;
-        this.replyYn = 1;
+        this.status = IpyangEnum.InquireStatus.Y;
     }
 
 
