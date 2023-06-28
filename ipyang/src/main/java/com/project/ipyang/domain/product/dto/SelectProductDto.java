@@ -1,8 +1,6 @@
 package com.project.ipyang.domain.product.dto;
 
 import com.project.ipyang.common.IpyangEnum;
-import com.project.ipyang.domain.board.entity.Board;
-import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.product.entity.Product;
 import com.project.ipyang.domain.product.entity.ProductImg;
 import lombok.AllArgsConstructor;
@@ -34,8 +32,4 @@ public class SelectProductDto  {
         this.loc = product.getLoc();
         this.memberId = product.getMember().getId();
     }
-
-
-
-
 }

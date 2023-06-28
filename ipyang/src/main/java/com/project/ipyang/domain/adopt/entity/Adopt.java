@@ -1,7 +1,9 @@
 package com.project.ipyang.domain.adopt.entity;
 
 import com.project.ipyang.common.entity.BaseEntity;
+import com.project.ipyang.domain.adopt.dto.AdoptImgDto;
 import com.project.ipyang.domain.adopt.dto.SelectAdoptDto;
+import com.project.ipyang.domain.adopt.dto.WriteAdoptDto;
 import com.project.ipyang.domain.apply.entity.Apply;
 import com.project.ipyang.domain.catType.entity.CatType;
 import com.project.ipyang.domain.member.entity.Member;
@@ -9,7 +11,9 @@ import com.project.ipyang.domain.vaccine.entity.Vaccine;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -48,7 +52,7 @@ public class Adopt extends BaseEntity {
     private String neu;
 
     @Column(name = "a_adopted_yn")
-    private String yn;
+    private int yn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -69,6 +73,24 @@ public class Adopt extends BaseEntity {
     @OneToMany(mappedBy = "adopt")
     private List<Apply> applies = new ArrayList<>();
 
+    public WriteAdoptDto convertWriteDto(Long memberId) {
+        return new WriteAdoptDto().builder()
+                                            .title(title)
+                                            .content(content)
+                                            .view(0)
+                                            .name(name)
+                                            .gender(gender)
+                                            .weight(weight)
+                                            .age(age)
+                                            .neu(neu)
+                                            .yn(0)
+                                            .adoptImgDtos(convertImgDto())
+                                            .memberId(memberId)
+                                            .vaccineId(vaccine.getId())
+                                            .catId(catType.getId())
+                                            .build();
+    }
+
     public SelectAdoptDto convertDto() {
         return new SelectAdoptDto().builder()
                                             .id(id)
@@ -82,6 +104,8 @@ public class Adopt extends BaseEntity {
                                             .age(age)
                                             .neu(neu)
                                             .yn(yn)
+                                            .createdAt(getCreatedAt())
+                                            .adoptImgs(convertImgDto())
                                             .memberId(member.getId())
                                             .vacId(vaccine.getId())
                                             .catId(catType.getId())
@@ -89,4 +113,35 @@ public class Adopt extends BaseEntity {
     }
 
 
+
+    public List<AdoptImgDto> convertImgDto() {
+        if(adoptImgs == null || adoptImgs.isEmpty()) return Collections.emptyList();
+
+        List<AdoptImgDto> adoptImgDtoList = new ArrayList<>();
+        AdoptImgDto adoptImgDto = null;
+
+        for(AdoptImg adoptImg : adoptImgs) {
+            adoptImgDtoList.add(adoptImgDto.builder()
+                                                    .id(adoptImg.getId())
+                                                    .imgOriginFile(adoptImg.getImgOriginFile())
+                                                    .imgStoredFile(adoptImg.getImgStoredFile())
+                                                    .build());
+        }
+        return adoptImgDtoList;
+    }
+
+
+    public void update(String title, String content, String name, String gender, String weight,
+                       String age, String neu, int yn, Vaccine vaccine, CatType catType) {
+        this.title = title;
+        this.content = content;
+        this.name = name;
+        this.gender = gender;
+        this.weight = weight;
+        this.age = age;
+        this.neu = neu;
+        this.yn = yn;
+        this.vaccine = vaccine;
+        this.catType = catType;
+    }
 }

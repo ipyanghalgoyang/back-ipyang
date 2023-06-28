@@ -22,7 +22,7 @@ public class AdoptDto {
     private String weight;
     private String age;
     private String neu;
-    private String yn;
+    private int yn;
     private Member member;
     private Vaccine vaccine;
     private CatType catType;
@@ -30,7 +30,7 @@ public class AdoptDto {
 
     public AdoptDto(Long id, String title, String content, int view,
                     String name, String gender, String weight,
-                    String age, String neu, String yn,
+                    String age, String neu, int yn,
                     Member member, Vaccine vaccine,
                     CatType catType, List<AdoptImg> adoptImgs) {
         this.id = id;

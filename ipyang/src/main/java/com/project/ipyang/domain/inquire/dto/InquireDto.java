@@ -10,15 +10,14 @@ import java.util.List;
 
 @Data
 @RequiredArgsConstructor
-
 public class InquireDto {
     private Long id;
     private String title;
     private String content;
-    private int passwd;               //비밀번호 숫자4자리로만 받기
+    private String passwd;
     private int replyYn;
-    private String  replyContent;
-    private String  commonInquire;
+    private String replyContent;
+    private String commonInquire;
     private Member member;
     private List<InquireImg> inquireImgs = new ArrayList<>();
 

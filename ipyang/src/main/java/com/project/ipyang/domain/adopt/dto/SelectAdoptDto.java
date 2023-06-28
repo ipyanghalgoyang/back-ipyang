@@ -1,12 +1,13 @@
 package com.project.ipyang.domain.adopt.dto;
 
+import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.adopt.entity.Adopt;
-import com.project.ipyang.domain.adopt.entity.AdoptImg;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,11 +25,12 @@ public class SelectAdoptDto {
     private String weight;
     private String age;
     private String neu;
-    private String yn;
-    private List<AdoptImg> adoptImgs = new ArrayList<>();
+    private int yn;
+    private List<AdoptImgDto> adoptImgs = new ArrayList<>();
     private Long memberId;
     private Long vacId;
     private Long catId;
+    private LocalDateTime createdAt;
 
     public SelectAdoptDto(Adopt adopt) {
         this.id = adopt.getId();
@@ -41,8 +43,12 @@ public class SelectAdoptDto {
         this.age = adopt.getAge();
         this.neu = adopt.getNeu();
         this.yn = adopt.getYn();
+        this.adoptImgs = adopt.convertImgDto();
         this.memberId = adopt.getMember().getId();
         this.vacId = adopt.getVaccine().getId();
         this.catId = adopt.getCatType().getId();
+        this.createdAt = adopt.getCreatedAt();
+
     }
+
 }
