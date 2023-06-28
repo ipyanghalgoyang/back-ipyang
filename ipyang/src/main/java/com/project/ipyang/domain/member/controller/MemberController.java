@@ -61,7 +61,7 @@ public class MemberController {
         return memberService.checkDuplicateNickname(nickname);
     }
 
-    @GetMapping("/v1/login")
+    @PostMapping("/v1/login")
     public ResponseEntity loginMember(@RequestParam String email, @RequestParam String passwd) {
         ResponseDto response;
 
