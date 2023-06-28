@@ -30,8 +30,8 @@ public class InsertBoardDto  {
     }
 
 
-    public HttpSession getSession() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        return request.getSession();
-    }
+//    public HttpSession getSession() {
+//        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+//        return request.getSession();
+//    }
 }

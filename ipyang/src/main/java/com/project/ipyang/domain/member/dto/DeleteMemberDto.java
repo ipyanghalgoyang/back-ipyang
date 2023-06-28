@@ -23,7 +23,8 @@ public class DeleteMemberDto {
     private int point;
     private IpyangEnum.MemberDelYN delYn;
 
-    public Member toEntity( ){
+
+    public Member toEntity() {
         return Member.builder()
                 .id(id)
                 .email(email)

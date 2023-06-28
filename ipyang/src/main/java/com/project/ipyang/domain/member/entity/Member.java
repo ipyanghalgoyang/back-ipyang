@@ -123,7 +123,9 @@ public class Member extends BaseEntity {
                 .build();
     }
 
-
+    public void setDelYn(IpyangEnum.MemberDelYN delYn) {
+        this.delYn = delYn;
+    }
 
 
 

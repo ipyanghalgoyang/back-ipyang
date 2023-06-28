@@ -20,11 +20,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
-    private final HttpServletRequest request;
+    
 
     @PostMapping(value = "/v1/board")
-    public ResponseDto<BoardDto> createBoard(InsertBoardDto request) {
-        HttpSession session = request.getSession();
+    public ResponseDto<BoardDto> createBoard(InsertBoardDto request,HttpSession session) {
+
         SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
 
         Long memberId = loggedInUser.getId();

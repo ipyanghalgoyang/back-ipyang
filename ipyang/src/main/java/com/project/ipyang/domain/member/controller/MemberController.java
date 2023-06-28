@@ -111,7 +111,6 @@ public class MemberController {
 
         return new ResponseDto(memberService.deleteWait(memberDto));
 
-
     }
     //회원탈퇴
     @DeleteMapping(value = "/v1/member")

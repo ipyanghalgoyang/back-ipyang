@@ -184,10 +184,10 @@ public class MemberService {
 
         // 기존 회원 정보를 가져옵니다.
         Member member = memberOptional.get();
-        DeleteMemberDto deleteMember = member.convertDelDto();
-        deleteMember.setDelYn(IpyangEnum.MemberDelYN.Y);
+       // DeleteMemberDto deleteMember = member.convertDelDto();
+        member.setDelYn(IpyangEnum.MemberDelYN.Y);
 
-        memberRepository.save(deleteMember.toEntity());
+        memberRepository.save(member);
 
         // 성공 응답을 반환합니다.
         return new ResponseDto("30일뒤 회원이 탈퇴됩니다.", HttpStatus.OK.value());
