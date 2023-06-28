@@ -3,6 +3,7 @@ package com.project.ipyang.domain.adopt.service;
 import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.domain.adopt.dto.AdoptDto;
 import com.project.ipyang.domain.adopt.dto.SelectAdoptDto;
+import com.project.ipyang.domain.adopt.dto.UpdateAdoptDto;
 import com.project.ipyang.domain.adopt.dto.WriteAdoptDto;
 import com.project.ipyang.domain.adopt.entity.Adopt;
 import com.project.ipyang.domain.catType.entity.CatType;
@@ -31,11 +32,11 @@ public class AdoptService {
     private final VaccineRepository vaccineRepository;
     private final CatTypeRepository catTypeRepository;
 
-    //입양 게시글 데이터 삽입
+    //입양글 작성
     @Transactional
     public ResponseDto createAdopt(WriteAdoptDto request, Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(()->new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
-        Vaccine vaccine = vaccineRepository.findById(request.getVaccineId()).orElseThrow(()->new IllegalArgumentException("데이터가 존재하지 않습니다."));
+        Vaccine vaccine = vaccineRepository.findById(request.getVacId()).orElseThrow(()->new IllegalArgumentException("데이터가 존재하지 않습니다."));
         CatType catType = catTypeRepository.findById(request.getCatId()).orElseThrow(()->new IllegalArgumentException("데이터가 존재하지 않습니다."));
 
         Adopt adopt = Adopt.builder()
@@ -54,24 +55,14 @@ public class AdoptService {
                                     .build();
 
         Long savedId = adoptRepository.save(adopt).getId();
+
         if(savedId != null) return new ResponseDto(adopt.convertWriteDto(memberId), HttpStatus.OK.value());
         else return new ResponseDto("에러가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        /*WriteAdoptDto savedAdoptDto = savedAdopt.convertWriteDto(memberId);
-        if(savedAdopt != null) return new ResponseDto(savedAdoptDto, HttpStatus.OK.value());
-        else return new ResponseDto("글 작성을 실패하였습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());*/
-
-        /*Optional<Adopt> searchAdopt = adoptRepository.findById(adopt.getId());
-
-        if(!searchAdopt.isPresent()) {
-            return new ResponseDto("에러가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
-        else return new ResponseDto(adopt.convertWriteDto(memberId), HttpStatus.OK.value());*/
-
-       /* return new ResponseDto("작성되었습니다", HttpStatus.OK.value());*/
     }
 
+
+    //전체 입양글 조회
     @Transactional
-    //전체 입양 게시글 가져오기
     public ResponseDto selectAllAdopt(SelectAdoptDto request) {
         List<Adopt> adopts = adoptRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
         List<SelectAdoptDto> selectAdoptDtos = adopts.stream().map(SelectAdoptDto::new).collect(Collectors.toList());
@@ -80,6 +71,7 @@ public class AdoptService {
             return new ResponseDto(selectAdoptDtos, HttpStatus.OK.value());
         } else return new ResponseDto("가져올 데이터가 없습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
+
 
     //특정 입양글 조회
     @Transactional
@@ -93,21 +85,24 @@ public class AdoptService {
         return new ResponseDto(detailAdopt, HttpStatus.OK.value());
     }
 
+
     //특정 입양글 수정
+    /*
+    * 현재 이미지 수정은 제외하였음
+    * */
     @Transactional
-    public ResponseDto updateAdopt(Long id, SelectAdoptDto request) {
+    public ResponseDto updateAdopt(Long id, UpdateAdoptDto request) {
         Optional<Adopt> adopt = adoptRepository.findById(id);
         if(!adopt.isPresent()) {
             return new ResponseDto("존재하지 않는 글입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
 
         Vaccine vaccine = vaccineRepository.findById(request.getVacId()).orElseThrow(()->new IllegalArgumentException("데이터가 존재하지 않습니다."));
-        CatType catType = catTypeRepository.findById(request.getCatId()).orElseThrow(()->new IllegalArgumentException("게시글이 존재하지 않습니다."));
+        CatType catType = catTypeRepository.findById(request.getCatId()).orElseThrow(()->new IllegalArgumentException("데이터가 존재하지 않습니다."));
 
         adopt.get().update(request.getTitle(), request.getContent(), request.getName(), request.getGender(),
                            request.getWeight(), request.getAge(), request.getNeu(), request.getYn(), vaccine, catType);
 
-        adoptRepository.save(adopt.get());
         return new ResponseDto("수정되었습니다", HttpStatus.OK.value());
 
     }

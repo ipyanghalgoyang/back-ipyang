@@ -18,13 +18,6 @@ public class IpyangEnum {
 
     }
 
-    public enum InquireCategory {
-        Adopt,
-        Point,
-        Ad,
-        Else
-    }
-
 
     public enum ProductStatus {
         Y,N
@@ -32,6 +25,17 @@ public class IpyangEnum {
 
     public enum ProductType{
         Food,Toy,Snack,Toilet,Etc
+    }
+
+
+    public enum NoticeCategory {
+        Notice,
+        Event,
+        FAQ
+    }
+
+    public enum InquireStatus {
+        Y, N
     }
 
 

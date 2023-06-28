@@ -1,7 +1,8 @@
-package com.project.ipyang.domain.adopt.dto;
+package com.project.ipyang.domain.notice.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project.ipyang.common.entity.BaseEntity;
+import com.project.ipyang.common.IpyangEnum;
+import com.project.ipyang.domain.notice.entity.NoticeImg;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,26 +19,16 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class WriteAdoptDto extends BaseEntity {
-    private Long memberId;
-    private Long vacId;
-    private Long catId;
+public class WriteNoticeDto {
     private String title;
     private String content;
-    private int view;
-    private String name;
-    private String gender;
-    private String weight;
-    private String age;
-    private String neu;
-    private int yn;
-    private List<AdoptImgDto> adoptImgDtos = new ArrayList<>();
+    private Long memberId;
+    private IpyangEnum.NoticeCategory category;
+    private List<NoticeImgDto> noticeImgs = new ArrayList<>();
 
     @JsonIgnore
     public HttpSession getSession() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         return request.getSession();
     }
-
-
 }

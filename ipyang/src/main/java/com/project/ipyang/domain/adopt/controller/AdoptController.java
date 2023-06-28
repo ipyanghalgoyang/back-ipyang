@@ -3,6 +3,7 @@ package com.project.ipyang.domain.adopt.controller;
 import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.config.SessionUser;
 import com.project.ipyang.domain.adopt.dto.SelectAdoptDto;
+import com.project.ipyang.domain.adopt.dto.UpdateAdoptDto;
 import com.project.ipyang.domain.adopt.dto.WriteAdoptDto;
 import com.project.ipyang.domain.adopt.service.AdoptService;
 import lombok.RequiredArgsConstructor;
@@ -42,13 +43,13 @@ public class AdoptController {
     }
 
     //특정 입양글 수정
-    @PutMapping(value = "/v1/adopt/edit/{id}")
-    public ResponseDto updateAdopt(@PathVariable("id") Long id, SelectAdoptDto request) {
+    @PutMapping(value = "/v1/adopt/{id}/edit")
+    public ResponseDto updateAdopt(@PathVariable("id") Long id, @RequestBody UpdateAdoptDto request) {
         return adoptService.updateAdopt(id, request);
     }
 
     //특정 입양글 삭제
-    @DeleteMapping(value = "v1/adopt/delete/{id}")
+    @DeleteMapping(value = "v1/adopt/{id}/delete")
     public ResponseDto deleteAdopt(@PathVariable("id") Long id) {
         return adoptService.deleteAdopt(id);
     }
