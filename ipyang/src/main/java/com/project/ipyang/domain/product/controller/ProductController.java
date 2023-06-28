@@ -20,11 +20,11 @@ import java.util.List;
 public class ProductController {
 
         private final ProductService productService;
-        private final HttpServletRequest request;
+
 
         @PostMapping(value = "/v1/product")
-        public ResponseDto<ProductDto> createProduct(InsertProductDto request) {
-                HttpSession session = request.getSession();
+        public ResponseDto<ProductDto> createProduct(InsertProductDto request,HttpSession session) {
+
                 SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
 
                 Long memberId = loggedInUser.getId();

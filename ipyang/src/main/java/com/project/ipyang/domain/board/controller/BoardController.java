@@ -1,6 +1,7 @@
 package com.project.ipyang.domain.board.controller;
 
 import com.project.ipyang.common.response.ResponseDto;
+import com.project.ipyang.config.SessionUser;
 import com.project.ipyang.domain.board.dto.BoardDto;
 import com.project.ipyang.domain.board.dto.InsertBoardDto;
 import com.project.ipyang.domain.board.dto.SelectBoardDto;
@@ -11,16 +12,23 @@ import com.project.ipyang.domain.member.dto.UpdateMemberDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
+    
 
     @PostMapping(value = "/v1/board")
-    public ResponseDto<BoardDto> createBoard(InsertBoardDto request) {
-        return new ResponseDto(boardService.createBoard(request));
+    public ResponseDto<BoardDto> createBoard(InsertBoardDto request,HttpSession session) {
+
+        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
+
+        Long memberId = loggedInUser.getId();
+        return new ResponseDto(boardService.createBoard(request,memberId));
     }
 
 
