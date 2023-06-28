@@ -1,5 +1,6 @@
 package com.project.ipyang.domain.inquire.service;
 
+import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.domain.inquire.dto.*;
 import com.project.ipyang.domain.inquire.entity.Inquire;
@@ -34,7 +35,7 @@ public class InquireService {
                                         .title(request.getTitle())
                                         .content(request.getContent())
                                         .passwd(request.getPasswd())
-                                        .replyYn(0)
+                                        .status(IpyangEnum.InquireStatus.N)
                                         .member(member)
                                         .build();
 
@@ -117,7 +118,7 @@ public class InquireService {
             return new ResponseDto("존재하지 않는 글입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
         inquire.get().replyUpdate(request.getReplyContent());
-        if(inquire.get().getReplyYn() == 1) {
+        if(inquire.get().getStatus() == IpyangEnum.InquireStatus.Y) {
             return new ResponseDto("답변이 작성되었습니다", HttpStatus.OK.value());
         } else return new ResponseDto("에러가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
     }

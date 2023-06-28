@@ -28,5 +28,16 @@ public class IpyangEnum {
     }
 
 
+    public enum NoticeCategory {
+        Notice,
+        Event,
+        FAQ
+    }
+
+    public enum InquireStatus {
+        Y, N
+    }
+
+
 
 }

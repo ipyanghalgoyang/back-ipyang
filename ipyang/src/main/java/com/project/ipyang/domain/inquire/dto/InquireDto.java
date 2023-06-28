@@ -1,5 +1,6 @@
 package com.project.ipyang.domain.inquire.dto;
 
+import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.domain.inquire.entity.Inquire;
 import com.project.ipyang.domain.inquire.entity.InquireImg;
 import com.project.ipyang.domain.member.entity.Member;
@@ -21,7 +22,7 @@ public class InquireDto {
     private String title;
     private String content;
     private String passwd;
-    private int replyYn;
+    private IpyangEnum.InquireStatus status;
     private String replyContent;
     private Member member;
     private List<InquireImgDto> inquireImgDtos = new ArrayList<>();
@@ -34,7 +35,7 @@ public class InquireDto {
                 .title(title)
                 .content(content)
                 .passwd(passwd)
-                .replyYn(replyYn)
+                .status(status)
                 .replyContent(replyContent)
                 .member(member)
                 .inquireImgs(inquireImgs)
