@@ -2,8 +2,7 @@ package com.project.ipyang.domain.inquire.entity;
 
 import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.entity.BaseEntity;
-import com.project.ipyang.domain.inquire.dto.InquireImgDto;
-import com.project.ipyang.domain.inquire.dto.SelectInquireDto;
+import com.project.ipyang.domain.inquire.dto.*;
 import com.project.ipyang.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -32,17 +32,13 @@ public class Inquire extends BaseEntity {
     private String content;
 
     @Column(name = "i_passwd")
-    private String passwd;               //비밀번호 숫자 4자리로만 받기
+    private String passwd;
 
-    @Column(name = "i_reply_yn")      //답변 여부 1 아니면 0
+    @Column(name = "i_reply_yn")         //미답변 : 0, 답변 : 1
     private int replyYn;
 
     @Column(name = "i_reply_content")
     private String replyContent;
-
-    @Column(name = "i_common_inquire")
-    @Enumerated(EnumType.STRING)
-    private IpyangEnum.InquireCategory commonInquire;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -51,6 +47,31 @@ public class Inquire extends BaseEntity {
     @OneToMany(mappedBy = "inquire")
     private List<InquireImg> inquireImgs = new ArrayList<>();
 
+    public InquireDto convertDto() {
+        return InquireDto.builder()
+                                    .id(id)
+                                    .title(title)
+                                    .content(content)
+                                    .passwd(passwd)
+                                    .replyYn(replyYn)
+                                    .replyContent(replyContent)
+                                    .member(member)
+
+                                    .inquireImgDtos(convertImgDto())
+                                    .build();
+    }
+
+    public WriteInquireDto convertWriteDto(Long memberId) {
+        return new WriteInquireDto().builder()
+                .title(title)
+                .content(content)
+                .passwd(passwd)
+                .replyYn(0)
+                .memberId(memberId)
+                .inquireImgDtos(convertImgDto())
+                .build();
+    }
+
     public SelectInquireDto convertSelectDto() {
         return new SelectInquireDto().builder()
                                                 .id(id)
@@ -58,13 +79,14 @@ public class Inquire extends BaseEntity {
                                                 .title(title)
                                                 .content(content)
                                                 .replyContent(replyContent)
-                                                .commonInquire(commonInquire)
                                                 .inquireImgDtos(convertImgDto())
+                                                .createdAt(getCreatedAt())
                                                 .build();
     }
 
+
     public List<InquireImgDto> convertImgDto() {
-        if(inquireImgs.isEmpty()) return null;
+        if(inquireImgs == null || inquireImgs.isEmpty()) return Collections.emptyList();
 
         List<InquireImgDto> inquireImgDtoList = new ArrayList<>();
         InquireImgDto inquireImgDto = null;
@@ -78,6 +100,23 @@ public class Inquire extends BaseEntity {
         }
         return inquireImgDtoList;
     }
+
+
+    //패스워드 일치 여부 검증
+    public boolean isPasswordMatch(String inputPasswd) {
+        return passwd.equals(inputPasswd);
+    }
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    public void replyUpdate(String inputReplyContent) {
+        this.replyContent = inputReplyContent;
+        this.replyYn = 1;
+    }
+
 
 
 

@@ -1,37 +1,60 @@
 package com.project.ipyang.domain.inquire.service;
 
 import com.project.ipyang.common.response.ResponseDto;
-import com.project.ipyang.domain.inquire.dto.InquireDto;
-import com.project.ipyang.domain.inquire.dto.WriteInquireDto;
-import com.project.ipyang.domain.inquire.dto.SelectInquireDto;
+import com.project.ipyang.domain.inquire.dto.*;
 import com.project.ipyang.domain.inquire.entity.Inquire;
 import com.project.ipyang.domain.inquire.repository.InquireRepository;
 import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class InquireService {
+
     private final InquireRepository inquireRepository;
     private final MemberRepository memberRepository;
 
-    public InquireDto createInquire(WriteInquireDto inquireDto) {
-        Member member = memberRepository.findById(inquireDto.getMemberId()) .get();
+    //문의글 작성
+    @Transactional
+    public ResponseDto createInquire(WriteInquireDto request, Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(()->new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
 
-        Inquire inquire = Inquire.builder().title(inquireDto.getTitle())
-                .content(inquireDto.getContent())
-                .passwd(inquireDto.getPasswd())
-                .replyYn(inquireDto.getReplyYn())
-                .replyContent(inquireDto.getReplyContent())
-                .commonInquire(inquireDto.getCommonInquire())
-                .member(member)
-                .build();
-        inquireRepository.save(inquire);
-        return new InquireDto();
+        Inquire inquire = Inquire.builder()
+                                        .title(request.getTitle())
+                                        .content(request.getContent())
+                                        .passwd(request.getPasswd())
+                                        .replyYn(0)
+                                        .member(member)
+                                        .build();
+
+        Long savedId = inquireRepository.save(inquire).getId();
+
+        if(savedId != null) return new ResponseDto(inquire.convertWriteDto(memberId), HttpStatus.OK.value());
+        else return new ResponseDto("에러가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+    }
+    
+
+    //전체 문의글 조회
+    @Transactional
+    public ResponseDto<List<SelectInquireDto>> selectAllInquire(SelectInquireDto request) {
+        List<Inquire> inquires = inquireRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<SelectInquireDto> selectInquireDtos = inquires.stream().map(SelectInquireDto::new).collect(Collectors.toList());Collectors.toList();
+
+        if(!selectInquireDtos.isEmpty()) {
+            return new ResponseDto(selectInquireDtos, HttpStatus.OK.value());
+        } else return new ResponseDto("가져올 데이터가 없습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
 
@@ -49,9 +72,55 @@ public class InquireService {
     }
 
 
+    //특정 문의글 수정
+    /*
+    * 현재 이미지 수정은 제외하였음
+    * */
+    @Transactional
+    public ResponseDto updateInquire(Long id, UpdateInquireDto request) {
+        Optional<Inquire> inquire = inquireRepository.findById(id);
+        if(!inquire.isPresent()) {
+            return new ResponseDto("존재하지 않는 글입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+
+        if(inquire.get().isPasswordMatch(request.getPasswd())) {
+            inquire.get().update(request.getTitle(), request.getContent());
+            return new ResponseDto("수정되었습니다", HttpStatus.OK.value());
+        }
+        else return new ResponseDto("비밀번호가 일치하지 않습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+    }
+
+
     //특정 문의글 삭제
-    /*@Transactional
-    public ResponseDto deleteInquire(Long id) {
-        inquireRepository.deleteById(id);
-    }*/
+    @Transactional
+    public ResponseDto deleteInquire(Long id, String inputPasswd) {
+        Optional<Inquire> inquire = inquireRepository.findById(id);
+        if(!inquire.isPresent()) {
+            return new ResponseDto("존재하지 않는 글입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+
+        if(inquire.get().isPasswordMatch(inputPasswd)) {
+            inquireRepository.deleteById(id);
+            return new ResponseDto("글이 삭제되었습니다", HttpStatus.OK.value());
+        }
+        else return new ResponseDto("비밀번호가 일치하지 않습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+    }
+
+
+    //관리자 : 문의글에 답변
+    @Transactional
+    public ResponseDto replyInquire(Long id, ReplyContentDto request) {
+        Optional<Inquire> inquire = inquireRepository.findById(id);
+        if(!inquire.isPresent()) {
+            return new ResponseDto("존재하지 않는 글입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+        inquire.get().replyUpdate(request.getReplyContent());
+        if(inquire.get().getReplyYn() == 1) {
+            return new ResponseDto("답변이 작성되었습니다", HttpStatus.OK.value());
+        } else return new ResponseDto("에러가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+    }
+
+
 }

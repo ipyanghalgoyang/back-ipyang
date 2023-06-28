@@ -86,7 +86,7 @@ public class Adopt extends BaseEntity {
                                             .yn(0)
                                             .adoptImgDtos(convertImgDto())
                                             .memberId(memberId)
-                                            .vaccineId(vaccine.getId())
+                                            .vacId(vaccine.getId())
                                             .catId(catType.getId())
                                             .build();
     }

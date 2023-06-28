@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WriteAdoptDto extends BaseEntity {
     private Long memberId;
-    private Long vaccineId;
+    private Long vacId;
     private Long catId;
     private String title;
     private String content;

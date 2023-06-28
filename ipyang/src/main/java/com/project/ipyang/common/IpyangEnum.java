@@ -18,13 +18,6 @@ public class IpyangEnum {
 
     }
 
-    public enum InquireCategory {
-        Adopt,
-        Point,
-        Ad,
-        Else
-    }
-
 
     public enum ProductStatus {
         Y,N

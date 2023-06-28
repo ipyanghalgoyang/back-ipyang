@@ -60,7 +60,7 @@ public class MemberController {
         return memberService.checkDuplicateNickname(nickname);
     }
 
-    @GetMapping("/v1/login")
+    @PostMapping("/v1/login")
     public ResponseEntity loginMember(@RequestParam String email, @RequestParam String passwd) {
         ResponseDto response;
 
@@ -114,7 +114,6 @@ public class MemberController {
     public ResponseDto<MemberDto> deleteMember( MemberDto memberDto){
         return new ResponseDto (memberService.deleteMember(memberDto));
     }
-
 
 
 
