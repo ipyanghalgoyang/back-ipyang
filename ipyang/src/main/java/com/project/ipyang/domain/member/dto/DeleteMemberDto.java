@@ -13,12 +13,28 @@ import lombok.ToString;
 @Builder
 public class DeleteMemberDto {
     private Long id;
+    private String email;
+    private String nickname;
+    private String passwd;
+    private String name;
+    private String phone;
+    private IpyangEnum.MemberRoleType memberRole;
+    private String address;
+    private int point;
     private IpyangEnum.MemberDelYN delYn;
 
     public Member toEntity( ){
         return Member.builder()
                 .id(id)
+                .email(email)
+                .nickname(nickname)
+                .passwd(passwd)
+                .name(name)
+                .phone(phone)
+                .memberRole(memberRole)
                 .delYn(delYn)
+                .address(address)
+                .point(point)
                 .build();
     }
 }

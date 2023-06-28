@@ -111,6 +111,14 @@ public class Member extends BaseEntity {
     public DeleteMemberDto convertDelDto() {
         return DeleteMemberDto.builder()
                 .id(id)
+                .email(email)
+                .nickname(nickname)
+                .passwd(passwd)
+                .name(name)
+                .phone(phone)
+                .memberRole(memberRole)
+                .address(address)
+                .point(point)
                 .delYn(delYn)
                 .build();
     }

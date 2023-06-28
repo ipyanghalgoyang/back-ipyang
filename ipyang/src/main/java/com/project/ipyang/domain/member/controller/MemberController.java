@@ -4,6 +4,7 @@ import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.config.SessionUser;
 import com.project.ipyang.domain.member.dto.*;
 import com.project.ipyang.domain.member.entity.Member;
+import com.project.ipyang.domain.member.scheduler.MemberScheduler;
 import com.project.ipyang.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -106,8 +107,11 @@ public class MemberController {
 
     //회원탈퇴시 del_yn N->Y로 전환
     @PutMapping(value = "/v1/memberdel")
-    public ResponseDto<MemberDto> deleteMember(DeleteMemberDto memberDto) {
+    public ResponseDto<MemberDto> delYNMember(DeleteMemberDto memberDto , MemberScheduler memberScheduler) {
+
         return new ResponseDto(memberService.deleteWait(memberDto));
+
+
     }
     //회원탈퇴
     @DeleteMapping(value = "/v1/member")

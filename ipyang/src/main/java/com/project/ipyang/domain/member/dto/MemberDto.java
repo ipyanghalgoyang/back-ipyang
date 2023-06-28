@@ -27,6 +27,7 @@ public class MemberDto {
     private String name;
     private String phone;
     private IpyangEnum.MemberRoleType memberRole;
+    private IpyangEnum.MemberDelYN delYn;
     private String address;
     private int point;
     private String imgContext;
@@ -60,6 +61,7 @@ public class MemberDto {
                 .passwd(passwd)
                 .name(name)
                 .phone(phone)
+                .delYn(delYn)
                 .memberRole(memberRole)
                 .address(address)
                 .point(point)
