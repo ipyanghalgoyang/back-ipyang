@@ -1,5 +1,6 @@
 package com.project.ipyang.domain.adopt.dto;
 
+import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.adopt.entity.Adopt;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ public class SelectAdoptDto {
     private String weight;
     private String age;
     private String neu;
-    private int yn;
+    private IpyangEnum.AdoptStatus status;
     private List<AdoptImgDto> adoptImgs = new ArrayList<>();
     private Long memberId;
     private Long vacId;
@@ -42,7 +43,7 @@ public class SelectAdoptDto {
         this.weight = adopt.getWeight();
         this.age = adopt.getAge();
         this.neu = adopt.getNeu();
-        this.yn = adopt.getYn();
+        this.status = adopt.getStatus();
         this.adoptImgs = adopt.convertImgDto();
         this.memberId = adopt.getMember().getId();
         this.vacId = adopt.getVaccine().getId();

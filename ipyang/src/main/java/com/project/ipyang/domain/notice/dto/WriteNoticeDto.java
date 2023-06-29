@@ -23,7 +23,6 @@ public class WriteNoticeDto {
     private String title;
     private String content;
     private Long memberId;
-    private IpyangEnum.NoticeCategory category;
     private List<NoticeImgDto> noticeImgs = new ArrayList<>();
 
     @JsonIgnore
