@@ -25,9 +25,9 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
 
-    public BoardDto createBoard(InsertBoardDto boardDto) {
+    public BoardDto createBoard(InsertBoardDto boardDto,Long memberId) {
 
-        Member member = memberRepository.findById(boardDto.getMemberId()).get();
+        Member member = memberRepository.findById(memberId).orElse(null);
 
         Board board = Board.builder().title(boardDto.getTitle())
                 .content(boardDto.getContent())
@@ -41,7 +41,6 @@ public class BoardService {
                 .build();
         boardRepository.save(board);
         return new BoardDto();
-
 
     }
 

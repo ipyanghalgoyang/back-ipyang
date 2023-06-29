@@ -29,8 +29,5 @@ public class InsertProductDto  {
         this.memberId = memberId;
     }
 
-    public HttpSession getSession() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        return request.getSession();
-    }
+
 }
