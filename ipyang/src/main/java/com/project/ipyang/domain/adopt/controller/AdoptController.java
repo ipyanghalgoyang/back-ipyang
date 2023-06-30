@@ -3,6 +3,7 @@ package com.project.ipyang.domain.adopt.controller;
 import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.config.SessionUser;
 import com.project.ipyang.domain.adopt.dto.SelectAdoptDto;
+import com.project.ipyang.domain.adopt.dto.UpdateAdoptDto;
 import com.project.ipyang.domain.adopt.dto.WriteAdoptDto;
 import com.project.ipyang.domain.adopt.service.AdoptService;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +18,10 @@ import java.util.List;
 public class AdoptController {
 
     private final AdoptService adoptService;
-    private final HttpServletRequest httpServletRequest;
 
     //입양글 작성
     @PostMapping(value = "/v1/adopt/write")
-    public ResponseDto<WriteAdoptDto> createAdopt(WriteAdoptDto request) {
-        HttpSession session = request.getSession();
+    public ResponseDto<WriteAdoptDto> createAdopt(WriteAdoptDto request, HttpSession session) {
         SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
         Long memberId = loggedInUser.getId();
 
@@ -30,26 +29,28 @@ public class AdoptController {
     }
 
     //전체 입양글 조회
-    @GetMapping(value = "/v1/adopt_list")
+    @GetMapping(value = "/v1/adopt")
     public ResponseDto<List<SelectAdoptDto>> selectAllAdopt(SelectAdoptDto request) {
         return adoptService.selectAllAdopt(request);
     }
 
     //특정 입양글 조회
-    @PostMapping(value = "/v1/adopt/{id}")
+    @GetMapping(value = "/v1/adopt/{id}")
     public ResponseDto<SelectAdoptDto> adoptDetail(@PathVariable("id") Long id) {
         return adoptService.selectAdopt(id);
     }
 
     //특정 입양글 수정
-    @PutMapping(value = "/v1/adopt/edit/{id}")
-    public ResponseDto updateAdopt(@PathVariable("id") Long id, SelectAdoptDto request) {
+    @PutMapping(value = "/v1/adopt/{id}/edit")
+    public ResponseDto updateAdopt(@PathVariable("id") Long id, @RequestBody UpdateAdoptDto request) {
         return adoptService.updateAdopt(id, request);
     }
 
     //특정 입양글 삭제
-    @DeleteMapping(value = "v1/adopt/delete/{id}")
+    @DeleteMapping(value = "/v1/adopt/{id}/delete")
     public ResponseDto deleteAdopt(@PathVariable("id") Long id) {
         return adoptService.deleteAdopt(id);
     }
+    
+    //관심글 등록
 }

@@ -8,6 +8,7 @@ import com.project.ipyang.domain.board.entity.Board;
 import com.project.ipyang.domain.inquire.entity.Inquire;
 
 import com.project.ipyang.domain.member.dto.MemberDto;
+import com.project.ipyang.domain.member.dto.SelectMemberDto;
 import com.project.ipyang.domain.notice.entity.Notice;
 import com.project.ipyang.domain.point.entity.Point;
 import com.project.ipyang.domain.product.entity.Product;
@@ -113,7 +114,6 @@ public class Member extends BaseEntity {
         this.delYn = IpyangEnum.MemberDelYN.Y;
 
     }
-
 
 
 
