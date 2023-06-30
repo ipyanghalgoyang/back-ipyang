@@ -47,9 +47,9 @@ public class ProductController {
         }
 
         //판매완료  status N->Y
-        @PutMapping(value = "/v1/soldout")
-        public ResponseDto<ProductDto> soldProduct(SoldProductDto productDto) {
-                return new ResponseDto(productService.soldoutProduct(productDto));
+        @PutMapping(value = "/v1/product/{id}/soldout")
+        public ResponseDto<ProductDto> soldProduct(@PathVariable("id")Long id) {
+                return productService.soldoutProduct(id);
         }
 
 

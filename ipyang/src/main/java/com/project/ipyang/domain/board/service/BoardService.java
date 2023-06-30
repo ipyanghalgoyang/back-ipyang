@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -54,21 +55,16 @@ public class BoardService {
         } else return new ResponseDto("가져올 데이터가 없습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
 
     }
+    @Transactional
+    public ResponseDto updateBoard(Long id,UpdateBoardDto request) {
 
-    public ResponseDto updateBoard(UpdateBoardDto boardDto) {
-
-        Optional<Board> boardOptional = boardRepository.findById(boardDto.getId());
+        Optional<Board> boardOptional = boardRepository.findById(id);
         if (!boardOptional.isPresent()) {
             return new ResponseDto("존재하지 않는 게시글입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
-
         }
 
-        Board board = boardOptional.get();
-        BoardDto updateBoard = board.convertUpdateDto();  //정보를 담고있음
-        updateBoard.setTitle(boardDto.getTitle());//춘천-> 철원 분양글
-        updateBoard.setContent(boardDto.getContent());
-        boardRepository.save(updateBoard.toEntity());
-        log.info("updateBoard.getTitle()->"+ updateBoard.getTitle());
+        boardOptional.get().UpdateBoard(request.getTitle(),request.getContent());
+
         return new ResponseDto("게시글이 업데이트되었습니다.", HttpStatus.OK.value());
 
     }

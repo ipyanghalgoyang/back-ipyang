@@ -4,7 +4,6 @@ import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.product.dto.SelectProductDto;
-import com.project.ipyang.domain.product.dto.SoldProductDto;
 import com.project.ipyang.domain.product.dto.UpdateProductDto;
 import lombok.*;
 
@@ -71,16 +70,8 @@ public class Product extends BaseEntity {
                 .build();
     }
 
-    public SoldProductDto convertSoldDto(){
-        return SoldProductDto.builder()
-                .id(id)
-                .name(name)
-                .status(status)
-                .price(price)
-                .type(type)
-                .loc(loc)
-                .memberId(member.getId())
-                .build();
+    public void soldout(){
+        this.status = IpyangEnum.ProductStatus.Y;
     }
 
 
