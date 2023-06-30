@@ -6,7 +6,7 @@ import com.project.ipyang.domain.adopt.entity.Adopt;
 import com.project.ipyang.domain.apply.entity.Apply;
 import com.project.ipyang.domain.board.entity.Board;
 import com.project.ipyang.domain.inquire.entity.Inquire;
-import com.project.ipyang.domain.member.dto.DeleteMemberDto;
+
 import com.project.ipyang.domain.member.dto.MemberDto;
 import com.project.ipyang.domain.notice.entity.Notice;
 import com.project.ipyang.domain.point.entity.Point;
@@ -108,24 +108,14 @@ public class Member extends BaseEntity {
                                 .build();
     }
 
-    public DeleteMemberDto convertDelDto() {
-        return DeleteMemberDto.builder()
-                .id(id)
-                .email(email)
-                .nickname(nickname)
-                .passwd(passwd)
-                .name(name)
-                .phone(phone)
-                .memberRole(memberRole)
-                .address(address)
-                .point(point)
-                .delYn(delYn)
-                .build();
+
+    public void withdraw( ){
+        this.delYn = IpyangEnum.MemberDelYN.Y;
+
     }
 
-    public void setDelYn(IpyangEnum.MemberDelYN delYn) {
-        this.delYn = delYn;
-    }
+
+
 
 
 

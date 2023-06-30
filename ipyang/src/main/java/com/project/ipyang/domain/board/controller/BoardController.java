@@ -39,9 +39,9 @@ public class BoardController {
     }
 
     //게시글 수정
-    @PutMapping(value = "/v1/board")
-    public ResponseDto<BoardDto> updateBoard(UpdateBoardDto boardDto) {
-        return new ResponseDto(boardService.updateBoard(boardDto));
+    @PutMapping(value = "/v1/board/{id}")
+    public ResponseDto<BoardDto> updateBoard(@PathVariable("id")Long id,@RequestBody UpdateBoardDto request) {
+        return boardService.updateBoard(id,request);
     }
 
     //게시글 삭제
