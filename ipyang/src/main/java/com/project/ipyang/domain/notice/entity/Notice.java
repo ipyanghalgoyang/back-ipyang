@@ -4,6 +4,7 @@ import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.notice.dto.NoticeImgDto;
+import com.project.ipyang.domain.notice.dto.SelectNoticeDto;
 import com.project.ipyang.domain.notice.dto.WriteNoticeDto;
 import lombok.*;
 
@@ -59,13 +60,30 @@ public class Notice extends BaseEntity {
     }
 
 
+    public SelectNoticeDto convertSelectDto() {
+        return new SelectNoticeDto().builder()
+                .id(id)
+                .category(category)
+                .title(title)
+                .content(content)
+                .build();
+    }
+
+
     public WriteNoticeDto convertWriteDto(Long memberId) {
         return new WriteNoticeDto().builder()
-                                            .category(category)
                                             .title(title)
                                             .content(content)
                                             .memberId(memberId)
                                             .noticeImgs(convertImgDto())
                                             .build();
+    }
+
+
+    //문의글 수정
+    public void update(String title, String content, IpyangEnum.NoticeCategory selectedCategory) {
+        this.title = title;
+        this.content = content;
+        this.category = selectedCategory;
     }
 }

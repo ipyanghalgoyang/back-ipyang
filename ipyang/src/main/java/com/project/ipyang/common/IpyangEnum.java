@@ -38,6 +38,10 @@ public class IpyangEnum {
         Y, N
     }
 
+    public enum AdoptStatus {
+        Y, N
+    }
+
 
 
 }

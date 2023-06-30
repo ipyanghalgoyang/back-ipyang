@@ -18,12 +18,10 @@ import java.util.List;
 public class AdoptController {
 
     private final AdoptService adoptService;
-    private final HttpServletRequest httpServletRequest;
 
     //입양글 작성
     @PostMapping(value = "/v1/adopt/write")
-    public ResponseDto<WriteAdoptDto> createAdopt(WriteAdoptDto request) {
-        HttpSession session = request.getSession();
+    public ResponseDto<WriteAdoptDto> createAdopt(WriteAdoptDto request, HttpSession session) {
         SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
         Long memberId = loggedInUser.getId();
 
@@ -31,13 +29,13 @@ public class AdoptController {
     }
 
     //전체 입양글 조회
-    @GetMapping(value = "/v1/adopt_list")
+    @GetMapping(value = "/v1/adopt")
     public ResponseDto<List<SelectAdoptDto>> selectAllAdopt(SelectAdoptDto request) {
         return adoptService.selectAllAdopt(request);
     }
 
     //특정 입양글 조회
-    @PostMapping(value = "/v1/adopt/{id}")
+    @GetMapping(value = "/v1/adopt/{id}")
     public ResponseDto<SelectAdoptDto> adoptDetail(@PathVariable("id") Long id) {
         return adoptService.selectAdopt(id);
     }
@@ -49,8 +47,10 @@ public class AdoptController {
     }
 
     //특정 입양글 삭제
-    @DeleteMapping(value = "v1/adopt/{id}/delete")
+    @DeleteMapping(value = "/v1/adopt/{id}/delete")
     public ResponseDto deleteAdopt(@PathVariable("id") Long id) {
         return adoptService.deleteAdopt(id);
     }
+    
+    //관심글 등록
 }

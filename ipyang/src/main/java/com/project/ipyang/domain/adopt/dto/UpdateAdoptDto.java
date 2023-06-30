@@ -1,5 +1,6 @@
 package com.project.ipyang.domain.adopt.dto;
 
+import com.project.ipyang.common.IpyangEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +14,7 @@ public class UpdateAdoptDto {
     private String weight;
     private String age;
     private String neu;
-    private int yn;
+    private IpyangEnum.AdoptStatus status;
     private Long vacId;
     private Long catId;
 }

@@ -1,5 +1,6 @@
 package com.project.ipyang.domain.adopt.service;
 
+import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.domain.adopt.dto.AdoptDto;
 import com.project.ipyang.domain.adopt.dto.SelectAdoptDto;
@@ -48,7 +49,7 @@ public class AdoptService {
                                     .weight(request.getWeight())
                                     .age(request.getAge())
                                     .neu(request.getNeu())
-                                    .yn(0)
+                                    .status(IpyangEnum.AdoptStatus.N)
                                     .member(member)
                                     .vaccine(vaccine)
                                     .catType(catType)
@@ -78,7 +79,7 @@ public class AdoptService {
     public ResponseDto selectAdopt(Long id) {
         Optional<Adopt> adopt = adoptRepository.findById(id);
         if(!adopt.isPresent()) {
-            return new ResponseDto("가져올 데이터가 없습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            return new ResponseDto("존재하지 않는 글입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
 
         SelectAdoptDto detailAdopt = adopt.get().convertDto();
@@ -101,7 +102,7 @@ public class AdoptService {
         CatType catType = catTypeRepository.findById(request.getCatId()).orElseThrow(()->new IllegalArgumentException("데이터가 존재하지 않습니다."));
 
         adopt.get().update(request.getTitle(), request.getContent(), request.getName(), request.getGender(),
-                           request.getWeight(), request.getAge(), request.getNeu(), request.getYn(), vaccine, catType);
+                           request.getWeight(), request.getAge(), request.getNeu(), request.getStatus(), vaccine, catType);
 
         return new ResponseDto("수정되었습니다", HttpStatus.OK.value());
 
@@ -111,9 +112,9 @@ public class AdoptService {
     //특정 입양글 삭제
     @Transactional
     public ResponseDto deleteAdopt(Long id) {
-        Optional<Adopt> Searchadopt = adoptRepository.findById(id);
+        Optional<Adopt> searchAdopt = adoptRepository.findById(id);
 
-        if(!Searchadopt.isPresent()) {
+        if(!searchAdopt.isPresent()) {
             return new ResponseDto("존재하지 않는 글입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
         } else adoptRepository.deleteById(id);
 
