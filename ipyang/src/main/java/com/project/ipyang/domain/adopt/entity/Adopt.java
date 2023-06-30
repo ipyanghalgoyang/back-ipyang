@@ -1,5 +1,6 @@
 package com.project.ipyang.domain.adopt.entity;
 
+import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.adopt.dto.AdoptImgDto;
 import com.project.ipyang.domain.adopt.dto.SelectAdoptDto;
@@ -11,7 +12,6 @@ import com.project.ipyang.domain.vaccine.entity.Vaccine;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -52,7 +52,8 @@ public class Adopt extends BaseEntity {
     private String neu;
 
     @Column(name = "a_adopted_yn")
-    private int yn;
+    @Enumerated(EnumType.STRING)
+    private IpyangEnum.AdoptStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -66,12 +67,13 @@ public class Adopt extends BaseEntity {
     @JoinColumn(name = "cat_id")
     private CatType catType;
 
-    @OneToMany(mappedBy = "adopt")
+    @OneToMany(mappedBy = "adopt", cascade = CascadeType.ALL)
     @OrderColumn(name = "adopt_img_order")
     private List<AdoptImg> adoptImgs = new ArrayList<>();
 
     @OneToMany(mappedBy = "adopt")
     private List<Apply> applies = new ArrayList<>();
+
 
     public WriteAdoptDto convertWriteDto(Long memberId) {
         return new WriteAdoptDto().builder()
@@ -83,10 +85,10 @@ public class Adopt extends BaseEntity {
                                             .weight(weight)
                                             .age(age)
                                             .neu(neu)
-                                            .yn(0)
+                                            .status(IpyangEnum.AdoptStatus.N)
                                             .adoptImgDtos(convertImgDto())
                                             .memberId(memberId)
-                                            .vaccineId(vaccine.getId())
+                                            .vacId(vaccine.getId())
                                             .catId(catType.getId())
                                             .build();
     }
@@ -103,7 +105,7 @@ public class Adopt extends BaseEntity {
                                             .gender(gender)
                                             .age(age)
                                             .neu(neu)
-                                            .yn(yn)
+                                            .status(status)
                                             .createdAt(getCreatedAt())
                                             .adoptImgs(convertImgDto())
                                             .memberId(member.getId())
@@ -131,8 +133,9 @@ public class Adopt extends BaseEntity {
     }
 
 
+    //글 수정
     public void update(String title, String content, String name, String gender, String weight,
-                       String age, String neu, int yn, Vaccine vaccine, CatType catType) {
+                       String age, String neu, IpyangEnum.AdoptStatus status, Vaccine vaccine, CatType catType) {
         this.title = title;
         this.content = content;
         this.name = name;
@@ -140,7 +143,7 @@ public class Adopt extends BaseEntity {
         this.weight = weight;
         this.age = age;
         this.neu = neu;
-        this.yn = yn;
+        this.status = status;
         this.vaccine = vaccine;
         this.catType = catType;
     }

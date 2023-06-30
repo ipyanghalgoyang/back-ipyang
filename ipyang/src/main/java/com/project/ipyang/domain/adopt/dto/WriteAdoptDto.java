@@ -1,6 +1,7 @@
 package com.project.ipyang.domain.adopt.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,9 +19,9 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class WriteAdoptDto extends BaseEntity {
+public class WriteAdoptDto {
     private Long memberId;
-    private Long vaccineId;
+    private Long vacId;
     private Long catId;
     private String title;
     private String content;
@@ -30,7 +31,7 @@ public class WriteAdoptDto extends BaseEntity {
     private String weight;
     private String age;
     private String neu;
-    private int yn;
+    private IpyangEnum.AdoptStatus status;
     private List<AdoptImgDto> adoptImgDtos = new ArrayList<>();
 
     @JsonIgnore

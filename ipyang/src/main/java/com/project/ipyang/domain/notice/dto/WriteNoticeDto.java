@@ -1,8 +1,8 @@
-package com.project.ipyang.domain.inquire.dto;
+package com.project.ipyang.domain.notice.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.ipyang.common.IpyangEnum;
-import com.project.ipyang.common.entity.BaseEntity;
+import com.project.ipyang.domain.notice.entity.NoticeImg;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,19 +19,15 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class WriteInquireDto {
+public class WriteNoticeDto {
     private String title;
     private String content;
-    private String passwd;
-    private IpyangEnum.InquireStatus status;
     private Long memberId;
-    private List<InquireImgDto> inquireImgDtos = new ArrayList<>();
+    private List<NoticeImgDto> noticeImgs = new ArrayList<>();
 
     @JsonIgnore
     public HttpSession getSession() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         return request.getSession();
     }
-
-
 }

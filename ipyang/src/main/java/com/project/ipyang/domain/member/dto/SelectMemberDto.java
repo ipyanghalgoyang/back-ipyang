@@ -9,6 +9,8 @@ import lombok.*;
 @Getter
 @ToString(exclude = "passwd")
 @RequiredArgsConstructor
+@AllArgsConstructor
+@Builder
 public class SelectMemberDto {
     private String email;
     private String nickname;
@@ -31,5 +33,6 @@ public class SelectMemberDto {
         this.delYn = member.getDelYn();
         this.point = member.getPoint();
     }
+
 
 }
