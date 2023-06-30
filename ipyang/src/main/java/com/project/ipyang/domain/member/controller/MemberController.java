@@ -1,18 +1,13 @@
 package com.project.ipyang.domain.member.controller;
 
 import com.project.ipyang.common.response.ResponseDto;
-import com.project.ipyang.config.SessionUser;
 import com.project.ipyang.domain.member.dto.*;
-import com.project.ipyang.domain.member.entity.Member;
-
 import com.project.ipyang.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,7 +19,6 @@ import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequiredArgsConstructor
@@ -78,14 +72,12 @@ public class MemberController {
         return new ResponseEntity<ResponseDto<?>>(response,HttpStatus.OK);
     }
 
-
     @GetMapping("/v1/afterlogin")
     public ResponseDto<MemberDto> getLoggedInMember(MemberDto memberDto) {
         ResponseDto loggedInMember = memberService.getLoggedInMember();
         // 필요한 경우 MemberDto로 변환하여 반환
         return loggedInMember;
     }
-
     //회원 가입 요청
     @PostMapping(value = "/v1/sign")
     public ResponseDto signUp(@Valid @ModelAttribute("member") SignUpMemberDto requestDto, BindingResult errors, Model model) {
@@ -106,47 +98,21 @@ public class MemberController {
         return memberService.memberInfoSave(requestDto, passwordEncoder);
 
     }
-
-
     //회원탈퇴시 del_yn N->Y로 전환
     @PutMapping(value = "/v1/member/{id}/withdraw")
     public ResponseDto withdrawMember(@PathVariable("id") Long id) {
 
         ResponseDto response = memberService.withdrawMember(id);
 
-        scheduleDeleteMember(id); // deleteMember 예약
         return response;
 
     }
-
-
     //회원탈퇴
     @DeleteMapping(value = "/v1/member")
     public ResponseDto deleteMember(Long id){
         return new ResponseDto (memberService.deleteMember(id));
     }
 
-    @Async
-    @Scheduled(fixedDelay = 120000) // 2분마다 실행
-    public void scheduleDeleteMember(Long id) {
-        try {
-            TimeUnit.MINUTES.sleep(2); // 2분간 대기
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        memberService.deleteMember(id);
-    }
-    // 30일(720시간)마다 실행 30일로 하고싶으면 이거쓰셈 ㅎㅎ
-//    @Async
-//    @Scheduled(fixedDelayString = "PT720H")
-//    public void scheduleDeleteMember(Long id) {
-//        try {
-//            TimeUnit.DAYS.sleep(30); // 30일간 대기
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        memberService.deleteMember(id);
-//    }
 
 
 }
