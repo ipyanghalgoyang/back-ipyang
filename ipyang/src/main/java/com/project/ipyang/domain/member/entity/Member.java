@@ -12,6 +12,7 @@ import com.project.ipyang.domain.member.dto.SelectMemberDto;
 import com.project.ipyang.domain.notice.entity.Notice;
 import com.project.ipyang.domain.point.entity.Point;
 import com.project.ipyang.domain.product.entity.Product;
+import com.project.ipyang.domain.warning.entity.BadWords;
 import com.project.ipyang.domain.warning.entity.Warning;
 import lombok.*;
 
@@ -94,6 +95,10 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member")
     private List<Apply> applies = new ArrayList<>();
+
+    @OneToMany(mappedBy ="member" )
+    private  List<BadWords> words = new ArrayList<>();
+
 
     public MemberDto convertDto(){
         return MemberDto.builder()
