@@ -93,18 +93,22 @@ public class ProductService {
 
 
 
-    public ResponseDto soldoutProduct(SoldProductDto productDto) {
-        Optional<Product> productOptional = productRepository.findById(productDto.getId());
+    @Transactional
+    public ResponseDto soldoutProduct( long id) {
+        Optional<Product> productOptional = productRepository.findById(id);
         if (!productOptional.isPresent()) {
             return new ResponseDto("존재하지 않는 판매글입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
-        Product product = productOptional.get();
-        SoldProductDto updateProduct = product.convertSoldDto();
-        updateProduct.setStatus(IpyangEnum.Status.Y);
 
-        productRepository.save(updateProduct.toEntity());
+        productOptional.get().soldout();
+        if(productOptional.get().getStatus() == IpyangEnum.Status.Y){
+            return new ResponseDto("판매가 완료되었습니다.", HttpStatus.OK.value());
+        }
+        else {
 
-        return new ResponseDto("판매가 완료되었습니다.", HttpStatus.OK.value());
+            return new ResponseDto("에러가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+
     }
 
 

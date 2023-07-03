@@ -71,7 +71,7 @@ public class Product extends BaseEntity {
     }
 
     public void soldout(){
-        this.status = IpyangEnum.ProductStatus.Y;
+        this.status = IpyangEnum.Status.Y;
     }
 
 
