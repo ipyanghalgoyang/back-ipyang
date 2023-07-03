@@ -21,7 +21,7 @@ public class DeleteMemberDto {
     private IpyangEnum.MemberRoleType memberRole;
     private String address;
     private int point;
-    private IpyangEnum.MemberDelYN delYn;
+    private IpyangEnum.Status delYn;
 
 
     public Member toEntity() {

@@ -29,7 +29,7 @@ public class Product extends BaseEntity {
 
     @Column(name = "p_status")//구매가능 판매완료
     @Enumerated(EnumType.STRING)
-    private IpyangEnum.ProductStatus status;
+    private IpyangEnum.Status status;
 
     @Column(name = "p_price")
     private int price;

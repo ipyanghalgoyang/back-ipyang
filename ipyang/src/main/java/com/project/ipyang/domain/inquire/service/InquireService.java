@@ -29,14 +29,15 @@ public class InquireService {
     //문의글 작성
     @Transactional
     public ResponseDto createInquire(WriteInquireDto request, Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(()->new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
+        Optional<Member> member = memberRepository.findById(memberId);
+        if(!member.isPresent()) return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
 
         Inquire inquire = Inquire.builder()
                                         .title(request.getTitle())
                                         .content(request.getContent())
                                         .passwd(request.getPasswd())
-                                        .status(IpyangEnum.InquireStatus.N)
-                                        .member(member)
+                                        .status(IpyangEnum.Status.N)
+                                        .member(member.get())
                                         .build();
 
         Long savedId = inquireRepository.save(inquire).getId();
@@ -51,20 +52,20 @@ public class InquireService {
     @Transactional
     public ResponseDto<List<SelectInquireDto>> selectAllInquire(SelectInquireDto request) {
         List<Inquire> inquires = inquireRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
-        List<SelectInquireDto> selectInquireDtos = inquires.stream().map(SelectInquireDto::new).collect(Collectors.toList());Collectors.toList();
 
-        if(!selectInquireDtos.isEmpty()) {
+        if(!inquires.isEmpty()) {
+            List<SelectInquireDto> selectInquireDtos = inquires.stream().map(SelectInquireDto::new).collect(Collectors.toList());Collectors.toList();
             return new ResponseDto(selectInquireDtos, HttpStatus.OK.value());
-        } else return new ResponseDto("가져올 데이터가 없습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        } else return new ResponseDto("데이터가 없습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
 
     //특정 문의글 조회
     @Transactional
-    public ResponseDto<SelectInquireDto> selectInquire(Long id, String passwd) {
+    public ResponseDto<SelectInquireDto> selectInquire(Long id, String inputPasswd) {
         Inquire inquire = inquireRepository.findById(id).orElseThrow(()->new IllegalArgumentException("문의글이 존재하지 않습니다."));
 
-        if(inquire != null && inquire.getPasswd().equals(passwd)) {
+        if(inquire != null && inquire.getPasswd().equals(inputPasswd)) {
             SelectInquireDto selectInquireDto = inquire.convertSelectDto();
             return new ResponseDto(selectInquireDto, HttpStatus.OK.value());
 
@@ -118,7 +119,7 @@ public class InquireService {
             return new ResponseDto("존재하지 않는 글입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
         inquire.get().replyUpdate(request.getReplyContent());
-        if(inquire.get().getStatus() == IpyangEnum.InquireStatus.Y) {
+        if(inquire.get().getStatus() == IpyangEnum.Status.Y) {
             return new ResponseDto("답변이 작성되었습니다", HttpStatus.OK.value());
         } else return new ResponseDto("에러가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
     }

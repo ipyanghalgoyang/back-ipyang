@@ -60,7 +60,7 @@ public class NoticeService {
                 selectNoticeDtos.add(selectNoticeDto);
             }
             return new ResponseDto(selectNoticeDtos, HttpStatus.OK.value());
-        } else return new ResponseDto("글이 존재하지 않습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        } else return new ResponseDto("존재하지 않는 글입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
 
     }
 

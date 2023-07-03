@@ -1,6 +1,7 @@
 package com.project.ipyang.domain.point.entity;
 
 
+import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
@@ -14,14 +15,15 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Point extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "point_id")
     private Long id;
 
     @Column(name = "point_type")
-    private String pointType;
-
+    @Enumerated(EnumType.STRING)
+    private IpyangEnum.PointType type;
 
     @Column(name = "point_history")
     private String pointHistory;

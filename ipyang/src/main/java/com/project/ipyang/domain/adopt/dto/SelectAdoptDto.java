@@ -26,7 +26,7 @@ public class SelectAdoptDto {
     private String weight;
     private String age;
     private String neu;
-    private IpyangEnum.AdoptStatus status;
+    private IpyangEnum.Status status;
     private List<AdoptImgDto> adoptImgs = new ArrayList<>();
     private Long memberId;
     private Long vacId;

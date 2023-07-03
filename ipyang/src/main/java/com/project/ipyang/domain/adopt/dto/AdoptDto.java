@@ -25,7 +25,7 @@ public class AdoptDto {
     private String weight;
     private String age;
     private String neu;
-    private IpyangEnum.AdoptStatus status;
+    private IpyangEnum.Status status;
     private Member member;
     private Vaccine vaccine;
     private CatType catType;

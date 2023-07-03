@@ -27,7 +27,7 @@ public class MemberDto {
     private String name;
     private String phone;
     private IpyangEnum.MemberRoleType memberRole;
-    private IpyangEnum.MemberDelYN delYn;
+    private IpyangEnum.Status delYn;
     private String address;
     private int point;
     private String imgContext;

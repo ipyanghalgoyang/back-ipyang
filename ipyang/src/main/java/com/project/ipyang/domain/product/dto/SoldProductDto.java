@@ -19,7 +19,7 @@ public class SoldProductDto {
     private String type;
     private String loc;
     private Long memberId;
-    private IpyangEnum.ProductStatus status;
+    private IpyangEnum.Status status;
 
 
     public Product toEntity() {

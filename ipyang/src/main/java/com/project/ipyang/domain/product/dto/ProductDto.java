@@ -16,7 +16,7 @@ import java.util.List;
 public class ProductDto   {
     private Long id;
     private String name;
-    private IpyangEnum.ProductStatus status;
+    private IpyangEnum.Status status;
     private int price;
     private String type;
     private String loc;

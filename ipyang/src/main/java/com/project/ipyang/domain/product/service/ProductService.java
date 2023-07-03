@@ -36,7 +36,7 @@ public class ProductService {
         // 필요한 데이터를 사용하여 Product 객체를 생성합니다.
         Product product = Product.builder()
                 .name(productDto.getName())
-                .status(IpyangEnum.ProductStatus.N)
+                .status(IpyangEnum.Status.N)
                 .price(productDto.getPrice())
                 .type(productDto.getType())
                 .loc(productDto.getLoc())
@@ -99,7 +99,7 @@ public class ProductService {
         }
         Product product = productOptional.get();
         SoldProductDto updateProduct = product.convertSoldDto();
-        updateProduct.setStatus(IpyangEnum.ProductStatus.Y);
+        updateProduct.setStatus(IpyangEnum.Status.Y);
 
         productRepository.save(updateProduct.toEntity());
 

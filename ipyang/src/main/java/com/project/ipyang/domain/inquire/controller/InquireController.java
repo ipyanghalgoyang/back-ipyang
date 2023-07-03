@@ -8,6 +8,7 @@ import com.project.ipyang.domain.inquire.dto.WriteInquireDto;
 import com.project.ipyang.domain.inquire.dto.SelectInquireDto;
 import com.project.ipyang.domain.inquire.service.InquireService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -18,6 +19,7 @@ import java.util.List;
 public class InquireController {
 
     private final InquireService inquireService;
+    private final PasswordEncoder passwordEncoder;
 
     //문의글 작성
     /*
@@ -40,8 +42,8 @@ public class InquireController {
 
     //특정 문의글 조회
     @GetMapping(value = "v1/inquire/{id}")
-    public ResponseDto<SelectInquireDto> inquireDetail(@PathVariable("id") Long id, @RequestParam String passwd) {
-        return inquireService.selectInquire(id, passwd);
+    public ResponseDto<SelectInquireDto> inquireDetail(@PathVariable("id") Long id, @RequestParam String inputPasswd) {
+        return inquireService.selectInquire(id, inputPasswd);
     }
 
 

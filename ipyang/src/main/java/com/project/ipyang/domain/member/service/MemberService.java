@@ -39,7 +39,7 @@ public class MemberService {
                 .name(memberDto.getName())
                 .phone(memberDto.getPhone())
                 .memberRole(IpyangEnum.MemberRoleType.USER)
-                .delYn(IpyangEnum.MemberDelYN.N)
+                .delYn(IpyangEnum.Status.N)
                 .address(memberDto.getAddress())
                 .point(memberDto.getPoint())
                 .build();
@@ -185,7 +185,7 @@ public class MemberService {
         // 기존 회원 정보를 가져옵니다.
         Member member = memberOptional.get();
        // DeleteMemberDto deleteMember = member.convertDelDto();
-        member.setDelYn(IpyangEnum.MemberDelYN.Y);
+        member.setDelYn(IpyangEnum.Status.Y);
 
         memberRepository.save(member);
 

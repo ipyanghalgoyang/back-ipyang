@@ -57,7 +57,7 @@ public class Member extends BaseEntity {
 
     @Column(name = "m_delyn")
     @Enumerated(EnumType.STRING)
-    private IpyangEnum.MemberDelYN delYn;  //회원탈퇴여부  y면 y일때 30일뒤에 삭제 n이면 현상태유지
+    private IpyangEnum.Status delYn;  //회원탈퇴여부  y면 y일때 30일뒤에 삭제 n이면 현상태유지
 
     @Column(name = "m_img_context")
     private String imgContext;
@@ -124,7 +124,7 @@ public class Member extends BaseEntity {
                 .build();
     }
 
-    public void setDelYn(IpyangEnum.MemberDelYN delYn) {
+    public void setDelYn(IpyangEnum.Status delYn) {
         this.delYn = delYn;
     }
 

@@ -23,15 +23,8 @@ public class WriteInquireDto {
     private String title;
     private String content;
     private String passwd;
-    private IpyangEnum.InquireStatus status;
+    private IpyangEnum.Status status;
     private Long memberId;
     private List<InquireImgDto> inquireImgDtos = new ArrayList<>();
-
-    @JsonIgnore
-    public HttpSession getSession() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        return request.getSession();
-    }
-
 
 }

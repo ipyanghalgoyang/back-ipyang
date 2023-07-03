@@ -19,7 +19,7 @@ public class SelectMemberDto {
     private String phone;
     private IpyangEnum.MemberRoleType memberRoleType;
     private String address;
-    private IpyangEnum.MemberDelYN delYn;
+    private IpyangEnum.Status delYn;
     private int point;
 
     public SelectMemberDto (Member member) {
