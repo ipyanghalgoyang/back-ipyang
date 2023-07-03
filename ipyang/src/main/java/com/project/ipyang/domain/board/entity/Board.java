@@ -93,7 +93,10 @@ public class Board extends BaseEntity {   //공유하기 제보하기  홍보하
                 .build();
     }
 
-
+public void UpdateBoard(String title,String content){
+ this.title = title;
+ this.content = content;
+}
 
 
 

@@ -1,10 +1,7 @@
 package com.project.ipyang.domain.member.controller;
 
 import com.project.ipyang.common.response.ResponseDto;
-import com.project.ipyang.config.SessionUser;
 import com.project.ipyang.domain.member.dto.*;
-import com.project.ipyang.domain.member.entity.Member;
-import com.project.ipyang.domain.member.scheduler.MemberScheduler;
 import com.project.ipyang.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -75,14 +72,12 @@ public class MemberController {
         return new ResponseEntity<ResponseDto<?>>(response,HttpStatus.OK);
     }
 
-
     @GetMapping("/v1/afterlogin")
     public ResponseDto<MemberDto> getLoggedInMember(MemberDto memberDto) {
         ResponseDto loggedInMember = memberService.getLoggedInMember();
         // 필요한 경우 MemberDto로 변환하여 반환
         return loggedInMember;
     }
-
     //회원 가입 요청
     @PostMapping(value = "/v1/sign")
     public ResponseDto signUp(@Valid @ModelAttribute("member") SignUpMemberDto requestDto, BindingResult errors, Model model) {
@@ -103,19 +98,19 @@ public class MemberController {
         return memberService.memberInfoSave(requestDto, passwordEncoder);
 
     }
-
-
     //회원탈퇴시 del_yn N->Y로 전환
-    @PutMapping(value = "/v1/memberdel")
-    public ResponseDto<MemberDto> delYNMember(DeleteMemberDto memberDto , MemberScheduler memberScheduler) {
+    @PutMapping(value = "/v1/member/{id}/withdraw")
+    public ResponseDto withdrawMember(@PathVariable("id") Long id) {
 
-        return new ResponseDto(memberService.deleteWait(memberDto));
+        ResponseDto response = memberService.withdrawMember(id);
+
+        return response;
 
     }
     //회원탈퇴
     @DeleteMapping(value = "/v1/member")
-    public ResponseDto<MemberDto> deleteMember( MemberDto memberDto){
-        return new ResponseDto (memberService.deleteMember(memberDto));
+    public ResponseDto deleteMember(Long id){
+        return new ResponseDto (memberService.deleteMember(id));
     }
 
 

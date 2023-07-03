@@ -12,6 +12,7 @@ import com.project.ipyang.domain.member.dto.SelectMemberDto;
 import com.project.ipyang.domain.notice.entity.Notice;
 import com.project.ipyang.domain.point.entity.Point;
 import com.project.ipyang.domain.product.entity.Product;
+import com.project.ipyang.domain.warning.entity.BadWords;
 import com.project.ipyang.domain.warning.entity.Warning;
 import lombok.*;
 
@@ -95,6 +96,10 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member")
     private List<Apply> applies = new ArrayList<>();
 
+    @OneToMany(mappedBy ="member" )
+    private  List<BadWords> words = new ArrayList<>();
+
+
     public MemberDto convertDto(){
         return MemberDto.builder()
                                 .id(id)
@@ -109,25 +114,11 @@ public class Member extends BaseEntity {
                                 .build();
     }
 
-    public DeleteMemberDto convertDelDto() {
-        return DeleteMemberDto.builder()
-                .id(id)
-                .email(email)
-                .nickname(nickname)
-                .passwd(passwd)
-                .name(name)
-                .phone(phone)
-                .memberRole(memberRole)
-                .address(address)
-                .point(point)
-                .delYn(delYn)
-                .build();
-    }
 
-    public void setDelYn(IpyangEnum.Status delYn) {
-        this.delYn = delYn;
-    }
+    public void withdraw( ){
+        this.delYn = IpyangEnum.Status.Y;
 
+    }
 
 }
 

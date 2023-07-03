@@ -35,4 +35,11 @@ public class IpyangEnum {
     }
 
 
+    public enum WarningReason{
+        BadWords,Fraud,Lying
+
+    }
+
+
+
 }

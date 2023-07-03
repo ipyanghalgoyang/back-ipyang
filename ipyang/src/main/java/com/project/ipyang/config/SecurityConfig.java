@@ -1,4 +1,4 @@
-package com.project.ipyang.common.configuration;
+package com.project.ipyang.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
