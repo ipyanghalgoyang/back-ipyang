@@ -4,6 +4,6 @@ import com.project.ipyang.common.entity.BaseEntity;
 import lombok.Data;
 
 @Data
-public class InsertVaccineDto extends BaseEntity {
+public class WriteVaccineDto extends BaseEntity {
     private String name;
 }

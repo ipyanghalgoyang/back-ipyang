@@ -53,7 +53,7 @@ public class Adopt extends BaseEntity {
 
     @Column(name = "a_adopted_yn")
     @Enumerated(EnumType.STRING)
-    private IpyangEnum.AdoptStatus status;
+    private IpyangEnum.Status status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -75,6 +75,9 @@ public class Adopt extends BaseEntity {
     private List<Apply> applies = new ArrayList<>();
 
 
+
+    //------------- Entity → DTO --------------------------------------------------------------------------------
+
     public WriteAdoptDto convertWriteDto(Long memberId) {
         return new WriteAdoptDto().builder()
                                             .title(title)
@@ -85,7 +88,7 @@ public class Adopt extends BaseEntity {
                                             .weight(weight)
                                             .age(age)
                                             .neu(neu)
-                                            .status(IpyangEnum.AdoptStatus.N)
+                                            .status(IpyangEnum.Status.N)
                                             .adoptImgDtos(convertImgDto())
                                             .memberId(memberId)
                                             .vacId(vaccine.getId())
@@ -133,9 +136,14 @@ public class Adopt extends BaseEntity {
     }
 
 
+    //-----------------------------------------------------------------------------------------------------------
+
+
+    //------------- 업데이트 --------------------------------------------------------------------------------------
+
     //글 수정
     public void update(String title, String content, String name, String gender, String weight,
-                       String age, String neu, IpyangEnum.AdoptStatus status, Vaccine vaccine, CatType catType) {
+                       String age, String neu, IpyangEnum.Status status, Vaccine vaccine, CatType catType) {
         this.title = title;
         this.content = content;
         this.name = name;
@@ -146,5 +154,10 @@ public class Adopt extends BaseEntity {
         this.status = status;
         this.vaccine = vaccine;
         this.catType = catType;
+    }
+
+    //조회수 증가
+    public void updateViewCount(int view) {
+        this.view = view + 1;
     }
 }

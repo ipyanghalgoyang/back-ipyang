@@ -6,7 +6,7 @@ import com.project.ipyang.domain.adopt.entity.Adopt;
 import com.project.ipyang.domain.apply.entity.Apply;
 import com.project.ipyang.domain.board.entity.Board;
 import com.project.ipyang.domain.inquire.entity.Inquire;
-
+import com.project.ipyang.domain.member.dto.DeleteMemberDto;
 import com.project.ipyang.domain.member.dto.MemberDto;
 import com.project.ipyang.domain.member.dto.SelectMemberDto;
 import com.project.ipyang.domain.notice.entity.Notice;
@@ -58,7 +58,7 @@ public class Member extends BaseEntity {
 
     @Column(name = "m_delyn")
     @Enumerated(EnumType.STRING)
-    private IpyangEnum.MemberDelYN delYn;  //회원탈퇴여부  y면 y일때 30일뒤에 삭제 n이면 현상태유지
+    private IpyangEnum.Status delYn;  //회원탈퇴여부  y면 y일때 30일뒤에 삭제 n이면 현상태유지
 
     @Column(name = "m_img_context")
     private String imgContext;
@@ -116,13 +116,9 @@ public class Member extends BaseEntity {
 
 
     public void withdraw( ){
-        this.delYn = IpyangEnum.MemberDelYN.Y;
+        this.delYn = IpyangEnum.Status.Y;
 
     }
-
-
-
-
 
 }
 

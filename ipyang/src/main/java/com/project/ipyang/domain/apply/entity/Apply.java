@@ -78,12 +78,5 @@ public class Apply extends BaseEntity {
     @Column(name = "a_ask7")
     private String ask7;
 
-    /* 이사, 또는 해외로 이주 시 반려 동물의 거취 문제에 대한 생각 */
-    @Column(name = "a_ask8")
-    private String ask8;
-
-    /* 미혼의 경우 앞으로 결혼, 임신, 출산 시 반려 동물의 거취에 대한 생각 */
-    @Column(name = "a_ask9")
-    private String ask9;
 
 }

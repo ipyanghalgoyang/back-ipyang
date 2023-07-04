@@ -36,7 +36,9 @@ public class AdoptService {
     //입양글 작성
     @Transactional
     public ResponseDto createAdopt(WriteAdoptDto request, Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(()->new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
+        Optional<Member> member = memberRepository.findById(memberId);
+        if(!member.isPresent()) return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+
         Vaccine vaccine = vaccineRepository.findById(request.getVacId()).orElseThrow(()->new IllegalArgumentException("데이터가 존재하지 않습니다."));
         CatType catType = catTypeRepository.findById(request.getCatId()).orElseThrow(()->new IllegalArgumentException("데이터가 존재하지 않습니다."));
 
@@ -49,8 +51,8 @@ public class AdoptService {
                                     .weight(request.getWeight())
                                     .age(request.getAge())
                                     .neu(request.getNeu())
-                                    .status(IpyangEnum.AdoptStatus.N)
-                                    .member(member)
+                                    .status(IpyangEnum.Status.N)
+                                    .member(member.get())
                                     .vaccine(vaccine)
                                     .catType(catType)
                                     .build();
@@ -64,13 +66,13 @@ public class AdoptService {
 
     //전체 입양글 조회
     @Transactional
-    public ResponseDto selectAllAdopt(SelectAdoptDto request) {
+    public ResponseDto selectAllAdopt() {
         List<Adopt> adopts = adoptRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
-        List<SelectAdoptDto> selectAdoptDtos = adopts.stream().map(SelectAdoptDto::new).collect(Collectors.toList());
 
-        if (!selectAdoptDtos.isEmpty()) {
+        if (!adopts.isEmpty()) {
+            List<SelectAdoptDto> selectAdoptDtos = adopts.stream().map(SelectAdoptDto::new).collect(Collectors.toList());
             return new ResponseDto(selectAdoptDtos, HttpStatus.OK.value());
-        } else return new ResponseDto("가져올 데이터가 없습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        } else return new ResponseDto("데이터가 없습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
 
@@ -82,7 +84,9 @@ public class AdoptService {
             return new ResponseDto("존재하지 않는 글입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
 
-        SelectAdoptDto detailAdopt = adopt.get().convertDto();
+        Adopt findAdopt = adopt.get();
+        findAdopt.updateViewCount(findAdopt.getView());         //조회수 증가
+        SelectAdoptDto detailAdopt = findAdopt.convertDto();
         return new ResponseDto(detailAdopt, HttpStatus.OK.value());
     }
 

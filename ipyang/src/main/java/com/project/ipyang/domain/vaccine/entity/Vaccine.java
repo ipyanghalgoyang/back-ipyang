@@ -24,4 +24,8 @@ public class Vaccine {
     @OneToMany(mappedBy = "vaccine")
     private List<Adopt> adopts = new ArrayList<>();
 
+    public void update(String inputName) {
+        this.name = inputName;
+    }
+
 }

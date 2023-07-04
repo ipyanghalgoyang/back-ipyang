@@ -42,7 +42,7 @@ public class MemberService {
                 .name(memberDto.getName())
                 .phone(memberDto.getPhone())
                 .memberRole(IpyangEnum.MemberRoleType.USER)
-                .delYn(IpyangEnum.MemberDelYN.N)
+                .delYn(IpyangEnum.Status.N)
                 .address(memberDto.getAddress())
                 .point(memberDto.getPoint())
                 .build();
@@ -163,9 +163,6 @@ public class MemberService {
     }
 
 
-
-
-
     @Transactional
     public ResponseDto withdrawMember(Long id  ) {
         Optional<Member> memberOptional = memberRepository.findById(id);
@@ -176,7 +173,7 @@ public class MemberService {
         Member member = memberOptional.get();
         member.withdraw(); //N-> Y
         member.delete();    // delete at  날짜추가
-        if (memberOptional.get().getDelYn() == IpyangEnum.MemberDelYN.Y){
+        if (memberOptional.get().getDelYn() == IpyangEnum.Status.Y){
 
             return new ResponseDto("30일뒤 회원이 탈퇴됩니다.", HttpStatus.OK.value());
         }
@@ -201,7 +198,6 @@ public class MemberService {
             return new ResponseDto("회원탈퇴 실패", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }
-
 
 
 }

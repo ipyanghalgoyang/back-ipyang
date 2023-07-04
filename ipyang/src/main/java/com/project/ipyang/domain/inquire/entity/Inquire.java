@@ -36,7 +36,7 @@ public class Inquire extends BaseEntity {
 
     @Column(name = "i_reply_yn")
     @Enumerated(EnumType.STRING)
-    private IpyangEnum.InquireStatus status;
+    private IpyangEnum.Status status;
 
     @Column(name = "i_reply_content")
     private String replyContent;
@@ -66,7 +66,7 @@ public class Inquire extends BaseEntity {
                 .title(title)
                 .content(content)
                 .passwd(passwd)
-                .status(IpyangEnum.InquireStatus.N)
+                .status(IpyangEnum.Status.N)
                 .memberId(memberId)
                 .inquireImgDtos(convertImgDto())
                 .build();
@@ -102,23 +102,26 @@ public class Inquire extends BaseEntity {
     }
 
 
-    //패스워드 일치 여부 검증
+    //문의글 조회 시 패스워드 일치 여부 검증
     public boolean isPasswordMatch(String inputPasswd) {
         return passwd.equals(inputPasswd);
     }
 
+
+    //문의글 작성 후 제목과 내용 수정
     public void update(String title, String content) {
         this.title = title;
         this.content = content;
     }
 
+
+    /*
+    * 문의글에 관리자가 답변 추가
+    * 답변이 추가된 순간 status 칼럼이 N → Y 로 변경됨
+    * */
     public void replyUpdate(String inputReplyContent) {
         this.replyContent = inputReplyContent;
-        this.status = IpyangEnum.InquireStatus.Y;
+        this.status = IpyangEnum.Status.Y;
     }
-
-
-
-
 
 }

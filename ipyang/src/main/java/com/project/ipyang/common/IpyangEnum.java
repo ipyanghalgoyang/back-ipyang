@@ -6,21 +6,15 @@ public class IpyangEnum {
         USER
     }
 
-    public enum MemberDelYN{
-        Y,N
+    public enum Status {
+        Y, N
     }
-
 
     public enum BoardCategory {
         Info,
         Promo,
         Report
 
-    }
-
-
-    public enum ProductStatus {
-        Y,N
     }
 
     public enum ProductType{
@@ -34,14 +28,11 @@ public class IpyangEnum {
         FAQ
     }
 
-    public enum InquireStatus {
-        Y, N
+    public enum PointType {
+        Charge,
+        Buy,
+        Sell
     }
-
-    public enum AdoptStatus {
-        Y, N
-    }
-
 
 
     public enum WarningReason{

@@ -18,4 +18,13 @@ public class CatType {
     @Column(name = "c_type")
     private String type;
 
+    public void update(String inputType) {
+        this.type = inputType;
+    }
+
+    //품종 수정
+    public void updatetype(String inputType) {
+        this.type = inputType;
+    }
+
 }

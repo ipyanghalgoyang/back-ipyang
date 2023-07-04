@@ -37,7 +37,7 @@ public class ProductService {
         // 필요한 데이터를 사용하여 Product 객체를 생성합니다.
         Product product = Product.builder()
                 .name(productDto.getName())
-                .status(IpyangEnum.ProductStatus.N)
+                .status(IpyangEnum.Status.N)
                 .price(productDto.getPrice())
                 .type(productDto.getType())
                 .loc(productDto.getLoc())
@@ -92,6 +92,7 @@ public class ProductService {
     }
 
 
+
     @Transactional
     public ResponseDto soldoutProduct( long id) {
         Optional<Product> productOptional = productRepository.findById(id);
@@ -100,7 +101,7 @@ public class ProductService {
         }
 
         productOptional.get().soldout();
-        if(productOptional.get().getStatus() == IpyangEnum.ProductStatus.Y){
+        if(productOptional.get().getStatus() == IpyangEnum.Status.Y){
             return new ResponseDto("판매가 완료되었습니다.", HttpStatus.OK.value());
         }
         else {

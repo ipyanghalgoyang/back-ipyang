@@ -14,7 +14,7 @@ public class UpdateAdoptDto {
     private String weight;
     private String age;
     private String neu;
-    private IpyangEnum.AdoptStatus status;
+    private IpyangEnum.Status status;
     private Long vacId;
     private Long catId;
 }

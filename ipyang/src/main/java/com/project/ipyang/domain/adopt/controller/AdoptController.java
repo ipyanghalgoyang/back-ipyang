@@ -28,11 +28,13 @@ public class AdoptController {
         return adoptService.createAdopt(request, memberId);
     }
 
+
     //전체 입양글 조회
     @GetMapping(value = "/v1/adopt")
-    public ResponseDto<List<SelectAdoptDto>> selectAllAdopt(SelectAdoptDto request) {
-        return adoptService.selectAllAdopt(request);
+    public ResponseDto<List<SelectAdoptDto>> selectAllAdopt() {
+        return adoptService.selectAllAdopt();
     }
+
 
     //특정 입양글 조회
     @GetMapping(value = "/v1/adopt/{id}")
@@ -40,17 +42,21 @@ public class AdoptController {
         return adoptService.selectAdopt(id);
     }
 
+
     //특정 입양글 수정
     @PutMapping(value = "/v1/adopt/{id}/edit")
     public ResponseDto updateAdopt(@PathVariable("id") Long id, @RequestBody UpdateAdoptDto request) {
         return adoptService.updateAdopt(id, request);
     }
 
+
     //특정 입양글 삭제
     @DeleteMapping(value = "/v1/adopt/{id}/delete")
     public ResponseDto deleteAdopt(@PathVariable("id") Long id) {
         return adoptService.deleteAdopt(id);
     }
-    
+
+
     //관심글 등록
+
 }

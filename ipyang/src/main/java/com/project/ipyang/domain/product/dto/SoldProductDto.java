@@ -2,7 +2,6 @@ package com.project.ipyang.domain.product.dto;
 
 import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.domain.member.entity.Member;
-import com.project.ipyang.domain.member.repository.MemberRepository;
 import com.project.ipyang.domain.product.entity.Product;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +12,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @Builder
-public class UpdateProductDto {
+public class SoldProductDto {
     private Long id;
     private String name;
     private int price;
@@ -23,17 +22,15 @@ public class UpdateProductDto {
     private IpyangEnum.Status status;
 
 
-    public Product toEntity( ) {
-
+    public Product toEntity() {
         return Product.builder()
                 .id(id)
                 .name(name)
-                .price(price)
+               .price(price)
                 .type(type)
                 .loc(loc)
                 .status(status)
                 .member(Member.builder().id(memberId).build())
                 .build();
     }
-
 }

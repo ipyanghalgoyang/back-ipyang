@@ -22,7 +22,7 @@ public class InquireDto {
     private String title;
     private String content;
     private String passwd;
-    private IpyangEnum.InquireStatus status;
+    private IpyangEnum.Status status;
     private String replyContent;
     private Member member;
     private List<InquireImgDto> inquireImgDtos = new ArrayList<>();

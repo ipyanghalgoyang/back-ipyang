@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 public class InsertProductDto  {
     private String name;
-    private IpyangEnum.ProductStatus status;
+    private IpyangEnum.Status status;
     private int price;
     private String type;
     private String loc;

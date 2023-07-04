@@ -32,7 +32,7 @@ public class NoticeController {
     }
 
 
-    //전체 안내글 조회
+    //카테고리별 안내글 조회
     @GetMapping(value = "/v1/notice/{category}")
     public ResponseDto<List<SelectNoticeDto>> selectAllNotice(@PathVariable("category") IpyangEnum.NoticeCategory selectedCategory) {
         return noticeService.selectAllNotice(selectedCategory);
