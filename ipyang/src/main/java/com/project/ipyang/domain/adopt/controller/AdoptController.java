@@ -7,6 +7,7 @@ import com.project.ipyang.domain.adopt.dto.UpdateAdoptDto;
 import com.project.ipyang.domain.adopt.dto.WriteAdoptDto;
 import com.project.ipyang.domain.adopt.service.AdoptService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -57,6 +58,6 @@ public class AdoptController {
     }
 
 
-    //관심글 등록
+
 
 }

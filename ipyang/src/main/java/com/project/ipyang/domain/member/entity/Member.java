@@ -3,6 +3,7 @@ package com.project.ipyang.domain.member.entity;
 import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.entity.*;
 import com.project.ipyang.domain.adopt.entity.Adopt;
+import com.project.ipyang.domain.adopt.entity.FavAdopt;
 import com.project.ipyang.domain.apply.entity.Apply;
 import com.project.ipyang.domain.board.entity.Board;
 import com.project.ipyang.domain.inquire.entity.Inquire;
@@ -99,6 +100,9 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy ="member" )
     private  List<BadWords> words = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member")
+    private List<FavAdopt> favAdopts = new ArrayList<>();
+
 
     public MemberDto convertDto(){
         return MemberDto.builder()
@@ -117,8 +121,6 @@ public class Member extends BaseEntity {
 
     public void withdraw( ){
         this.delYn = IpyangEnum.Status.Y;
-
     }
-
 }
 

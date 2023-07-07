@@ -74,6 +74,9 @@ public class Adopt extends BaseEntity {
     @OneToMany(mappedBy = "adopt")
     private List<Apply> applies = new ArrayList<>();
 
+    @OneToMany(mappedBy = "adopt")
+    private List<FavAdopt> favAdopts = new ArrayList<>();
+
 
 
     //------------- Entity → DTO --------------------------------------------------------------------------------
