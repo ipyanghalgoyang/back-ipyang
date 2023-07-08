@@ -7,6 +7,8 @@ import com.project.ipyang.domain.adopt.dto.SelectAdoptDto;
 import com.project.ipyang.domain.adopt.dto.UpdateAdoptDto;
 import com.project.ipyang.domain.adopt.dto.WriteAdoptDto;
 import com.project.ipyang.domain.adopt.entity.Adopt;
+import com.project.ipyang.domain.adopt.entity.FavAdopt;
+import com.project.ipyang.domain.adopt.repository.FavAdoptRepository;
 import com.project.ipyang.domain.catType.entity.CatType;
 import com.project.ipyang.domain.vaccine.entity.Vaccine;
 import com.project.ipyang.domain.adopt.repository.AdoptRepository;
@@ -128,4 +130,5 @@ public class AdoptService {
         }
         else return new ResponseDto("에러가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
+
 }

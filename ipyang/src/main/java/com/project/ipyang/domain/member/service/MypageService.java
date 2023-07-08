@@ -2,8 +2,11 @@ package com.project.ipyang.domain.member.service;
 
 import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.domain.adopt.dto.SelectAdoptDto;
+import com.project.ipyang.domain.adopt.dto.SelectFavAdoptDto;
 import com.project.ipyang.domain.adopt.entity.Adopt;
+import com.project.ipyang.domain.adopt.entity.FavAdopt;
 import com.project.ipyang.domain.adopt.repository.AdoptRepository;
+import com.project.ipyang.domain.adopt.repository.FavAdoptRepository;
 import com.project.ipyang.domain.apply.dto.SelectApplyDto;
 import com.project.ipyang.domain.apply.entity.Apply;
 import com.project.ipyang.domain.apply.repository.ApplyRepository;
@@ -39,6 +42,7 @@ public class MypageService {
     private final AdoptRepository adoptRepository;
     private final BoardRepository boardRepository;
     private final ProductRepository productRepository;
+    private final FavAdoptRepository favAdoptRepository;
 
     //회원이 작성한 문의 내역 조회
     @Transactional
@@ -97,6 +101,25 @@ public class MypageService {
                 selectTotalDto.setProductDtos(productDtos);
             }
             return new ResponseDto(selectTotalDto, HttpStatus.OK.value());
+        } else return new ResponseDto("내역이 없습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+    }
+
+
+    //회원의 관심 고양이 조회
+    public ResponseDto<List<SelectFavAdoptDto>> selectFavAdoptByMember(Long memberId) {
+        List<FavAdopt> favAdopts = favAdoptRepository.findByMemberIdOrderByCreatedAtDesc(memberId);
+        List<SelectFavAdoptDto> selectFavAdoptDtos = new ArrayList<>();
+        if(!favAdopts.isEmpty()) {
+            for(FavAdopt favAdopt : favAdopts) {
+                Long favId = favAdopt.getId();
+                Long findMemberId = favAdopt.getMember().getId();
+                Long adoptId = favAdopt.getAdopt().getId();
+                String title = favAdopt.getAdopt().getTitle();
+
+                SelectFavAdoptDto selectFavAdoptDto = favAdopt.convertSelectDto(favId, findMemberId, adoptId, title);
+                selectFavAdoptDtos.add(selectFavAdoptDto);
+            }
+            return new ResponseDto(selectFavAdoptDtos, HttpStatus.OK.value());
         } else return new ResponseDto("내역이 없습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 }
