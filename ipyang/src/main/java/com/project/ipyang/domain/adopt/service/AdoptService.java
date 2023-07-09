@@ -93,7 +93,7 @@ public class AdoptService {
     }
 
 
-    //특정 입양글 수정
+    //입양글 수정
     /*
     * 현재 이미지 수정은 제외하였음
     * */
@@ -115,7 +115,7 @@ public class AdoptService {
     }
 
 
-    //특정 입양글 삭제
+    //입양글 삭제
     @Transactional
     public ResponseDto deleteAdopt(Long id) {
         Optional<Adopt> searchAdopt = adoptRepository.findById(id);
