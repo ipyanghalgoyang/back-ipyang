@@ -61,9 +61,9 @@ public class WarningService {
             if (warningReason == IpyangEnum.WarningReason.BadWords) {
 
                 String warn = board.getContent();
-                System.out.println(warn);
+
                 String trimText = warn.trim();
-                System.out.println(trimText);
+
                 trimText = trimText.replaceAll(" ", "");
 
                 List<BadWords> wordsList = badWordsRepository.findAll();
@@ -71,7 +71,7 @@ public class WarningService {
                 int cnt = 0;
 
                 for (BadWords badWords : wordsList) {
-                    System.out.println("badWords = " + badWords.getWords());
+
                     boolean result = trimText.contains(badWords.getWords());
                     if (result) cnt++;
                     if (cnt >= 1) {
@@ -79,7 +79,7 @@ public class WarningService {
                     }
                 }
                 if (cnt >= 1) {
-                    System.out.println("신고 처리 완료");
+
                     //신고당한 사용자 제제
                 } else {
                     //신고한 사용자 제제

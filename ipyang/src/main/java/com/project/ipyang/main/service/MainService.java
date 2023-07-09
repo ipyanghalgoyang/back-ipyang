@@ -39,7 +39,7 @@ public class MainService {
             if(!boards.isEmpty()) {
                 List<SelectBoardDto> boardDtos = new ArrayList<>();
                 for(Board board : boards) {
-                    SelectBoardDto selectBoardDto = board.convertDto();
+                    SelectBoardDto selectBoardDto = board.convertSelectDto();
                     boardDtos.add(selectBoardDto);
                 }
                 selectTotalDto.setBoardDtos(boardDtos);

@@ -22,7 +22,7 @@ public class BoardDto {
     private String content;
     private int viewCnt;
     private int likeCnt;
-    private IpyangEnum.BoardCategory commonBoard;
+    private IpyangEnum.BoardCategory category;
     private int ref;
     private int reStep;
     private int reLevel;
@@ -38,7 +38,7 @@ public class BoardDto {
                 .content(content)
                 .viewCnt(viewCnt)
                 .likeCnt(likeCnt)
-                .commonBoard(commonBoard)
+                .category(category)
                 .ref(ref)
                 .reStep(reStep)
                 .reLevel(reLevel)
