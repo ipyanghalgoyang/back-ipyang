@@ -7,6 +7,8 @@ import com.project.ipyang.domain.adopt.dto.SelectAdoptDto;
 import com.project.ipyang.domain.adopt.dto.UpdateAdoptDto;
 import com.project.ipyang.domain.adopt.dto.WriteAdoptDto;
 import com.project.ipyang.domain.adopt.entity.Adopt;
+import com.project.ipyang.domain.adopt.entity.FavAdopt;
+import com.project.ipyang.domain.adopt.repository.FavAdoptRepository;
 import com.project.ipyang.domain.catType.entity.CatType;
 import com.project.ipyang.domain.vaccine.entity.Vaccine;
 import com.project.ipyang.domain.adopt.repository.AdoptRepository;
@@ -91,7 +93,7 @@ public class AdoptService {
     }
 
 
-    //특정 입양글 수정
+    //입양글 수정
     /*
     * 현재 이미지 수정은 제외하였음
     * */
@@ -113,7 +115,7 @@ public class AdoptService {
     }
 
 
-    //특정 입양글 삭제
+    //입양글 삭제
     @Transactional
     public ResponseDto deleteAdopt(Long id) {
         Optional<Adopt> searchAdopt = adoptRepository.findById(id);
@@ -128,4 +130,5 @@ public class AdoptService {
         }
         else return new ResponseDto("에러가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
+
 }

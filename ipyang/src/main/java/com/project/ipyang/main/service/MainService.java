@@ -29,9 +29,9 @@ public class MainService {
     //전체 게시판 게시글, 상품, 입양글 데이터 가져오기
     @Transactional
     public ResponseDto selectTotal(SelectTotalDto selectTotalDto) {
-        List<Board> boards = boardRepository.findAll();
-        List<Product> products = productRepository.findAll();
-        List<Adopt> adopts = adoptRepository.findAll();
+        List<Board> boards = boardRepository.findTop15ByOrderByCreatedAtDesc();
+        List<Product> products = productRepository.findTop15ByOrderByCreatedAtDesc();
+        List<Adopt> adopts = adoptRepository.findTop15ByOrderByCreatedAtDesc();
 
         if(!boards.isEmpty() || !products.isEmpty() || !adopts.isEmpty()) {
 
