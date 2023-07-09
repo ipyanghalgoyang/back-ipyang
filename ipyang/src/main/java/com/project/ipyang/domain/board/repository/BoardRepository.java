@@ -8,4 +8,6 @@ import java.util.List;
 public interface BoardRepository extends JpaRepository<Board,Long> {
     List<Board> findByMemberIdOrderByCreatedAtDesc(Long memberId);
 
+    //메인 화면에 필요한 데이터 조회
+    List<Board> findTop15ByOrderByCreatedAtDesc();
 }

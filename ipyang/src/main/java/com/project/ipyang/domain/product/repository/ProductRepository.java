@@ -11,5 +11,6 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product,Long> {
     List<Product> findByMemberIdOrderByCreatedAtDesc(Long memberId);
 
-
+    //메인 화면에 필요한 데이터 조회
+    List<Product> findTop15ByOrderByCreatedAtDesc();
 }

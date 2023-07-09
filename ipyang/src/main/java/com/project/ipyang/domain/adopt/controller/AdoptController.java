@@ -44,18 +44,22 @@ public class AdoptController {
     }
 
 
-    //특정 입양글 수정
+    //입양글 수정
     @PutMapping(value = "/v1/adopt/{id}/edit")
     public ResponseDto updateAdopt(@PathVariable("id") Long id, @RequestBody UpdateAdoptDto request) {
         return adoptService.updateAdopt(id, request);
     }
 
 
-    //특정 입양글 삭제
+    //입양글 삭제
     @DeleteMapping(value = "/v1/adopt/{id}/delete")
     public ResponseDto deleteAdopt(@PathVariable("id") Long id) {
         return adoptService.deleteAdopt(id);
     }
+
+
+    //입양 중인 게시글만 필터링
+
 
 
 
