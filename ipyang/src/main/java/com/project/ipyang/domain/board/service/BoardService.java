@@ -30,12 +30,13 @@ public class BoardService {
     @Transactional
     public ResponseDto writeBoard(IpyangEnum.BoardCategory sC, InsertBoardDto boardDto, Long memberId) {
 
-        Member member = memberRepository.findById(memberId).orElse(null);
+        Optional<Member> member = memberRepository.findById(memberId);
+        if(!member.isPresent()) return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
 
         Board board = Board.builder().title(boardDto.getTitle())
                 .content(boardDto.getContent())
                 .category(sC)
-                .member(member)
+                .member(member.get())
                 .build();
         Board writeBoard = boardRepository.save(board);
         if (writeBoard != null) {
@@ -82,8 +83,9 @@ public class BoardService {
             if (!board.isPresent()){
                 return new ResponseDto("존재하지 않는 글입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
             }
-
-            SelectBoardDto readBoard = board.get().convertSelectDto();
+            Board findBoard = board.get();
+            findBoard.updateViewCnt(findBoard.getViewCnt()); //조회수 증가
+            SelectBoardDto readBoard = findBoard.convertSelectDto();
 
 
             List<Comment> comments = commentRepository.findByBoardId(id);
@@ -96,40 +98,55 @@ public class BoardService {
 
         }
 
-     //조회수 증가
+
 
 
     //게시글 수정
     @Transactional
-    public ResponseDto updateBoard(Long id,UpdateBoardDto request) {
+    public ResponseDto updateBoard(Long id,UpdateBoardDto request,Long memberId) {
 
         Optional<Board> boardOptional = boardRepository.findById(id);
         if (!boardOptional.isPresent()) {
             return new ResponseDto("존재하지 않는 게시글입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
+        Board findBoard = boardOptional.get();
 
-        boardOptional.get().UpdateBoard(request.getTitle(),request.getContent());
-
-        return new ResponseDto("게시글이 업데이트되었습니다.", HttpStatus.OK.value());
-
+        if (memberId.equals(findBoard.getMember().getId())){
+            findBoard.UpdateBoard(request.getTitle(),request.getContent());
+            return new ResponseDto("게시물 수정 성공.", HttpStatus.OK.value());
+        }
+        else {
+            return new ResponseDto("게시글 작성자만 삭제가능합니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
     }
 
 
 
+    @Transactional
+    public ResponseDto deleteBoard(Long id,Long memberId ) {
+        Optional<Board> boardOptional = boardRepository.findById(id);
+        if (!boardOptional.isPresent()) {
+            return new ResponseDto("존재하지 않는 게시글입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
 
-    public ResponseDto deleteBoard(BoardDto boardDto) {
-        Optional<Board> boardOptional = boardRepository.findById(boardDto.getId());
-        if (boardOptional.isPresent()) {
-            Board board = boardOptional.get();
+        Board board = boardOptional.get();
+        List<Comment> commentOptional = commentRepository.findByBoardId(id);
+
+        if (memberId.equals(board.getMember().getId())){
+            for (Comment comment : commentOptional) {
+                System.out.println(comment);
+                commentRepository.delete(comment);
+            }
             boardRepository.delete(board);
-            return new ResponseDto("글삭제 성공", HttpStatus.OK.value());
+            return new ResponseDto("게시물 삭제 성공.", HttpStatus.OK.value());
         }
         else {
-            return new ResponseDto("글삭제 실패", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            return new ResponseDto("게시글 작성자만 삭제가능합니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }
 
 //===================댓글========================================
+    @Transactional
     public ResponseDto writeComment(Long boardId,InsertCommentDto request, Long memberId) {
         Member member = memberRepository.findById(memberId).orElse(null);
         Board board = boardRepository.findById(boardId).orElse(null);
@@ -152,14 +169,42 @@ public class BoardService {
                 return new ResponseDto("댓글 작성 에러.", HttpStatus.INTERNAL_SERVER_ERROR.value());
                }
     }
+    @Transactional
+    public ResponseDto updateComment(Long id, UpdateCommentDto request, Long memberId) {
 
-//    //댓글조회
-//    public ResponseDto<List<SelectCommentDto>> listComment(long boardId){
-//
-//        List<Comment> comments = commentRepository.findByBoardId(boardId);
-//
-//    }
+        Optional<Comment> commentOptional = commentRepository.findById(id);
+        if (!commentOptional.isPresent()){
+            return new ResponseDto("존재하지않는 댓글입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
 
+        Comment findComment = commentOptional.get();
+        if (memberId.equals(findComment.getMember().getId())){
+                findComment.updateComment(request.getContent());
+            return new ResponseDto("댓글수정성공.", HttpStatus.OK.value());
+        }else {
 
+            return new ResponseDto("댓글 작성자만 수정가능합니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+
+    }
+
+    @Transactional
+    public ResponseDto deleteComment(Long id, Long memberId) {
+        Optional<Comment> commentOptional = commentRepository.findById(id);
+        if (!commentOptional.isPresent()){
+            return new ResponseDto("존재하지않는 댓글입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+
+        Comment findComment = commentOptional.get();
+
+        if (memberId.equals(findComment.getMember().getId())){
+           findComment.delete();
+            return new ResponseDto("댓글삭제성공.", HttpStatus.OK.value());
+        }else {
+
+            return new ResponseDto("댓글 작성자만 삭제가능합니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+
+    }
 }
 

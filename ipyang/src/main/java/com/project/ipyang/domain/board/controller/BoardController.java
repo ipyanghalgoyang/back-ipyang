@@ -69,27 +69,53 @@ public class BoardController {
 
     //게시글 수정
     @PutMapping(value = "/v1/board/{id}")
-    public ResponseDto<BoardDto> updateBoard(@PathVariable("id")Long id,@RequestBody UpdateBoardDto request) {
-        return boardService.updateBoard(id,request);
+    public ResponseDto<BoardDto> updateBoard(@PathVariable("id")Long id,@RequestBody UpdateBoardDto request
+                                                ,HttpSession session) {
+        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
+        Long memberId = loggedInUser.getId();
+
+        return boardService.updateBoard(id,request,memberId);
     }
 
-    //게시글 삭제
-    @DeleteMapping(value = "/v1/board")
-    public ResponseDto<BoardDto> deleteBoard(BoardDto boardDto) {
-        return new ResponseDto(boardService.deleteBoard(boardDto));
+    @ApiOperation(
+            value = "게시글 삭제"
+            , notes = "게시글과 게시글에있는 모든 댓글을 삭제한다")
+    @DeleteMapping(value = "/v1/board/{id}")
+    public ResponseDto<BoardDto> deleteBoard(@PathVariable("id")Long id,HttpSession session) {
+        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
+        Long memberId = loggedInUser.getId();
+
+        return new ResponseDto(boardService.deleteBoard(id,memberId));
     }
 
 
     //===========================================================================
-    //댓글작성
+    @ApiOperation(
+            value = "댓글 작성"
+            , notes = "게시글에 댓글을 작성한다")
     @PostMapping(value = "/v1/comment/{id}")
     public ResponseDto writeComment(@PathVariable("id")Long id,@RequestBody InsertCommentDto request,
                                              HttpSession session) {
 
         SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
-
         Long memberId = loggedInUser.getId();
         return  boardService.writeComment(id,request,memberId);
+    }
+
+    @PutMapping(value = "/v1/comment/{id}")
+    public ResponseDto updateComment(@PathVariable("id")Long id,@RequestBody UpdateCommentDto request,HttpSession session){
+        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
+
+        Long memberId = loggedInUser.getId();
+        return  boardService.updateComment(id,request,memberId);
+    }
+
+    @DeleteMapping(value = "/v1/comment/{id}")
+    public ResponseDto deleteComment(@PathVariable("id")Long id,HttpSession session){
+        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
+
+        Long memberId = loggedInUser.getId();
+        return boardService.deleteComment(id,memberId);
     }
 
 

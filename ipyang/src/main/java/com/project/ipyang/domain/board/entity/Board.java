@@ -97,6 +97,7 @@ public void UpdateBoard(String title,String content){
 }
 
 
-
-
+    public void updateViewCnt(int viewCnt) {
+        this.viewCnt = viewCnt +1;
+    }
 }
