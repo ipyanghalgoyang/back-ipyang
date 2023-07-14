@@ -52,4 +52,6 @@ public class SelectBoardDto {
 //                .member(memberId)
 //                .build();
 //    }
+
+
 }

@@ -34,7 +34,7 @@ public class Adopt extends BaseEntity {
     private String content;
 
     @Column(name = "a_view_cnt")
-    private int view;
+    private int viewCnt;
 
     @Column(name = "a_name")
     private String name;
@@ -104,7 +104,7 @@ public class Adopt extends BaseEntity {
                                             .id(id)
                                             .title(title)
                                             .content(content)
-                                            .view(view)
+                                            .viewCnt(viewCnt)
                                             .name(name)
                                             .gender(gender)
                                             .weight(weight)
@@ -161,6 +161,6 @@ public class Adopt extends BaseEntity {
 
     //조회수 증가
     public void updateViewCount(int view) {
-        this.view = view + 1;
+        this.viewCnt = view + 1;
     }
 }
