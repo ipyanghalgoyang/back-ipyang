@@ -39,7 +39,7 @@ public class Board extends BaseEntity {   //공유하기 제보하기  홍보하
 
     @Column(name = "b_category")
     @Enumerated(EnumType.STRING)
-    private IpyangEnum.BoardCategory commonBoard;
+    private IpyangEnum.BoardCategory category;
 
     @Column(name = "b_ref")
     private int ref;
@@ -65,25 +65,23 @@ public class Board extends BaseEntity {   //공유하기 제보하기  홍보하
                 .content(content)
                 .viewCnt(viewCnt)
                 .likeCnt(likeCnt)
-                .commonBoard(commonBoard)
+                .category(category)
                 .ref(ref)
                 .reStep(reStep)
                 .reLevel(reLevel)
                 .memberId(member)
                 .build();
     }
-    public SelectBoardDto convertDto() {
+    public SelectBoardDto convertSelectDto() {
         return SelectBoardDto.builder()
                                      .id(id)
                                      .title(title)
                                      .content(content)
                                      .viewCnt(viewCnt)
                                      .likeCnt(likeCnt)
-                                     .commonBoard(commonBoard)
-                                     .ref(ref)
-                                     .reStep(reStep)
-                                     .reLevel(reLevel)
+                                     .category(category)
                                     .memberId(member.getId())
+                                    .createdAt(getCreatedAt())
                                      .build();
     }
 

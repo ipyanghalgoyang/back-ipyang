@@ -8,6 +8,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @Data
 @Builder
 @RequiredArgsConstructor
@@ -18,40 +21,17 @@ public class SelectBoardDto {
     private String content;
     private int viewCnt;
     private int likeCnt;
-    private IpyangEnum.BoardCategory commonBoard;
-    private int ref;   //글그룹
-    private int reStep;  //들여쓰기
-    private int reLevel;//1이 게시글 2가 댓글
+    private IpyangEnum.BoardCategory category;
     private long memberId;
-
+    private LocalDateTime createdAt;
     public SelectBoardDto(Board board) {
         this.id = board.getId();
         this.title = board.getTitle();
         this.content = board.getContent();
         this.viewCnt = board.getViewCnt();
         this.likeCnt = board.getLikeCnt();
-        this.commonBoard = board.getCommonBoard();
-        this.ref = board.getRef();
-        this.reStep = board.getReStep();
-        this.reLevel = board.getReLevel();
+        this.category = board.getCategory();
         this.memberId = board.getMember().getId();
+        this.createdAt = board.getCreatedAt();
     }
-
-
-//    public Board toEntity() {
-//        return Board.builder()
-//                .id(id)
-//                .title(title)
-//                .content(content)
-//                .viewCnt(viewCnt)
-//                .likeCnt(likeCnt)
-//                .commonBoard(commonBoard)
-//                .ref(ref)
-//                .reStep(reStep)
-//                .reLevel(reLevel)
-//                .member(memberId)
-//                .build();
-//    }
-
-
 }
