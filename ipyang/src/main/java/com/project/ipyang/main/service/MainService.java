@@ -25,17 +25,19 @@ public class MainService {
     private final AdoptRepository adoptRepository;
 
     @Transactional(readOnly = true)
-    public ResponseDto getTotal(int pageNo, int size, String sort) {
-        Pageable pageable = PageRequest.of(pageNo, size, Sort.by(Sort.Direction.DESC, sort));
+    public ResponseDto getTotal(Pageable pageable) {
+        int page = pageable.getPageNumber() - 1;   //요청 받은 페이지
 
-        Page<SelectBoardDto> boards = boardRepository.findAll(pageable).map(SelectBoardDto::new);
-        Page<SelectAdoptDto> adopts = adoptRepository.findAll(pageable).map(SelectAdoptDto::new);
-        Page<SelectProductDto> products = productRepository.findAll(pageable).map(SelectProductDto::new);
+        Pageable modifiedPageable = PageRequest.of(page, pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "id"));
+
+        Page<SelectBoardDto> boards = boardRepository.findAll(modifiedPageable).map(SelectBoardDto::new);
+        Page<SelectAdoptDto> adopts = adoptRepository.findAll(modifiedPageable).map(SelectAdoptDto::new);
+        Page<SelectProductDto> products = productRepository.findAll(modifiedPageable).map(SelectProductDto::new);
 
         if(!boards.isEmpty() || !products.isEmpty() || !adopts.isEmpty()) {
             GetTotalDto getTotalDto = new GetTotalDto();
 
-            if(!boards.isEmpty()) getTotalDto.setAdoptDtos(adopts);
+            if(!boards.isEmpty()) getTotalDto.setBoardDtos(boards);
             if(!products.isEmpty()) getTotalDto.setProductDtos(products);
             if(!adopts.isEmpty()) getTotalDto.setAdoptDtos(adopts);
 
