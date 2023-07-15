@@ -20,7 +20,7 @@ public class SelectAdoptDto {
     private Long id;
     private String title;
     private String content;
-    private int view;
+    private int viewCnt;
     private String name;
     private String gender;
     private String weight;
@@ -37,7 +37,7 @@ public class SelectAdoptDto {
         this.id = adopt.getId();
         this.title = adopt.getTitle();
         this.content = adopt.getContent();
-        this.view = adopt.getView();
+        this.viewCnt = adopt.getViewCnt();
         this.name = adopt.getName();
         this.gender = adopt.getGender();
         this.weight = adopt.getWeight();
