@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
@@ -128,21 +129,23 @@ public class MemberService {
         }
     }
 
-    // 세션에서 로그인한 회원 객체 가져오기
-    public ResponseDto getLoggedInMember() {
-        SessionUser loggedInMember = (SessionUser) session.getAttribute("loggedInMember");
-
-        if (loggedInMember != null) {
-            return new ResponseDto<>(loggedInMember, HttpStatus.OK.value());
-        } else {
-            return new ResponseDto("로그인한 회원이 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
-    }
 
 
-    public ResponseDto updateMember(UpdateMemberDto memberDto) {
+//    // 세션에서 로그인한 회원 객체 가져오기
+//    public ResponseDto getLoggedInMember() {
+//        SessionUser loggedInMember = (SessionUser) session.getAttribute("loggedInMember");
+//
+//        if (loggedInMember != null) {
+//            return new ResponseDto<>(loggedInMember, HttpStatus.OK.value());
+//        } else {
+//            return new ResponseDto("로그인한 회원이 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+//        }
+//    }
+
+
+    public ResponseDto updateMember(UpdateMemberDto request,Long memberId) {
         // 회원 정보를 데이터베이스에서 조회합니다.
-        Optional<Member> memberOptional = memberRepository.findById(memberDto.getId());
+        Optional<Member> memberOptional = memberRepository.findById(memberId);
         if (!memberOptional.isPresent()) {
             // 해당 회원이 존재하지 않는 경우 에러 응답을 반환합니다.
             return new ResponseDto("존재하지 않는 회원입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
@@ -151,10 +154,10 @@ public class MemberService {
         // 기존 회원 정보를 가져옵니다.
         Member member = memberOptional.get();
         MemberDto updateMember = member.convertDto();
-        updateMember.setNickname(memberDto.getNickname());
-        updateMember.setPasswd(memberDto.getPasswd());
-        updateMember.setPhone(memberDto.getPhone());
-        updateMember.setAddress(memberDto.getAddress());
+        updateMember.setNickname(request.getNickname());
+        updateMember.setPasswd(request.getPasswd());
+        updateMember.setPhone(request.getPhone());
+        updateMember.setAddress(request.getAddress());
 
         memberRepository.save(updateMember.toEntity());
 

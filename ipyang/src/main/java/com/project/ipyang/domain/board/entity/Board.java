@@ -54,10 +54,18 @@ public class Board extends BaseEntity {   //공유하기 제보하기  홍보하
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.LAZY)
     private List<BoardImg> boardImgs = new ArrayList<>();
 
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.LAZY)
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board")
+    private List<Likes> likes = new ArrayList<>();
+
+
+    private boolean isLiked;
     public BoardDto convertUpdateDto() {
         return BoardDto.builder()
                 .id(id)
@@ -99,5 +107,19 @@ public void UpdateBoard(String title,String content){
 
     public void updateViewCnt(int viewCnt) {
         this.viewCnt = viewCnt +1;
+    }
+
+    public void likeBoard(int likeCnt) {
+        this.likeCnt = likeCnt +1;
+        isLiked = true;
+    }
+
+    public void cancelLike(int likeCnt) {
+        this.likeCnt = likeCnt-1;
+        isLiked = false;
+    }
+
+    public boolean isLiked() {
+        return isLiked;
     }
 }

@@ -1,15 +1,13 @@
 package com.project.ipyang.domain.member.entity;
 
 import com.project.ipyang.common.IpyangEnum;
-import com.project.ipyang.common.entity.*;
+import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.adopt.entity.Adopt;
 import com.project.ipyang.domain.adopt.entity.FavAdopt;
 import com.project.ipyang.domain.apply.entity.Apply;
 import com.project.ipyang.domain.board.entity.Board;
 import com.project.ipyang.domain.inquire.entity.Inquire;
-import com.project.ipyang.domain.member.dto.DeleteMemberDto;
 import com.project.ipyang.domain.member.dto.MemberDto;
-import com.project.ipyang.domain.member.dto.SelectMemberDto;
 import com.project.ipyang.domain.notice.entity.Notice;
 import com.project.ipyang.domain.point.entity.Point;
 import com.project.ipyang.domain.product.entity.Product;
@@ -102,6 +100,13 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member")
     private List<FavAdopt> favAdopts = new ArrayList<>();
+
+
+//    @OneToMany(mappedBy = "member")
+//    private List<Comment> comments = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "member")
+//    private List<Likes> likes = new ArrayList<>();
 
 
     public MemberDto convertDto(){

@@ -5,6 +5,7 @@ import com.project.ipyang.common.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -13,6 +14,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
 public class BoardImg extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,4 +30,14 @@ public class BoardImg extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "board_id")
     private Board board;
+
+    public static BoardImg toBoardImg(Board savedId, String imgOriginFile, String imgStoredFile) {
+        BoardImg boardImg = new BoardImg();
+        boardImg.setImgOriginFile(imgOriginFile);
+        boardImg.setImgStoredFile(imgStoredFile);
+        boardImg.setBoard(savedId);
+
+
+        return boardImg;
+    }
 }

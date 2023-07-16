@@ -1,8 +1,10 @@
 package com.project.ipyang.domain.member.controller;
 
 import com.project.ipyang.common.response.ResponseDto;
+import com.project.ipyang.config.SessionUser;
 import com.project.ipyang.domain.member.dto.*;
 import com.project.ipyang.domain.member.service.MemberService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Arrays;
@@ -36,23 +39,38 @@ public class MemberController {
         return new ResponseDto(memberService.createMember(request));
     }
 
-    //전체 사용자 데이터 가져오기
+    @ApiOperation(
+            value = "회원 목록가져오기"
+            , notes = "멤버테이블에서 모든회원정보 가져오기")
     @GetMapping(value = "/v1/member")
     public ResponseDto<List<SelectMemberDto>> selectAllMember(SelectMemberDto request) {
         return memberService.selectAllMember(request);
     }
 
+    @ApiOperation(
+            value = "회원정보 수정하기"
+            , notes = "멤버테이블에서 모든회원정보 가져오기")
     @PutMapping(value = "/v1/member")
-    public ResponseDto<MemberDto> updateMember(UpdateMemberDto memberDto) {
-        return new ResponseDto(memberService.updateMember(memberDto));
+    public ResponseDto  updateMember(UpdateMemberDto request
+                                 ,HttpSession session) {
+
+        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
+        Long memberId = loggedInUser.getId();
+        return new ResponseDto(memberService.updateMember(request,memberId));
     }
 
+
+    @ApiOperation(
+            value = "이메일 중복확인"
+            , notes = "멤버테이블에서 이메일중복된거있는지 확인")
     @GetMapping(value = "/v1/dup-email")
     public ResponseDto duplicateMember(@RequestParam String email) {
         return memberService.checkDuplicateEmail(email);
     }
 
-    //닉네임 중복 확인
+    @ApiOperation(
+            value = "닉네임 중복확인"
+            , notes = "멤버테이블에서 닉네임중복된거있는지 확인")
     @GetMapping(value = "/v1/dup-nickname")
     public ResponseDto duplicateNickname(@RequestParam String nickname) {
         return memberService.checkDuplicateNickname(nickname);
@@ -72,12 +90,21 @@ public class MemberController {
         return new ResponseEntity<ResponseDto<?>>(response,HttpStatus.OK);
     }
 
-    @GetMapping("/v1/afterlogin")
-    public ResponseDto<MemberDto> getLoggedInMember(MemberDto memberDto) {
-        ResponseDto loggedInMember = memberService.getLoggedInMember();
-        // 필요한 경우 MemberDto로 변환하여 반환
-        return loggedInMember;
+    @PostMapping("/v1/logout")
+    public ResponseDto logoutMember(HttpServletRequest request) {
+
+        request.getSession().invalidate();
+
+        ResponseDto response = new ResponseDto("로그아웃 되었습니다.", HttpStatus.OK.value());
+        return response;
     }
+
+//    @GetMapping("/v1/afterlogin")
+//    public ResponseDto<MemberDto> getLoggedInMember(MemberDto memberDto) {
+//        ResponseDto loggedInMember = memberService.getLoggedInMember();
+//        // 필요한 경우 MemberDto로 변환하여 반환
+//        return loggedInMember;
+//    }
     //회원 가입 요청
     @PostMapping(value = "/v1/sign")
     public ResponseDto signUp(@Valid @ModelAttribute("member") SignUpMemberDto requestDto, BindingResult errors, Model model) {

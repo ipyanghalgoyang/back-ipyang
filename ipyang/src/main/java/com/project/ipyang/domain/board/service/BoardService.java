@@ -4,18 +4,28 @@ import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.domain.board.dto.*;
 import com.project.ipyang.domain.board.entity.Board;
+import com.project.ipyang.domain.board.entity.BoardImg;
 import com.project.ipyang.domain.board.entity.Comment;
+import com.project.ipyang.domain.board.repository.BoardImgRepository;
 import com.project.ipyang.domain.board.repository.BoardRepository;
 import com.project.ipyang.domain.board.repository.CommentRepository;
 import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,26 +37,63 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
     private final CommentRepository commentRepository;
+    private final BoardImgRepository boardImgRepository;
     @Transactional
-    public ResponseDto writeBoard(IpyangEnum.BoardCategory sC, InsertBoardDto boardDto, Long memberId) {
+    public ResponseDto writeBoard(IpyangEnum.BoardCategory sC, InsertBoardDto boardDto, Long memberId
+                                 ) throws IOException {
 
         Optional<Member> member = memberRepository.findById(memberId);
-        if(!member.isPresent()) return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        Board writeBoard = null;
 
-        Board board = Board.builder().title(boardDto.getTitle())
-                .content(boardDto.getContent())
-                .category(sC)
-                .member(member.get())
-                .build();
-        Board writeBoard = boardRepository.save(board);
+
+
+        //사진을 첨부하지아니할경우
+        if (boardDto.getBoardFile().isEmpty()) {
+            Board board = Board.builder().title(boardDto.getTitle())
+                    .content(boardDto.getContent())
+                    .category(sC)
+                    .member(member.get())
+                    .build();
+             writeBoard = boardRepository.save(board);
+        }
+        else {
+            System.out.println("BoardService.이미지 첨부된글작성");
+                Board board = Board.builder().title(boardDto.getTitle())
+                        .content(boardDto.getContent())
+                        .category(sC)
+                        .member(member.get())
+                        .build();
+            writeBoard = boardRepository.save(board);
+            Long savedId = writeBoard.getId();
+            Board boardId =  boardRepository.findById(savedId).get();
+
+            for (MultipartFile boardFile : boardDto.getBoardFile()) {
+                String imgOriginFile = boardFile.getOriginalFilename();
+                String imgStoredFile = System.currentTimeMillis() + "_" + imgOriginFile;
+
+                String savePath = "C:/intelliJ/intelSrc/study/back-ipyang/ipyang/src/main/resources/static/images/" + imgStoredFile;
+
+                boardFile.transferTo(new File(savePath));
+                BoardImg boardImg = BoardImg.toBoardImg(boardId,imgOriginFile,imgStoredFile);
+               boardImgRepository.save(boardImg);
+
+            }
+        }
+
+
         if (writeBoard != null) {
             return new ResponseDto("게시글을 작성했습니다.", HttpStatus.OK.value());
         }else {
             return new ResponseDto("게시글을 작성 에러.", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
-
-
     }
+
+
+
+
+
+
+
 
     //전체 게시판 게시글 가져오기
     @Transactional
@@ -61,8 +108,12 @@ public class BoardService {
     }
     //카테고리별 글 조회
     @Transactional
-    public ResponseDto<List<SelectBoardDto>> selectSomeBoard(IpyangEnum.BoardCategory sC) {
-        List<Board> boards = boardRepository.findByCategory(sC);
+    public ResponseDto<List<SelectBoardDto>> selectSomeBoard(IpyangEnum.BoardCategory sC/*, Pageable pageable*/) {
+      /*  int page = pageable.getPageNumber() - 1;
+        int pageLimit = 5;*/
+
+        List<Board> boards =  boardRepository.findByCategory(sC);
+       // List<Board> boards =  boardRepository.findByCategory(sC/*, PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "board_id"))*/);
         List<SelectBoardDto> selectBoardDtos = new ArrayList<>();
 
         if (!boards.isEmpty()){
@@ -130,13 +181,13 @@ public class BoardService {
         }
 
         Board board = boardOptional.get();
-        List<Comment> commentOptional = commentRepository.findByBoardId(id);
+      //  List<Comment> commentOptional = commentRepository.findByBoardId(id);
 
         if (memberId.equals(board.getMember().getId())){
-            for (Comment comment : commentOptional) {
-                System.out.println(comment);
-                commentRepository.delete(comment);
-            }
+//            for (Comment comment : commentOptional) {
+//                System.out.println(comment);
+//                commentRepository.delete(comment);
+//            }
             boardRepository.delete(board);
             return new ResponseDto("게시물 삭제 성공.", HttpStatus.OK.value());
         }
@@ -145,15 +196,45 @@ public class BoardService {
         }
     }
 
+
+    public Object likeBoard(Long id, Long memberId) {
+        Optional<Board> boardOptional = boardRepository.findById(id);
+        if (!boardOptional.isPresent()) {
+            return new ResponseDto("존재하지 않는 게시글입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+
+        Optional<Member> member = memberRepository.findById(memberId);
+        if(!member.isPresent()) return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+
+
+
+        Board board = boardOptional.get();
+
+        if (board.isLiked()) {
+            board.cancelLike(board.getLikeCnt());
+            return new ResponseDto("좋아요를 취소합니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        } else {
+            board.likeBoard(board.getLikeCnt());
+            return new ResponseDto("게시물 좋아요를 눌렀습니다.", HttpStatus.OK.value());
+        }
+
+
+    }
+
 //===================댓글========================================
     @Transactional
     public ResponseDto writeComment(Long boardId,InsertCommentDto request, Long memberId) {
-        Member member = memberRepository.findById(memberId).orElse(null);
+      //  Member member = memberRepository.findById(memberId).orElse(null);
         Board board = boardRepository.findById(boardId).orElse(null);
+
+        Optional<Member> memberOptional = memberRepository.findById(memberId);
+        if(!memberOptional.isPresent()) return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+
         Comment comment = Comment.builder()
                 .content(request.getContent())
                 .reLevel(0)
-                .member(member)
+                .member(memberOptional.get())
                 .board(board)
                 .build();
         Long id = comment.getId();  // comment의 id 값을 가져옴
@@ -206,5 +287,7 @@ public class BoardService {
         }
 
     }
+
+
 }
 
