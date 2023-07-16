@@ -2,11 +2,13 @@ package com.project.ipyang.domain.adopt.controller;
 
 import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.config.SessionUser;
-import com.project.ipyang.domain.adopt.dto.SelectAdoptDto;
-import com.project.ipyang.domain.adopt.dto.UpdateAdoptDto;
-import com.project.ipyang.domain.adopt.dto.WriteAdoptDto;
+import com.project.ipyang.domain.adopt.dto.*;
 import com.project.ipyang.domain.adopt.service.AdoptService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,10 +32,21 @@ public class AdoptController {
     }
 
 
-    //전체 입양글 조회
+    //전체 입양글 조회 (페이징)
+    /*------------------------------------------------------------
+    * adoptDtos.getContent());         | 요청 페이지에 해당하는 글
+    * adoptDtos.getTotalElements());   | 전체 글 개수
+    * adoptDtos.getNumber());          | DB로 요청한 페이지 번호
+    * adoptDtos.getTotalPages());      | 전체 페이지 개수
+    * adoptDtos.getSize());            | 한 페이지당 노출되는 글 개수
+    * adoptDtos.hasPrevious());        | 이전 페이지 존재 여부
+    * adoptDtos.isFirst());            | 첫 페이지 여부
+    * adoptDtos.isLast());             | 마지막 페이지 여부
+    * ------------------------------------------------------------
+    * */
     @GetMapping(value = "/v1/adopt")
-    public ResponseDto<List<SelectAdoptDto>> selectAllAdopt() {
-        return adoptService.selectAllAdopt();
+    public ResponseDto getAdoptList(@PageableDefault(page = 1) Pageable pageable) {
+        return adoptService.getAdoptList(pageable);
     }
 
 

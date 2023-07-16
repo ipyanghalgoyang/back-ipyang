@@ -2,13 +2,8 @@ package com.project.ipyang.domain.adopt.service;
 
 import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.response.ResponseDto;
-import com.project.ipyang.domain.adopt.dto.AdoptDto;
-import com.project.ipyang.domain.adopt.dto.SelectAdoptDto;
-import com.project.ipyang.domain.adopt.dto.UpdateAdoptDto;
-import com.project.ipyang.domain.adopt.dto.WriteAdoptDto;
+import com.project.ipyang.domain.adopt.dto.*;
 import com.project.ipyang.domain.adopt.entity.Adopt;
-import com.project.ipyang.domain.adopt.entity.FavAdopt;
-import com.project.ipyang.domain.adopt.repository.FavAdoptRepository;
 import com.project.ipyang.domain.catType.entity.CatType;
 import com.project.ipyang.domain.vaccine.entity.Vaccine;
 import com.project.ipyang.domain.adopt.repository.AdoptRepository;
@@ -17,14 +12,15 @@ import com.project.ipyang.domain.vaccine.repository.VaccineRepository;
 import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +43,7 @@ public class AdoptService {
         Adopt adopt = Adopt.builder()
                                     .title(request.getTitle())
                                     .content(request.getContent())
-                                    .view(0)
+                                    .viewCnt(0)
                                     .name(request.getName())
                                     .gender(request.getGender())
                                     .weight(request.getWeight())
@@ -66,15 +62,28 @@ public class AdoptService {
     }
 
 
-    //전체 입양글 조회
+    //전체 입양글 조회 (페이징)
     @Transactional
-    public ResponseDto selectAllAdopt() {
-        List<Adopt> adopts = adoptRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+    public ResponseDto getAdoptList(Pageable pageable) {
+        int page = pageable.getPageNumber() - 1;   //요청 받은 페이지
+        int pageLimit = 10;                        //페이지당 글 개수
+        int blockLimit = 5;                        //한번에 5개의 페이지만 노출
 
-        if (!adopts.isEmpty()) {
-            List<SelectAdoptDto> selectAdoptDtos = adopts.stream().map(SelectAdoptDto::new).collect(Collectors.toList());
-            return new ResponseDto(selectAdoptDtos, HttpStatus.OK.value());
-        } else return new ResponseDto("데이터가 없습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        Page<Adopt> adopts = adoptRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC,"id")));
+
+        if(!adopts.isEmpty()) {
+            Page<AdoptDto> adoptDtos = adopts.map(adopt -> new AdoptDto(adopt.getId(), adopt.getTitle(), adopt.getStatus(),
+                                                                        adopt.getMember().getId(), adopt.getMember().getNickname(),
+                                                                        adopt.getViewCnt(), adopt.getCreatedAt()));
+
+            int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1;
+            int endPage = ((startPage + blockLimit - 1) < adoptDtos.getTotalPages()) ? startPage + blockLimit - 1 : adoptDtos.getTotalPages();
+
+            AdoptPageDto adoptPage = new AdoptPageDto(adoptDtos, startPage, endPage);
+
+            return new ResponseDto(adoptPage, HttpStatus.OK.value());
+        }
+        else return new ResponseDto("글이 없습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
 
@@ -87,7 +96,7 @@ public class AdoptService {
         }
 
         Adopt findAdopt = adopt.get();
-        findAdopt.updateViewCount(findAdopt.getView());         //조회수 증가
+        findAdopt.updateViewCount(findAdopt.getViewCnt());         //조회수 증가
         SelectAdoptDto detailAdopt = findAdopt.convertDto();
         return new ResponseDto(detailAdopt, HttpStatus.OK.value());
     }
