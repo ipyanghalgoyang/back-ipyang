@@ -24,6 +24,7 @@ public class SelectBoardDto {
     private IpyangEnum.BoardCategory category;
     private long memberId;
     private LocalDateTime createdAt;
+
     public SelectBoardDto(Board board) {
         this.id = board.getId();
         this.title = board.getTitle();
