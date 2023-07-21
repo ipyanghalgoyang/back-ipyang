@@ -11,6 +11,10 @@ import com.project.ipyang.domain.product.entity.ProductImg;
 import com.project.ipyang.domain.product.repository.ProductRepository;
 import com.project.ipyang.domain.product.repository.ProductImgRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,94 +31,126 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final MemberRepository memberRepository;
     private final ProductImgRepository productImgRepository;
-    private  final EntityManager em;
 
-
-    public ProductDto createProduct(InsertProductDto productDto, Long memberId) {
-        // memberId를 기반으로 회원 정보를 필요한 경우에 가져옵니다.
+    @Transactional
+    public ResponseDto createProduct(IpyangEnum.ProductType pT,InsertProductDto request, Long memberId) {
         Member member = memberRepository.findById(memberId).orElse(null);
 
-        // 필요한 데이터를 사용하여 Product 객체를 생성합니다.
         Product product = Product.builder()
-                .name(productDto.getName())
+                .name(request.getName())
+                .content(request.getContent())
                 .status(IpyangEnum.Status.N)
-                .price(productDto.getPrice())
-                .type(productDto.getType())
-                .loc(productDto.getLoc())
+                .price(request.getPrice())
+                .type(pT)
+                .loc(request.getLoc())
                 .member(member)
                 .build();
 
-        // 상품을 저장합니다.
         productRepository.save(product);
 
-        // 생성된 ProductDto나 필요한 응답을 반환합니다.
-        return new ProductDto();
-    }
-
-
-    public ProductImgDto createProduct_Img(InsertProductImgDto productImgDto) {
-
-        Product product = productRepository.findById(productImgDto.getProductId()).orElse(null);
-        ProductImg productImg = ProductImg.builder().imgOriginFile(productImgDto.getImgOriginFile())
-                .imgStoredFile(productImgDto.getImgStoredFile())
-                .build();
-        productImgRepository.save(productImg);
-        return new ProductImgDto();
+        return new ResponseDto("판매글 작성성공", HttpStatus.OK.value());
     }
 
 
     //전체 상품 데이터 가져오기
-    public ResponseDto selectAllProduct(SelectProductDto request) {
-        List<Product> products = productRepository.findAll();
-        List<SelectProductDto> selectProductDtos = products.stream().map(SelectProductDto::new).collect(Collectors.toList());
+    @Transactional
+    public ResponseDto selectAllProduct( Pageable pageable) {
+        int page = pageable.getPageNumber() - 1;
+        int pageLimit = 10;
+        int blockLimit = 5;
+        Page<Product> products = productRepository.findAll( PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
+
+
+
+        Page<SelectProductDto> selectProductDtos = products.map(product -> new SelectProductDto(
+            product.getId(),
+            product.getName(),
+            product.getStatus(),
+            product.getPrice(),
+            product.getType(),
+            product.getLoc(),
+            product.getMember().getId(),
+            product.getMember().getNickname(),
+            product.getCreatedAt()
+        ));
+
+                //products.stream().map(SelectProductDto::new).collect(Collectors.toList());
+
+
+        int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1;
+        int endPage = ((startPage + blockLimit - 1) < selectProductDtos.getTotalPages()) ? startPage + blockLimit - 1 : selectProductDtos.getTotalPages();
+
+        ProductPageDto productPage = new ProductPageDto(selectProductDtos,startPage,endPage);
 
         if(!selectProductDtos.isEmpty()) {
-            return new ResponseDto(selectProductDtos, HttpStatus.OK.value());
+            return new ResponseDto(productPage, HttpStatus.OK.value());
         } else return new ResponseDto("가져올 데이터가 없습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
-    public Object updateProduct(UpdateProductDto productDto) {
-        Optional<Product> productOptional = productRepository.findById(productDto.getId());
+
+    public ResponseDto<ReadProductDto> readSomeProduct(Long id) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        if (!productOptional.isPresent()){
+            return new ResponseDto("존재하지 않는 글입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+        Product findProduct = productOptional.get();
+        ReadProductDto readProductDto = findProduct.convertReadDto();
+        return new ResponseDto(readProductDto,HttpStatus.OK.value());
+    }
+
+
+    @Transactional
+    public Object updateProduct(Long id,UpdateProductDto request,Long memberId) {
+        Optional<Product> productOptional = productRepository.findById(id);
         if (!productOptional.isPresent()) {
             return new ResponseDto("존재하지 않는 판매글입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
 
-        Product product = productOptional.get();
-        UpdateProductDto updateProduct = product.convertUpdateDto();
-        updateProduct.setName(productDto.getName());
-        updateProduct.setPrice(productDto.getPrice());
-        updateProduct.setType(productDto.getType());
-        updateProduct.setLoc(productDto.getLoc());
-        productRepository.save(updateProduct.toEntity());
+        Product findProduct = productOptional.get();
 
-        return new ResponseDto("판매글이 수정되었습니다.", HttpStatus.OK.value());
+        if (memberId.equals(findProduct.getMember().getId())){
+            findProduct.UpdateProduct(request.getName(),request.getLoc(),request.getPrice(),request.getContent());
+             productRepository.save(findProduct);
+            return new ResponseDto("게시물 수정 성공.", HttpStatus.OK.value());
+        }
+        else {
+            return new ResponseDto("판매글 작성자만 수정가능합니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+
 
     }
 
 
 
     @Transactional
-    public ResponseDto soldoutProduct( long id) {
+    public ResponseDto soldoutProduct( long id,Long memberId) {
         Optional<Product> productOptional = productRepository.findById(id);
         if (!productOptional.isPresent()) {
             return new ResponseDto("존재하지 않는 판매글입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
 
-        productOptional.get().soldout();
-        if(productOptional.get().getStatus() == IpyangEnum.Status.Y){
+        Product findProduct = productOptional.get();
+
+
+
+        if (memberId.equals(findProduct.getMember().getId())){
+            findProduct.soldout();
+            productRepository.save(findProduct);
             return new ResponseDto("판매가 완료되었습니다.", HttpStatus.OK.value());
         }
         else {
-
-            return new ResponseDto("에러가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            return new ResponseDto("판매글 작성자만 수정가능합니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
+
+
+
 
     }
 
 
 
 
-
+    @Transactional
     public ResponseDto deleteProduct(ProductDto productDto) {
         Optional<Product> productOptional = productRepository.findById(productDto.getId());
         if (productOptional.isPresent()) {
@@ -126,6 +162,8 @@ public class ProductService {
             return new ResponseDto("판매글삭제 실패", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }
+
+
 }
 
 

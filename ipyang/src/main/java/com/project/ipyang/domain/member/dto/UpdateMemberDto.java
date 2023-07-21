@@ -9,7 +9,6 @@ import lombok.ToString;
 @Getter
 @ToString
 public class UpdateMemberDto {
-    private Long id;
     private String passwd;
     private String nickname;
     private String phone;

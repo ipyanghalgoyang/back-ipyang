@@ -14,26 +14,13 @@ import lombok.ToString;
 @ToString
 @Builder
 public class UpdateProductDto {
-    private Long id;
     private String name;
+    private String content;
     private int price;
-    private String type;
     private String loc;
-    private Long memberId;
-    private IpyangEnum.Status status;
 
 
-    public Product toEntity( ) {
 
-        return Product.builder()
-                .id(id)
-                .name(name)
-                .price(price)
-                .type(type)
-                .loc(loc)
-                .status(status)
-                .member(Member.builder().id(memberId).build())
-                .build();
-    }
+
 
 }
