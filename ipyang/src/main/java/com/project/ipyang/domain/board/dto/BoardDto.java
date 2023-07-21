@@ -21,11 +21,7 @@ public class BoardDto {
     private String title;
     private String content;
     private int viewCnt;
-    private int likeCnt;
     private IpyangEnum.BoardCategory category;
-    private int ref;
-    private int reStep;
-    private int reLevel;
     private Member memberId;
     private List<BoardImg> boardImgs = new ArrayList<>();
 
@@ -37,11 +33,7 @@ public class BoardDto {
                 .title(title)
                 .content(content)
                 .viewCnt(viewCnt)
-                .likeCnt(likeCnt)
                 .category(category)
-                .ref(ref)
-                .reStep(reStep)
-                .reLevel(reLevel)
                 .member(memberId)
                 .build();
     }

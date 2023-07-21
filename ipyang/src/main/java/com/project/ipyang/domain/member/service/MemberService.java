@@ -45,14 +45,13 @@ public class MemberService {
                 .memberRole(IpyangEnum.MemberRoleType.USER)
                 .delYn(IpyangEnum.Status.N)
                 .address(memberDto.getAddress())
-                .point(memberDto.getPoint())
                 .build();
         memberRepository.save(member);
         return new MemberDto();
     }
 
     //전체 멤버 데이터 가져오기
-    public ResponseDto selectAllMember(SelectMemberDto request) {
+    public ResponseDto selectAllMember() {
         List<Member> members = memberRepository.findAll();
         List<SelectMemberDto> selectMemberDtos = members.stream().map(SelectMemberDto::new).collect(Collectors.toList());
 
@@ -130,17 +129,6 @@ public class MemberService {
     }
 
 
-
-//    // 세션에서 로그인한 회원 객체 가져오기
-//    public ResponseDto getLoggedInMember() {
-//        SessionUser loggedInMember = (SessionUser) session.getAttribute("loggedInMember");
-//
-//        if (loggedInMember != null) {
-//            return new ResponseDto<>(loggedInMember, HttpStatus.OK.value());
-//        } else {
-//            return new ResponseDto("로그인한 회원이 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
-//        }
-//    }
 
 
     public ResponseDto updateMember(UpdateMemberDto request,Long memberId) {

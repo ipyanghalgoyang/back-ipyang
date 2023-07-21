@@ -43,8 +43,8 @@ public class MemberController {
             value = "회원 목록가져오기"
             , notes = "멤버테이블에서 모든회원정보 가져오기")
     @GetMapping(value = "/v1/member")
-    public ResponseDto<List<SelectMemberDto>> selectAllMember(SelectMemberDto request) {
-        return memberService.selectAllMember(request);
+    public ResponseDto<List<SelectMemberDto>> selectAllMember( ) {
+        return memberService.selectAllMember();
     }
 
     @ApiOperation(
@@ -99,12 +99,7 @@ public class MemberController {
         return response;
     }
 
-//    @GetMapping("/v1/afterlogin")
-//    public ResponseDto<MemberDto> getLoggedInMember(MemberDto memberDto) {
-//        ResponseDto loggedInMember = memberService.getLoggedInMember();
-//        // 필요한 경우 MemberDto로 변환하여 반환
-//        return loggedInMember;
-//    }
+
     //회원 가입 요청
     @PostMapping(value = "/v1/sign")
     public ResponseDto signUp(@Valid @ModelAttribute("member") SignUpMemberDto requestDto, BindingResult errors, Model model) {

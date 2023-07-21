@@ -18,7 +18,7 @@ public class IpyangEnum {
     }
 
     public enum ProductType{
-        Food,Toy,Snack,Toilet,Etc
+        Food,Toy,Snack,Sand,Beauty,Etc
     }
 
 
@@ -37,6 +37,10 @@ public class IpyangEnum {
 
     public enum WarningReason{
         BadWords,Fraud,Lying
+
+    }
+    public enum LikeType{
+        Board,Comment
 
     }
 

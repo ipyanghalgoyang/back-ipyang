@@ -16,20 +16,22 @@ import java.time.LocalDateTime;
 public class SelectCommentDto {
     private Long id;
     private String content;
-    private int likeCnt;
+    private long likeCnt;
     private long memberId;
     private long boardId;
     private LocalDateTime createdAt;
 
 
-    public SelectCommentDto(Comment comment){
+
+
+
+    public SelectCommentDto(Comment comment, long likeCnt) {
         this.id = comment.getId();
         this.content = comment.getContent();
-        this.likeCnt = comment.getLikeCnt();
+        this.likeCnt = likeCnt;
         this.memberId = comment.getMember().getId();
         this.boardId = comment.getBoard().getId();
         this.createdAt = comment.getCreatedAt();
+
     }
-
-
 }

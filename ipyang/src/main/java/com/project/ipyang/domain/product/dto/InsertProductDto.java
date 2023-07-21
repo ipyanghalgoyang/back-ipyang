@@ -14,20 +14,12 @@ import java.util.List;
 @Data
 public class InsertProductDto  {
     private String name;
-    private IpyangEnum.Status status;
     private int price;
-    private String type;
     private String loc;
-    private Long memberId;
+    private String content;
     private List<MultipartFile> imageFiles;
 
-    public Long getMemberId() {
-        return memberId;
-    }
 
-    public void setMemberId(Long memberId) {
-        this.memberId = memberId;
-    }
 
 
 }

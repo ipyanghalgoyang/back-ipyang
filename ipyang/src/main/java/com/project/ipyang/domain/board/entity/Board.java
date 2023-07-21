@@ -34,21 +34,11 @@ public class Board extends BaseEntity {   //공유하기 제보하기  홍보하
     @Column(name = "b_view_cnt")
     private int viewCnt;
 
-    @Column(name = "b_like_cnt")
-    private int likeCnt;
 
     @Column(name = "b_category")
     @Enumerated(EnumType.STRING)
     private IpyangEnum.BoardCategory category;
 
-    @Column(name = "b_ref")
-    private int ref;
-
-     @Column(name = "b_re_step")
-    private int reStep;
-
-     @Column(name = "b_re_level")
-    private int reLevel;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -61,43 +51,21 @@ public class Board extends BaseEntity {   //공유하기 제보하기  홍보하
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "board")
-    private List<Likes> likes = new ArrayList<>();
 
 
-    private boolean isLiked;
-    public BoardDto convertUpdateDto() {
-        return BoardDto.builder()
-                .id(id)
-                .title(title)
-                .content(content)
-                .viewCnt(viewCnt)
-                .likeCnt(likeCnt)
-                .category(category)
-                .ref(ref)
-                .reStep(reStep)
-                .reLevel(reLevel)
-                .memberId(member)
-                .build();
-    }
     public SelectBoardDto convertSelectDto() {
         return SelectBoardDto.builder()
                                      .id(id)
                                      .title(title)
                                      .content(content)
                                      .viewCnt(viewCnt)
-                                     .likeCnt(likeCnt)
                                      .category(category)
                                     .memberId(member.getId())
                                     .createdAt(getCreatedAt())
                                      .build();
     }
 
-    public DeleteBoardDto convertDelDto(){
-        return DeleteBoardDto.builder()
-                .id(id)
-                .build();
-    }
+
 
 public void UpdateBoard(String title,String content){
  this.title = title;
@@ -109,17 +77,7 @@ public void UpdateBoard(String title,String content){
         this.viewCnt = viewCnt +1;
     }
 
-    public void likeBoard(int likeCnt) {
-        this.likeCnt = likeCnt +1;
-        isLiked = true;
-    }
 
-    public void cancelLike(int likeCnt) {
-        this.likeCnt = likeCnt-1;
-        isLiked = false;
-    }
 
-    public boolean isLiked() {
-        return isLiked;
-    }
+
 }

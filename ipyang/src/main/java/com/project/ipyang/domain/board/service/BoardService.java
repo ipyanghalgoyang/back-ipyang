@@ -6,9 +6,11 @@ import com.project.ipyang.domain.board.dto.*;
 import com.project.ipyang.domain.board.entity.Board;
 import com.project.ipyang.domain.board.entity.BoardImg;
 import com.project.ipyang.domain.board.entity.Comment;
+import com.project.ipyang.domain.board.entity.Likes;
 import com.project.ipyang.domain.board.repository.BoardImgRepository;
 import com.project.ipyang.domain.board.repository.BoardRepository;
 import com.project.ipyang.domain.board.repository.CommentRepository;
+import com.project.ipyang.domain.board.repository.LikesRepository;
 import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +40,7 @@ public class BoardService {
     private final MemberRepository memberRepository;
     private final CommentRepository commentRepository;
     private final BoardImgRepository boardImgRepository;
+    private final LikesRepository likesRepository;
     @Transactional
     public ResponseDto writeBoard(IpyangEnum.BoardCategory sC, InsertBoardDto boardDto, Long memberId
                                  ) throws IOException {
@@ -48,37 +51,37 @@ public class BoardService {
 
 
         //사진을 첨부하지아니할경우
-        if (boardDto.getBoardFile().isEmpty()) {
+     //   if (boardDto.getBoardFile().isEmpty()) {
             Board board = Board.builder().title(boardDto.getTitle())
                     .content(boardDto.getContent())
                     .category(sC)
                     .member(member.get())
                     .build();
              writeBoard = boardRepository.save(board);
-        }
-        else {
-            System.out.println("BoardService.이미지 첨부된글작성");
-                Board board = Board.builder().title(boardDto.getTitle())
-                        .content(boardDto.getContent())
-                        .category(sC)
-                        .member(member.get())
-                        .build();
-            writeBoard = boardRepository.save(board);
-            Long savedId = writeBoard.getId();
-            Board boardId =  boardRepository.findById(savedId).get();
-
-            for (MultipartFile boardFile : boardDto.getBoardFile()) {
-                String imgOriginFile = boardFile.getOriginalFilename();
-                String imgStoredFile = System.currentTimeMillis() + "_" + imgOriginFile;
-
-                String savePath = "C:/intelliJ/intelSrc/study/back-ipyang/ipyang/src/main/resources/static/images/" + imgStoredFile;
-
-                boardFile.transferTo(new File(savePath));
-                BoardImg boardImg = BoardImg.toBoardImg(boardId,imgOriginFile,imgStoredFile);
-               boardImgRepository.save(boardImg);
-
-            }
-        }
+    //    }
+//        else {
+//            System.out.println("BoardService.이미지 첨부된글작성");
+//                Board board = Board.builder().title(boardDto.getTitle())
+//                        .content(boardDto.getContent())
+//                        .category(sC)
+//                        .member(member.get())
+//                        .build();
+//            writeBoard = boardRepository.save(board);
+//            Long savedId = writeBoard.getId();
+//            Board boardId =  boardRepository.findById(savedId).get();
+//
+//            for (MultipartFile boardFile : boardDto.getBoardFile()) {
+//                String imgOriginFile = boardFile.getOriginalFilename();
+//                String imgStoredFile = System.currentTimeMillis() + "_" + imgOriginFile;
+//
+//                String savePath = "C:/intelliJ/intelSrc/study/back-ipyang/ipyang/src/main/resources/static/images/" + imgStoredFile;
+//
+//                boardFile.transferTo(new File(savePath));
+//                BoardImg boardImg = BoardImg.toBoardImg(boardId,imgOriginFile,imgStoredFile);
+//               boardImgRepository.save(boardImg);
+//
+//            }
+ //       }
 
 
         if (writeBoard != null) {
@@ -87,10 +90,6 @@ public class BoardService {
             return new ResponseDto("게시글을 작성 에러.", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }
-
-
-
-
 
 
 
@@ -108,20 +107,39 @@ public class BoardService {
     }
     //카테고리별 글 조회
     @Transactional
-    public ResponseDto<List<SelectBoardDto>> selectSomeBoard(IpyangEnum.BoardCategory sC/*, Pageable pageable*/) {
-      /*  int page = pageable.getPageNumber() - 1;
-        int pageLimit = 5;*/
+    public ResponseDto<List<SelectBoardDto>> selectSomeBoard(IpyangEnum.BoardCategory sC, Pageable pageable) {
+        int page = pageable.getPageNumber() - 1;
+        int pageLimit = 10;
+        int blockLimit = 5;
 
-        List<Board> boards =  boardRepository.findByCategory(sC);
-       // List<Board> boards =  boardRepository.findByCategory(sC/*, PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "board_id"))*/);
-        List<SelectBoardDto> selectBoardDtos = new ArrayList<>();
+
+        Page<Board> boards = boardRepository.findByCategory(sC, PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
+
+
 
         if (!boards.isEmpty()){
-            for (Board board : boards){
-                SelectBoardDto selectBoardDto = board.convertSelectDto();
-                selectBoardDtos.add(selectBoardDto);
-            }
-            return new ResponseDto(selectBoardDtos,HttpStatus.OK.value());
+            Page<SelectBoardDto> boardDtos = boards.map(board ->{
+                long likeCnt = likesRepository.countByTargetTypeAndTargetId(IpyangEnum.LikeType.Board, board.getId());
+                return new SelectBoardDto(
+                        board.getId(),
+                        board.getTitle(),
+                        board.getMember().getId(),
+                        board.getMember().getNickname(),
+                        likeCnt,
+                        board.getViewCnt(),
+                        board.getCreatedAt()
+                );
+            });
+
+
+            int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1;
+            int endPage = ((startPage + blockLimit - 1) < boardDtos.getTotalPages()) ? startPage + blockLimit - 1 : boardDtos.getTotalPages();
+
+            BoardPageDto boardPage  = new BoardPageDto(boardDtos, startPage, endPage);
+
+
+
+            return new ResponseDto(boardPage,HttpStatus.OK.value());
 
         }else
          return new ResponseDto("글이 없습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
@@ -140,7 +158,12 @@ public class BoardService {
 
 
             List<Comment> comments = commentRepository.findByBoardId(id);
-            List<SelectCommentDto>  readComment = comments.stream().map(SelectCommentDto::new).collect(Collectors.toList());
+
+
+        List<SelectCommentDto> readComment = comments.stream().map(comment -> {
+            long likeCnt = likesRepository.countByTargetTypeAndTargetId(IpyangEnum.LikeType.Comment, comment.getId());
+            return new SelectCommentDto(comment, likeCnt);
+        }).collect(Collectors.toList());
 
 
             ReadBoardDto readBoardDto = new ReadBoardDto(readBoard, readComment);
@@ -164,10 +187,11 @@ public class BoardService {
 
         if (memberId.equals(findBoard.getMember().getId())){
             findBoard.UpdateBoard(request.getTitle(),request.getContent());
+            boardRepository.save(findBoard);
             return new ResponseDto("게시물 수정 성공.", HttpStatus.OK.value());
         }
         else {
-            return new ResponseDto("게시글 작성자만 삭제가능합니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            return new ResponseDto("게시글 작성자만 수정가능합니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }
 
@@ -181,13 +205,13 @@ public class BoardService {
         }
 
         Board board = boardOptional.get();
-      //  List<Comment> commentOptional = commentRepository.findByBoardId(id);
 
         if (memberId.equals(board.getMember().getId())){
-//            for (Comment comment : commentOptional) {
-//                System.out.println(comment);
-//                commentRepository.delete(comment);
-//            }
+            List<Likes> likes =   likesRepository.findByTargetId(id);
+            likesRepository.delete((Likes) likes);
+            List<Comment> comments = commentRepository.findByBoardId(id);
+            //comments.get().getId();
+
             boardRepository.delete(board);
             return new ResponseDto("게시물 삭제 성공.", HttpStatus.OK.value());
         }
@@ -197,29 +221,22 @@ public class BoardService {
     }
 
 
-    public Object likeBoard(Long id, Long memberId) {
-        Optional<Board> boardOptional = boardRepository.findById(id);
-        if (!boardOptional.isPresent()) {
-            return new ResponseDto("존재하지 않는 게시글입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+    public ResponseDto likeBoard(Long id, Long memberId) {
+        Optional<Member> memberOptional = memberRepository.findById(memberId);
+        Optional<Likes> likesOptional = likesRepository.findByTargetTypeAndTargetIdAndMember(IpyangEnum.LikeType.Board,id, memberOptional.get());
+        if(likesOptional.isPresent()){
+            likesRepository.delete(likesOptional.get());
+            return new ResponseDto("게시글 좋아요취소 성공.", HttpStatus.OK.value());
+        }else {
+            Likes likes = Likes.builder()
+                    .member(memberOptional.get())
+                    .targetType(IpyangEnum.LikeType.Board)
+                    .targetId(id)
+                    .build();
+            likesRepository.save(likes);
+            return new ResponseDto("게시글 좋아요추가 성공.", HttpStatus.OK.value());
         }
-
-        Optional<Member> member = memberRepository.findById(memberId);
-        if(!member.isPresent()) return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-
-
-
-
-        Board board = boardOptional.get();
-
-        if (board.isLiked()) {
-            board.cancelLike(board.getLikeCnt());
-            return new ResponseDto("좋아요를 취소합니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        } else {
-            board.likeBoard(board.getLikeCnt());
-            return new ResponseDto("게시물 좋아요를 눌렀습니다.", HttpStatus.OK.value());
-        }
-
-
     }
 
 //===================댓글========================================
@@ -288,6 +305,44 @@ public class BoardService {
 
     }
 
+    public ResponseDto likeComment(Long id, Long memberId) {
+        Optional<Member> memberOptional = memberRepository.findById(memberId);
+        Optional<Likes> likesOptional = likesRepository.findByTargetTypeAndTargetIdAndMember(IpyangEnum.LikeType.Comment,id, memberOptional.get());
+        if(likesOptional.isPresent()){
+            likesRepository.delete(likesOptional.get());
+            return new ResponseDto("댓글 좋아요취소 성공.", HttpStatus.OK.value());
+        }else {
+            Likes likes = Likes.builder()
+                    .member(memberOptional.get())
+                    .targetType(IpyangEnum.LikeType.Comment)
+                    .targetId(id)
+                    .build();
+            likesRepository.save(likes);
+            return new ResponseDto("댓글 좋아요추가 성공.", HttpStatus.OK.value());
+        }
+    }
 
 }
-
+//쿠키로 좋아요 사용하는방법  반려사유: 쿠키는 기간제라 30일뒤면 좋아요누른 이력이 사라지기때문이다.
+//    public ResponseDto likeBoard(Long id ) {
+//        Optional<Board> boardOptional = boardRepository.findById(id);
+//        if (!boardOptional.isPresent()) {
+//            return new ResponseDto("존재하지 않는 게시글입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+//        }
+//
+//        Board board = boardOptional.get();
+//        board.likeBoard(board.getLikeCnt());
+//        return new ResponseDto("게시물 좋아요를 눌렀습니다.", HttpStatus.OK.value());
+//    }
+//
+//
+//    public ResponseDto cancelLikeBoard(Long id ) {
+//        Optional<Board> boardOptional = boardRepository.findById(id);
+//        if (!boardOptional.isPresent()) {
+//            return new ResponseDto("존재하지 않는 게시글입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+//        }
+//        Board board = boardOptional.get();
+//
+//        board.cancelLike(board.getLikeCnt());
+//        return new ResponseDto("게시물 좋아요를 취소합니다.", HttpStatus.OK.value());
+//    }

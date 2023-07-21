@@ -1,5 +1,6 @@
 package com.project.ipyang.domain.board.entity;
 
+import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.member.entity.Member;
 import lombok.*;
@@ -21,8 +22,15 @@ public class Likes extends BaseEntity {
     @JoinColumn(name ="member_id")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="board_id")
-    private Board board;
-// delete시 바로 삭제되도록 설정
+
+    @Column(name = "target_type")
+    @Enumerated(EnumType.STRING)
+    private IpyangEnum.LikeType targetType;
+
+    @Column(name = "target_id")
+    private long targetId;
+
+
+
+
 }

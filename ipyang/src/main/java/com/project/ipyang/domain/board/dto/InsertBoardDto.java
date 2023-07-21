@@ -19,6 +19,6 @@ public class InsertBoardDto  {
     private List<MultipartFile> boardFile; // save.html -> Controller 파일 담는 용도
     private List<String> imgOriginFile; // 원본 파일 이름
     private List<String> imgStoredFile; // 서버 저장용 파일 이름
-    private int fileAttached; // 파일 첨부 여부(첨부 1, 미첨부 0)
+   // private int fileAttached; // 파일 첨부 여부(첨부 1, 미첨부 0)
 
 }

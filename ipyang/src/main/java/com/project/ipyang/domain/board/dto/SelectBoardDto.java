@@ -2,6 +2,7 @@ package com.project.ipyang.domain.board.dto;
 
 import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.domain.board.entity.Board;
+import com.project.ipyang.domain.board.repository.LikesRepository;
 import com.project.ipyang.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,23 +17,42 @@ import java.util.Date;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class SelectBoardDto {
+
+
     private Long id;
     private String title;
     private String content;
     private int viewCnt;
-    private int likeCnt;
+    private long likeCnt;
     private IpyangEnum.BoardCategory category;
     private long memberId;
     private LocalDateTime createdAt;
-
+    private String nickname;
     public SelectBoardDto(Board board) {
         this.id = board.getId();
         this.title = board.getTitle();
         this.content = board.getContent();
         this.viewCnt = board.getViewCnt();
-        this.likeCnt = board.getLikeCnt();
         this.category = board.getCategory();
         this.memberId = board.getMember().getId();
         this.createdAt = board.getCreatedAt();
+    }
+
+
+
+
+    public SelectBoardDto(Long id, String title, Long memberId, String nickname, long likeCnt, int viewCnt, LocalDateTime createdAt) {
+        this.id = id;
+        this.title = title;
+
+        this.viewCnt = viewCnt;
+        this.likeCnt = likeCnt;
+        this.memberId = memberId;
+        this.nickname = nickname;
+        this.createdAt = createdAt;
+
+
+
+
     }
 }
