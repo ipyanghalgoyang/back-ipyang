@@ -1,7 +1,6 @@
 package com.project.ipyang.domain.adopt.dto;
 
 import com.project.ipyang.common.IpyangEnum;
-import com.project.ipyang.domain.adopt.entity.Adopt;
 import lombok.*;
 import java.time.LocalDateTime;
 

@@ -24,7 +24,7 @@ public class AdoptController {
 
     //입양글 작성
     @PostMapping(value = "/v1/adopt/write")
-    public ResponseDto<WriteAdoptDto> createAdopt(WriteAdoptDto request, HttpSession session) {
+    public ResponseDto<WriteAdoptDto> createAdopt(@RequestBody WriteAdoptDto request, HttpSession session) {
         SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
         Long memberId = loggedInUser.getId();
 
@@ -71,7 +71,15 @@ public class AdoptController {
     }
 
 
-    //입양 중인 게시글만 필터링
+    //입양 상태, 고양이 품종, 백신 종류에 따라 필터링
+    @GetMapping(value = "/v1/adopt/filter")
+    public ResponseDto filterAdopt(@RequestParam(required = false) String adopted,
+                                   @RequestParam(required = false) List<Long> catIds,
+                                   @RequestParam(required = false) List<Long> vacIds,
+                                   @PageableDefault(page = 1) Pageable pageable) {
+        return adoptService.filterAdopt(adopted, catIds, vacIds, pageable);
+    }
+
 
 
 

@@ -10,11 +10,10 @@ import com.project.ipyang.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,14 +27,14 @@ public class InquireService {
 
     //문의글 작성
     @Transactional
-    public ResponseDto createInquire(WriteInquireDto request, Long memberId) {
+    public ResponseDto createInquire(WriteInquireDto request, Long memberId, PasswordEncoder passwordEncoder) {
         Optional<Member> member = memberRepository.findById(memberId);
         if(!member.isPresent()) return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
 
         Inquire inquire = Inquire.builder()
                                         .title(request.getTitle())
                                         .content(request.getContent())
-                                        .passwd(request.getPasswd())
+                                        .passwd(passwordEncoder.encode(request.getPasswd()))
                                         .status(IpyangEnum.Status.N)
                                         .member(member.get())
                                         .build();
@@ -50,7 +49,7 @@ public class InquireService {
 
     //전체 문의글 조회
     @Transactional
-    public ResponseDto<List<SelectInquireDto>> selectAllInquire(SelectInquireDto request) {
+    public ResponseDto<List<SelectInquireDto>> selectAllInquire() {
         List<Inquire> inquires = inquireRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
 
         if(!inquires.isEmpty()) {
