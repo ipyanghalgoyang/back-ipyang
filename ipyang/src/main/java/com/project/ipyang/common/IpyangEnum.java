@@ -11,14 +11,14 @@ public class IpyangEnum {
     }
 
     public enum BoardCategory {
-        Info,
-        Promo,
-        Report
+        INFO,
+        PROMO,
+        REPORT
 
     }
 
     public enum ProductType{
-        Food,Toy,Snack,Sand,Beauty,Etc
+        FOOD,TOY,SNACK,SAND,BEAUTY,ETC
     }
 
 
@@ -36,11 +36,11 @@ public class IpyangEnum {
 
 
     public enum WarningReason{
-        BadWords,Fraud,Lying
+        BAD_WORDS,FRAUD,LYING
 
     }
     public enum LikeType{
-        Board,Comment
+        BOARD,COMMENT
 
     }
 

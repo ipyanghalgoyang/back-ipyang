@@ -18,7 +18,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Setter
 public class Board extends BaseEntity {   //공유하기 제보하기  홍보하기
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

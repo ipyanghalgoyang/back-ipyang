@@ -119,7 +119,7 @@ public class BoardService {
 
         if (!boards.isEmpty()){
             Page<SelectBoardDto> boardDtos = boards.map(board ->{
-                long likeCnt = likesRepository.countByTargetTypeAndTargetId(IpyangEnum.LikeType.Board, board.getId());
+                long likeCnt = likesRepository.countByTargetTypeAndTargetId(IpyangEnum.LikeType.BOARD, board.getId());
                 return new SelectBoardDto(
                         board.getId(),
                         board.getTitle(),
@@ -161,7 +161,7 @@ public class BoardService {
 
 
         List<SelectCommentDto> readComment = comments.stream().map(comment -> {
-            long likeCnt = likesRepository.countByTargetTypeAndTargetId(IpyangEnum.LikeType.Comment, comment.getId());
+            long likeCnt = likesRepository.countByTargetTypeAndTargetId(IpyangEnum.LikeType.COMMENT, comment.getId());
             return new SelectCommentDto(comment, likeCnt);
         }).collect(Collectors.toList());
 
@@ -224,14 +224,14 @@ public class BoardService {
 
     public ResponseDto likeBoard(Long id, Long memberId) {
         Optional<Member> memberOptional = memberRepository.findById(memberId);
-        Optional<Likes> likesOptional = likesRepository.findByTargetTypeAndTargetIdAndMember(IpyangEnum.LikeType.Board,id, memberOptional.get());
+        Optional<Likes> likesOptional = likesRepository.findByTargetTypeAndTargetIdAndMember(IpyangEnum.LikeType.BOARD,id, memberOptional.get());
         if(likesOptional.isPresent()){
             likesRepository.delete(likesOptional.get());
             return new ResponseDto("게시글 좋아요취소 성공.", HttpStatus.OK.value());
         }else {
             Likes likes = Likes.builder()
                     .member(memberOptional.get())
-                    .targetType(IpyangEnum.LikeType.Board)
+                    .targetType(IpyangEnum.LikeType.BOARD)
                     .targetId(id)
                     .build();
             likesRepository.save(likes);
@@ -255,9 +255,7 @@ public class BoardService {
                 .board(board)
                 .build();
         Long id = comment.getId();  // comment의 id 값을 가져옴
-        if (id != null && comment.getReLevel() == 0) {
-            comment.setRef(Math.toIntExact(id));  // id가 null이 아니고 reLevel이 0인 경우에만 ref 필드에 id 값을 설정
-        }
+
 
         Comment wrtieComment = commentRepository.save(comment);
         if (wrtieComment != null){
@@ -307,14 +305,14 @@ public class BoardService {
 
     public ResponseDto likeComment(Long id, Long memberId) {
         Optional<Member> memberOptional = memberRepository.findById(memberId);
-        Optional<Likes> likesOptional = likesRepository.findByTargetTypeAndTargetIdAndMember(IpyangEnum.LikeType.Comment,id, memberOptional.get());
+        Optional<Likes> likesOptional = likesRepository.findByTargetTypeAndTargetIdAndMember(IpyangEnum.LikeType.COMMENT,id, memberOptional.get());
         if(likesOptional.isPresent()){
             likesRepository.delete(likesOptional.get());
             return new ResponseDto("댓글 좋아요취소 성공.", HttpStatus.OK.value());
         }else {
             Likes likes = Likes.builder()
                     .member(memberOptional.get())
-                    .targetType(IpyangEnum.LikeType.Comment)
+                    .targetType(IpyangEnum.LikeType.COMMENT)
                     .targetId(id)
                     .build();
             likesRepository.save(likes);

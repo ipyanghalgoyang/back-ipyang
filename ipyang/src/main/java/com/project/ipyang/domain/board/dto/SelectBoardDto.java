@@ -18,7 +18,6 @@ import java.util.Date;
 @AllArgsConstructor
 public class SelectBoardDto {
 
-
     private Long id;
     private String title;
     private String content;
@@ -28,6 +27,7 @@ public class SelectBoardDto {
     private long memberId;
     private LocalDateTime createdAt;
     private String nickname;
+
     public SelectBoardDto(Board board) {
         this.id = board.getId();
         this.title = board.getTitle();
@@ -39,20 +39,13 @@ public class SelectBoardDto {
     }
 
 
-
-
     public SelectBoardDto(Long id, String title, Long memberId, String nickname, long likeCnt, int viewCnt, LocalDateTime createdAt) {
         this.id = id;
         this.title = title;
-
         this.viewCnt = viewCnt;
         this.likeCnt = likeCnt;
         this.memberId = memberId;
         this.nickname = nickname;
         this.createdAt = createdAt;
-
-
-
-
     }
 }

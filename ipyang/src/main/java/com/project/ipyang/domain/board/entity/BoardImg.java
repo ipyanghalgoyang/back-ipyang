@@ -14,7 +14,6 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
 public class BoardImg extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,13 +30,5 @@ public class BoardImg extends BaseEntity {
     @JoinColumn(name = "board_id")
     private Board board;
 
-    public static BoardImg toBoardImg(Board savedId, String imgOriginFile, String imgStoredFile) {
-        BoardImg boardImg = new BoardImg();
-        boardImg.setImgOriginFile(imgOriginFile);
-        boardImg.setImgStoredFile(imgStoredFile);
-        boardImg.setBoard(savedId);
 
-
-        return boardImg;
-    }
 }
