@@ -23,15 +23,15 @@ public class IpyangEnum {
 
 
     public enum NoticeCategory {
-        Notice,
-        Event,
+        NOTICE,
+        EVENT,
         FAQ
     }
 
     public enum PointType {
-        Charge,
-        Buy,
-        Sell
+        CHARGE,
+        BUY,
+        SELL
     }
 
 

@@ -21,10 +21,11 @@ import java.util.List;
 public class AdoptController {
 
     private final AdoptService adoptService;
+    private final HttpSession session;
 
     //입양글 작성
     @PostMapping(value = "/v1/adopt/write")
-    public ResponseDto<WriteAdoptDto> createAdopt(@RequestBody WriteAdoptDto request, HttpSession session) {
+    public ResponseDto<WriteAdoptDto> createAdopt(@RequestBody WriteAdoptDto request) {
         SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
         Long memberId = loggedInUser.getId();
 
@@ -79,10 +80,5 @@ public class AdoptController {
                                    @PageableDefault(page = 1) Pageable pageable) {
         return adoptService.filterAdopt(adopted, catIds, vacIds, pageable);
     }
-
-
-
-
-
 
 }
