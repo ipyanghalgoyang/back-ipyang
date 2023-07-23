@@ -27,11 +27,9 @@ public class InsertMemberDto  {
     @Max(value = 11,message = "11자리 이하만 가능합니다")
     private String phone;
 
-    private String memberRole;
 
     private String address;
 
-    private int    point;
 //    private String img_original;
 //    private String img_stored;
 

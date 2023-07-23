@@ -3,8 +3,8 @@ package com.project.ipyang.domain.product.entity;
 import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.member.entity.Member;
+import com.project.ipyang.domain.product.dto.ReadProductDto;
 import com.project.ipyang.domain.product.dto.SelectProductDto;
-import com.project.ipyang.domain.product.dto.UpdateProductDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,7 +16,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Setter
 public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,8 +32,12 @@ public class Product extends BaseEntity {
     @Column(name = "p_price")
     private int price;
 
+    @Column(name = "p_content" )//제퓸설명
+    private String content;
+
     @Column(name = "p_type")//품목
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private IpyangEnum.ProductType type;
 
     @Column(name = "p_loc")
     private String loc;
@@ -58,10 +61,26 @@ public class Product extends BaseEntity {
                                         .build();
     }
 
-    public UpdateProductDto convertUpdateDto(){
-        return UpdateProductDto.builder()
+
+
+    public void soldout(){
+        this.status = IpyangEnum.Status.Y;
+    }
+
+
+    public void UpdateProduct(String name, String loc, int price, String content) {
+
+        this.name = name;
+        this.loc = loc;
+        this.price = price;
+        this.content = content;
+    }
+
+    public ReadProductDto convertReadDto() {
+        return ReadProductDto.builder()
                 .id(id)
                 .name(name)
+                .content(content)
                 .status(status)
                 .price(price)
                 .type(type)
@@ -69,11 +88,4 @@ public class Product extends BaseEntity {
                 .memberId(member.getId())
                 .build();
     }
-
-    public void soldout(){
-        this.status = IpyangEnum.Status.Y;
-    }
-
-
-
 }

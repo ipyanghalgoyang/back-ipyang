@@ -13,7 +13,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Setter
 public class Comment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,5 +56,8 @@ public class Comment extends BaseEntity {
     }
 
 
+    public void updateComment(String content) {
+        this.content = content;
 
+    }
 }
