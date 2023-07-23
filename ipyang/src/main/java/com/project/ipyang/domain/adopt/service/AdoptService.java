@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -140,4 +141,23 @@ public class AdoptService {
         else return new ResponseDto("에러가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
+
+    //입양 상태, 고양이 품종, 백신 종류에 따라 필터링
+    @Transactional
+    public ResponseDto filterAdopt(String adopted, List<Long> catIds, List<Long> vacIds, Pageable pageable) {
+        int page = pageable.getPageNumber() - 1;                        //요청 받은 페이지
+        int blockLimit = 5;                                             //한번에 5개의 페이지만 노출
+        pageable = PageRequest.of(page, 10, pageable.getSort());   //페이지당 최대 10개의 데이터 노출
+
+        Page<AdoptDto> adoptDtos = adoptRepository.findFilteredAdopt(adopted, catIds, vacIds, page, pageable);
+
+        if(!adoptDtos.isEmpty()) {
+            int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1;
+            int endPage = ((startPage + blockLimit - 1) < adoptDtos.getTotalPages()) ? startPage + blockLimit - 1 : adoptDtos.getTotalPages();
+            AdoptPageDto adoptFilterPage = new AdoptPageDto(adoptDtos, startPage, endPage);
+
+            return new ResponseDto(adoptFilterPage, HttpStatus.OK.value());
+        }
+        else return new ResponseDto("글이 존재하지 않습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+    }
 }

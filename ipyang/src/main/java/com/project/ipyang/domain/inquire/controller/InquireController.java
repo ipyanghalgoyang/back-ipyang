@@ -22,21 +22,18 @@ public class InquireController {
     private final PasswordEncoder passwordEncoder;
 
     //문의글 작성
-    /*
-    * 비밀번호 저장 시 암호화되는 기능 추가해야 함
-    * */
     @PostMapping(value = "/v1/inquire/write")
-    public ResponseDto<WriteInquireDto> createInquire(WriteInquireDto request, HttpSession session) {
+    public ResponseDto<WriteInquireDto> createInquire(@RequestBody WriteInquireDto request, HttpSession session) {
         SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
         Long memberId = loggedInUser.getId();
 
-        return inquireService.createInquire(request, memberId);
+        return inquireService.createInquire(request, memberId, passwordEncoder);
     }
 
     //전체 문의글 조회
     @GetMapping(value = "/v1/inquire")
-    public ResponseDto<List<SelectInquireDto>> selectAllInquire(SelectInquireDto request) {
-        return inquireService.selectAllInquire(request);
+    public ResponseDto<List<SelectInquireDto>> selectAllInquire() {
+        return inquireService.selectAllInquire();
     }
 
 
@@ -66,7 +63,4 @@ public class InquireController {
     public ResponseDto replyInquire(@PathVariable("id") Long id, @RequestBody ReplyContentDto request) {
         return inquireService.replyInquire(id, request);
     }
-
-
-
 }

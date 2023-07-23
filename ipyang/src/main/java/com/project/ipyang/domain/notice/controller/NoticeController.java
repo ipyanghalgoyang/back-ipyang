@@ -40,9 +40,8 @@ public class NoticeController {
 
 
     //특정 안내글 조회
-    @GetMapping(value = "/v1/notice/{category}/{id}")
-    public ResponseDto<SelectNoticeDto> noticeDetail(@PathVariable("id") Long id,
-                                                     @PathVariable("category") IpyangEnum.NoticeCategory selectedCategory) {
+    @GetMapping(value = "/v1/notice/{id}")
+    public ResponseDto<SelectNoticeDto> noticeDetail(@PathVariable("id") Long id) {
         return noticeService.selectNotice(id);
     }
 
@@ -51,18 +50,16 @@ public class NoticeController {
     /*
     * 현재 이미지 수정은 제외하였음
     * */
-    @PutMapping(value = "/v1/notice/{category}/{id}/edit")
+    @PutMapping(value = "/v1/notice/{id}/edit")
     public ResponseDto updateNotice(@PathVariable("id") Long id,
-                                    @PathVariable("category") IpyangEnum.NoticeCategory selectedCategory,
                                     @RequestBody UpdateNoticeDto request) {
         return noticeService.updateNotice(id, request);
     }
 
 
     //특정 안내글 삭제
-    @DeleteMapping(value = "/v1/notice/{category}/{id}/delete")
-    public ResponseDto deleteNotice(@PathVariable("id") Long id,
-                                    @PathVariable("category") IpyangEnum.NoticeCategory selectedCategory) {
+    @DeleteMapping(value = "/v1/notice/{id}/delete")
+    public ResponseDto deleteNotice(@PathVariable("id") Long id) {
         return noticeService.deleteNotice(id);
     }
 

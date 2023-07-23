@@ -2,7 +2,6 @@ package com.project.ipyang.domain.member.controller;
 
 import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.config.SessionUser;
-import com.project.ipyang.domain.adopt.dto.SelectAdoptDto;
 import com.project.ipyang.domain.adopt.dto.SelectFavAdoptDto;
 import com.project.ipyang.domain.apply.dto.SelectApplyDto;
 import com.project.ipyang.domain.inquire.dto.SelectInquireDto;

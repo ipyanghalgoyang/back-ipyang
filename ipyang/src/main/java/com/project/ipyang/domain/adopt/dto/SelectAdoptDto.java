@@ -3,6 +3,9 @@ package com.project.ipyang.domain.adopt.dto;
 import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.adopt.entity.Adopt;
+import com.project.ipyang.domain.member.entity.Member;
+import com.project.ipyang.domain.vaccine.entity.Vaccine;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,8 +32,8 @@ public class SelectAdoptDto {
     private IpyangEnum.Status status;
     private List<AdoptImgDto> adoptImgs = new ArrayList<>();
     private Long memberId;
-    private Long vacId;
-    private Long catId;
+    private String vacName;
+    private String catType;
     private LocalDateTime createdAt;
 
     public SelectAdoptDto(Adopt adopt) {
@@ -46,10 +49,28 @@ public class SelectAdoptDto {
         this.status = adopt.getStatus();
         this.adoptImgs = adopt.convertImgDto();
         this.memberId = adopt.getMember().getId();
-        this.vacId = adopt.getVaccine().getId();
-        this.catId = adopt.getCatType().getId();
+        this.vacName = adopt.getVaccine().getName();
+        this.catType = adopt.getCatType().getType();
         this.createdAt = adopt.getCreatedAt();
-
     }
 
+    @QueryProjection
+    public SelectAdoptDto(Long id, String title, String content, int viewCnt, String name, String gender,
+                          String weight, String age, String neu, IpyangEnum.Status status, Long memberId,
+                          String vacName, String catType, LocalDateTime createdAt) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.viewCnt = viewCnt;
+        this.name = name;
+        this.gender = gender;
+        this.weight = weight;
+        this.age = age;
+        this.neu = neu;
+        this.status = status;
+        this.memberId = memberId;
+        this.vacName = vacName;
+        this.catType = catType;
+        this.createdAt = createdAt;
+    }
 }
