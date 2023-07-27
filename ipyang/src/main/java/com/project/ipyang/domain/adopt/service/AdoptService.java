@@ -121,7 +121,6 @@ public class AdoptService {
                            request.getWeight(), request.getAge(), request.getNeu(), request.getStatus(), vaccine, catType);
 
         return new ResponseDto("수정되었습니다", HttpStatus.OK.value());
-
     }
 
 
