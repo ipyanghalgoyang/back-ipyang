@@ -18,7 +18,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Setter
 public class Board extends BaseEntity {   //공유하기 제보하기  홍보하기
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,67 +33,48 @@ public class Board extends BaseEntity {   //공유하기 제보하기  홍보하
     @Column(name = "b_view_cnt")
     private int viewCnt;
 
-    @Column(name = "b_like_cnt")
-    private int likeCnt;
 
     @Column(name = "b_category")
     @Enumerated(EnumType.STRING)
     private IpyangEnum.BoardCategory category;
 
-    @Column(name = "b_ref")
-    private int ref;
-
-     @Column(name = "b_re_step")
-    private int reStep;
-
-     @Column(name = "b_re_level")
-    private int reLevel;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.LAZY)
     private List<BoardImg> boardImgs = new ArrayList<>();
 
 
-    public BoardDto convertUpdateDto() {
-        return BoardDto.builder()
-                .id(id)
-                .title(title)
-                .content(content)
-                .viewCnt(viewCnt)
-                .likeCnt(likeCnt)
-                .category(category)
-                .ref(ref)
-                .reStep(reStep)
-                .reLevel(reLevel)
-                .memberId(member)
-                .build();
-    }
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.LAZY)
+    private List<Comment> comments = new ArrayList<>();
+
+
+
     public SelectBoardDto convertSelectDto() {
         return SelectBoardDto.builder()
                                      .id(id)
                                      .title(title)
                                      .content(content)
                                      .viewCnt(viewCnt)
-                                     .likeCnt(likeCnt)
                                      .category(category)
                                     .memberId(member.getId())
                                     .createdAt(getCreatedAt())
                                      .build();
     }
 
-    public DeleteBoardDto convertDelDto(){
-        return DeleteBoardDto.builder()
-                .id(id)
-                .build();
-    }
+
 
 public void UpdateBoard(String title,String content){
  this.title = title;
  this.content = content;
 }
+
+
+    public void updateViewCnt(int viewCnt) {
+        this.viewCnt = viewCnt +1;
+    }
 
 
 

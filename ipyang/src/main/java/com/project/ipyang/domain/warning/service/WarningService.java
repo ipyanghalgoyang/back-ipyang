@@ -58,7 +58,7 @@ public class WarningService {
             writer = board.getMember().getId();
 
             //욕설관련 신고 사유일경우
-            if (warningReason == IpyangEnum.WarningReason.BadWords) {
+            if (warningReason == IpyangEnum.WarningReason.BAD_WORDS) {
 
                 String warn = board.getContent();
 

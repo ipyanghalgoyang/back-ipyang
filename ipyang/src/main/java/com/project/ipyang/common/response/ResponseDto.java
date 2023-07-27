@@ -33,6 +33,9 @@ public class ResponseDto<T> implements Serializable {
         this.ResultData = null;
         this.error = errorDto;
     }
+
+
+
     public static <T> ResponseDto<T> from(T resultData){
         return new ResponseDto<T>(resultData);
     }

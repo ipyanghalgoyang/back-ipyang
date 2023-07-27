@@ -2,20 +2,20 @@ package com.project.ipyang.domain.adopt.repository;
 
 import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.domain.adopt.dto.AdoptDto;
-import com.project.ipyang.domain.adopt.entity.QAdopt;
-import com.project.ipyang.domain.catType.entity.QCatType;
-import com.project.ipyang.domain.vaccine.entity.QVaccine;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+
+import static com.project.ipyang.domain.adopt.entity.QAdopt.adopt;
+import static com.project.ipyang.domain.catType.entity.QCatType.catType;
+import static com.project.ipyang.domain.vaccine.entity.QVaccine.vaccine;
 
 
 public class AdoptRepositoryImpl implements AdoptRepositoryCustom {
@@ -24,10 +24,6 @@ public class AdoptRepositoryImpl implements AdoptRepositoryCustom {
     public AdoptRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
-
-    QAdopt adopt = QAdopt.adopt;
-    QCatType catType = QCatType.catType;
-    QVaccine vaccine = QVaccine.vaccine;
 
     //입양 상태, 고양이 품종, 백신 종류에 따라 필터링
     @Override
