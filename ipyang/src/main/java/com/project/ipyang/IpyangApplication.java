@@ -11,7 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @EnableJpaAuditing
 @EnableScheduling
 public class IpyangApplication {
-
+	static {
+		System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
+	}
 	public static void main(String[] args) {
 		SpringApplication.run(IpyangApplication.class, args);
 	}
