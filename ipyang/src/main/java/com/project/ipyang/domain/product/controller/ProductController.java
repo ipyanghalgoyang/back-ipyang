@@ -24,10 +24,10 @@ import java.util.List;
 public class ProductController {
 
         private final ProductService productService;
-
+        private final HttpSession session;
 
         @PostMapping(value = "/v1/product/{type}/write")
-        public ResponseDto createProduct(@PathVariable("type")IpyangEnum.ProductType pT, InsertProductDto request, HttpSession session) {
+        public ResponseDto createProduct(@PathVariable("type")IpyangEnum.ProductType pT, InsertProductDto request) {
 
                 SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
                 if (loggedInUser == null) {
@@ -62,8 +62,7 @@ public class ProductController {
 
         //판매글 수정하기
         @PutMapping(value = "/v1/product/{id}")
-        public ResponseDto<ProductDto> updateProduct(@PathVariable("id")Long id,@RequestBody UpdateProductDto request
-                ,HttpSession session) {
+        public ResponseDto<ProductDto> updateProduct(@PathVariable("id")Long id,@RequestBody UpdateProductDto request) {
 
                 SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
 
@@ -80,7 +79,7 @@ public class ProductController {
 
         //판매완료  status N->Y
         @PutMapping(value = "/v1/product/{id}/soldout")
-        public ResponseDto<ProductDto> soldProduct(@PathVariable("id")Long id ,HttpSession session) {
+        public ResponseDto<ProductDto> soldProduct(@PathVariable("id")Long id ) {
                 SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
 
                 if (loggedInUser == null) {

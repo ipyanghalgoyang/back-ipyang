@@ -52,7 +52,7 @@ public class MemberController {
             , notes = "멤버테이블에서 모든회원정보 가져오기")
     @PutMapping(value = "/v1/member")
     public ResponseDto  updateMember(UpdateMemberDto request
-                                 ,HttpSession session) {
+                                ) {
 
         SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
         Long memberId = loggedInUser.getId();
