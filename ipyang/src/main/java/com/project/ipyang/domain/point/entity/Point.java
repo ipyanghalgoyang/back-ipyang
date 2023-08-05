@@ -5,6 +5,7 @@ import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Point extends BaseEntity {
 
     @Id
@@ -25,8 +27,8 @@ public class Point extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private IpyangEnum.PointType type;
 
-    @Column(name = "point_history")
-    private String pointHistory;
+    @Column(name = "point_history")// -10  +50 같은거
+    private Long pointHistory;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
