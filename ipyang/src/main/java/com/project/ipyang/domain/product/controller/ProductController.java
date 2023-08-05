@@ -46,7 +46,7 @@ public class ProductController {
 
         //전체 상품 데이터 가져오기
         @GetMapping(value = "/v1/product")
-        public ResponseDto<List<ProductDto>> selectAllProduct(@PageableDefault(page = 1) Pageable pageable
+        public ResponseDto<List<SelectProductDto>> selectAllProduct(@PageableDefault(page = 1) Pageable pageable
         )  {
             return productService.selectAllProduct(pageable);
         }
@@ -54,7 +54,7 @@ public class ProductController {
 
         //상품 자세히보기
         @GetMapping(value = "v1/product/{id}")
-        public ResponseDto readProduct(@PathVariable("id")Long id){
+        public ResponseDto<ReadProductDto> readProduct(@PathVariable("id")Long id){
                 return new ResponseDto(productService.readSomeProduct(id));
         }
 

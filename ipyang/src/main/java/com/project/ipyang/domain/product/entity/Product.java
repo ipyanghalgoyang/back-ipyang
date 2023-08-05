@@ -58,6 +58,7 @@ public class Product extends BaseEntity {
                                         .type(type)
                                         .loc(loc)
                                         .memberId(member.getId())
+                                        .createdAt(getCreatedAt())
                                         .build();
     }
 
@@ -86,6 +87,7 @@ public class Product extends BaseEntity {
                 .type(type)
                 .loc(loc)
                 .memberId(member.getId())
+                .createdAt(getCreatedAt())
                 .build();
     }
 }

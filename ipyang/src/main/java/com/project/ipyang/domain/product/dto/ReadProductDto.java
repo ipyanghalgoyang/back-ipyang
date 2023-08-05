@@ -1,5 +1,6 @@
 package com.project.ipyang.domain.product.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.domain.product.entity.ProductImg;
 import lombok.AllArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -23,4 +25,6 @@ public class ReadProductDto {
     private String loc;
     private Long memberId;
     private List<ProductImg> imageFiles;
+    @JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
+    private LocalDateTime createdAt;
 }

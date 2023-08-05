@@ -1,5 +1,8 @@
 package com.project.ipyang.domain.board.dto;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.domain.board.entity.Board;
 import com.project.ipyang.domain.board.repository.LikesRepository;
@@ -25,6 +28,7 @@ public class SelectBoardDto {
     private long likeCnt;
     private IpyangEnum.BoardCategory category;
     private long memberId;
+    @JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
     private String nickname;
 

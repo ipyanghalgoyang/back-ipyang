@@ -1,5 +1,6 @@
 package com.project.ipyang.domain.product.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.product.entity.Product;
@@ -25,6 +26,7 @@ public class SelectProductDto  {
     private Long memberId;
     private String nickname;
     private List<ProductImg> imageFiles;
+    @JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
     public SelectProductDto(Product product) {

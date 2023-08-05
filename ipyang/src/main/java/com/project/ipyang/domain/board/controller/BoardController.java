@@ -77,34 +77,11 @@ public class BoardController {
                                              @RequestBody  InsertBoardDto request
                                             ) throws IOException {
 
-
-
-        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
-        if (loggedInUser == null) {
-            return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
-        Long memberId = loggedInUser.getId();
-        if (memberId == null) {
-            return new ResponseDto("존재하지 않는 회원입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
-
-        return boardService.writeBoard(sC, request, memberId);
+        return boardService.writeBoard(sC, request);
     }
 
 
 
-
-
-//세션한줄코딩?
-//    @PostMapping(value = "/v1/board/{category}/write")
-//    public ResponseDto<BoardDto> createBoard(@PathVariable("category")IpyangEnum.BoardCategory sC,
-//                                           @RequestBody InsertBoardDto request,
-//                                             HttpSession session) {
-//
-//      Long memberId = sessionService.validating(session);
-//
-//        return  boardService.writeBoard(sC,request,memberId);
-//    }
 
 
 

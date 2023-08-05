@@ -2,6 +2,7 @@ package com.project.ipyang.domain.board.service;
 
 import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.response.ResponseDto;
+import com.project.ipyang.config.SessionUser;
 import com.project.ipyang.domain.board.dto.*;
 import com.project.ipyang.domain.board.entity.Board;
 import com.project.ipyang.domain.board.entity.BoardImg;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,10 +43,12 @@ public class BoardService {
     private final CommentRepository commentRepository;
     private final BoardImgRepository boardImgRepository;
     private final LikesRepository likesRepository;
+    private final HttpSession session;
     @Transactional
-    public ResponseDto writeBoard(IpyangEnum.BoardCategory sC, InsertBoardDto boardDto, Long memberId
+    public ResponseDto writeBoard(IpyangEnum.BoardCategory sC, InsertBoardDto boardDto
                                  ) throws IOException {
-
+        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
+        Long memberId = loggedInUser.getId();
         Optional<Member> member = memberRepository.findById(memberId);
         Board writeBoard = null;
 
