@@ -42,6 +42,11 @@ public class PointService {
     public ResponseDto expensePoint(PointChargeDto request, Long memberId) {
         Optional<Member> member = memberRepository.findById(memberId);
 
+        if(member.get().getPoint() - request.getPointHistory() < 0){
+            return new ResponseDto("포인트가 부족합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+
+
         Point point = Point.builder()
                 .pointHistory(request.getPointHistory())
                 .type(IpyangEnum.PointType.BUY)
@@ -51,6 +56,8 @@ public class PointService {
 
         Member updateMember  = member.get();
         updateMember.expense(request.getPointHistory());
+
+
         memberRepository.save(updateMember);
         return new ResponseDto("포인트차감 완료", HttpStatus.OK.value());
 
