@@ -42,6 +42,7 @@ import java.util.Optional;
 public class BoardController {
     private final BoardService boardService;
     private final SessionService sessionService;
+    private final HttpSession session;
 
     @ApiOperation(
             value = "게시물 작성"
@@ -73,8 +74,8 @@ public class BoardController {
 
     @PostMapping(value = "/v1/board/{category}/write")
     public ResponseDto<BoardDto> writeBoard(@PathVariable("category") IpyangEnum.BoardCategory sC,
-                                             @RequestBody  InsertBoardDto request,
-                                             HttpSession session) throws IOException {
+                                             @RequestBody  InsertBoardDto request
+                                            ) throws IOException {
 
 
 
@@ -147,7 +148,7 @@ public class BoardController {
             , notes = "선택한 게시글 제목과 내용을 수정한다.")
     @PutMapping(value = "/v1/board/{id}")
     public ResponseDto<BoardDto> updateBoard(@PathVariable("id")Long id,@RequestBody UpdateBoardDto request
-                                                ,HttpSession session) {
+                                                ) {
         SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
 
         if (loggedInUser == null) {
@@ -165,7 +166,7 @@ public class BoardController {
             value = "게시글 삭제"
             , notes = "게시글과 게시글에있는 모든 댓글을 삭제한다")
     @DeleteMapping(value = "/v1/board/{id}")
-    public ResponseDto deleteBoard(@PathVariable("id")Long id,HttpSession session) {
+    public ResponseDto deleteBoard(@PathVariable("id")Long id) {
         SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
 
         if (loggedInUser == null) {
@@ -184,7 +185,7 @@ public class BoardController {
             value = "게시글 좋아요버튼"
             , notes = "실행시키면 좋아요테이블에 데이터추가 한번더 실행시 데이터 제거")
     @PostMapping(value = "/v1/board/{id}/like")
-    public ResponseDto likeBoard(@PathVariable("id")Long id,HttpSession session) {
+    public ResponseDto likeBoard(@PathVariable("id")Long id) {
 
         SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
 
@@ -205,8 +206,8 @@ public class BoardController {
             value = "댓글 작성"
             , notes = "게시글에 댓글을 작성한다")
     @PostMapping(value = "/v1/comment/{id}")
-    public ResponseDto writeComment(@PathVariable("id")Long id,@RequestBody InsertCommentDto request,
-                                             HttpSession session) {
+    public ResponseDto writeComment(@PathVariable("id")Long id,@RequestBody InsertCommentDto request
+                                           ) {
 
         SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
@@ -222,7 +223,7 @@ public class BoardController {
     }
 
     @PutMapping(value = "/v1/comment/{id}")
-    public ResponseDto updateComment(@PathVariable("id")Long id,@RequestBody UpdateCommentDto request,HttpSession session){
+    public ResponseDto updateComment(@PathVariable("id")Long id,@RequestBody UpdateCommentDto request){
         SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
             return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
@@ -236,7 +237,7 @@ public class BoardController {
     }
 
     @DeleteMapping(value = "/v1/comment/{id}")
-    public ResponseDto deleteComment(@PathVariable("id")Long id,HttpSession session){
+    public ResponseDto deleteComment(@PathVariable("id")Long id){
         SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
             return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
@@ -255,7 +256,7 @@ public class BoardController {
             value = "댓글 좋아요버튼"
             , notes = "실행시키면 좋아요테이블에 데이터추가 한번더 실행시 데이터 제거")
     @PostMapping(value = "/v1/comment/{id}/like")
-    public ResponseDto likeComment(@PathVariable("id")Long id,HttpSession session) {
+    public ResponseDto likeComment(@PathVariable("id")Long id) {
 
         SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
 
