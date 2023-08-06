@@ -52,7 +52,7 @@ public class BoardService {
         Optional<Member> member = memberRepository.findById(memberId);
         Board writeBoard = null;
 
-
+        //한번 테스트 해봐 사진올려바
 
         //사진을 첨부하지아니할경우
         if (boardDto.getBoardFile().isEmpty()) {
@@ -148,29 +148,31 @@ public class BoardService {
     //선택한 글 조회
     @Transactional
     public ResponseDto<ReadBoardDto> readSomeBoard(Long id) {
-            Optional<Board> board = boardRepository.findById(id);
-            if (!board.isPresent()){
-                return new ResponseDto("존재하지 않는 글입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-            }
-            Board findBoard = board.get();
-            findBoard.updateViewCnt(findBoard.getViewCnt()); //조회수 증가
-            SelectBoardDto readBoard = findBoard.convertSelectDto();
+        Optional<Board> board = boardRepository.findById(id);
+        if (!board.isPresent()){
+            return new ResponseDto("존재하지 않는 글입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+        Board findBoard = board.get();
+        findBoard.updateViewCnt(findBoard.getViewCnt()); //조회수 증가
+        SelectBoardDto readBoard = findBoard.convertSelectDto();
+        List<String> imgList = new ArrayList<>();
+        for (BoardImg boardImg : findBoard.getBoardImgs()) {
+            imgList.add(boardImg.getImgStoredFile());
+        }
+        if(!imgList.isEmpty()) readBoard.setImgList(imgList);
 
-
-            List<Comment> comments = commentRepository.findByBoardId(id);
-
+        List<Comment> comments = commentRepository.findByBoardId(id);
 
         List<SelectCommentDto> readComment = comments.stream().map(comment -> {
             long likeCnt = likesRepository.countByTargetTypeAndTargetId(IpyangEnum.LikeType.COMMENT, comment.getId());
             return new SelectCommentDto(comment, likeCnt);
         }).collect(Collectors.toList());
 
+        ReadBoardDto readBoardDto = new ReadBoardDto(readBoard, readComment);
 
-            ReadBoardDto readBoardDto = new ReadBoardDto(readBoard, readComment);
+        return new ResponseDto(readBoardDto,HttpStatus.OK.value());
 
-            return new ResponseDto(readBoardDto,HttpStatus.OK.value());
-
-        }
+    }
 
 
 
