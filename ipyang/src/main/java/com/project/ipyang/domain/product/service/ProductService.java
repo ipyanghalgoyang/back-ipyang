@@ -2,6 +2,7 @@ package com.project.ipyang.domain.product.service;
 
 import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.response.ResponseDto;
+import com.project.ipyang.config.SessionUser;
 import com.project.ipyang.domain.board.entity.Board;
 import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.member.repository.MemberRepository;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,9 +33,12 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final MemberRepository memberRepository;
     private final ProductImgRepository productImgRepository;
+    private final HttpSession session;
 
     @Transactional
-    public ResponseDto createProduct(IpyangEnum.ProductType pT,InsertProductDto request, Long memberId) {
+    public ResponseDto createProduct(IpyangEnum.ProductType pT,InsertProductDto request) {
+        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
+        Long memberId = loggedInUser.getId();
         Member member = memberRepository.findById(memberId).orElse(null);
 
         Product product = Product.builder()
@@ -87,7 +92,7 @@ public class ProductService {
         } else return new ResponseDto("가져올 데이터가 없습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
-
+    @Transactional
     public ResponseDto<ReadProductDto> readSomeProduct(Long id) {
         Optional<Product> productOptional = productRepository.findById(id);
         if (!productOptional.isPresent()){
@@ -100,7 +105,10 @@ public class ProductService {
 
 
     @Transactional
-    public Object updateProduct(Long id,UpdateProductDto request,Long memberId) {
+    public Object updateProduct(Long id,UpdateProductDto request) {
+        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
+        Long memberId = loggedInUser.getId();
+
         Optional<Product> productOptional = productRepository.findById(id);
         if (!productOptional.isPresent()) {
             return new ResponseDto("존재하지 않는 판매글입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
@@ -123,15 +131,16 @@ public class ProductService {
 
 
     @Transactional
-    public ResponseDto soldoutProduct( long id,Long memberId) {
+    public ResponseDto soldoutProduct( long id) {
+
+        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
+        Long memberId = loggedInUser.getId();
         Optional<Product> productOptional = productRepository.findById(id);
         if (!productOptional.isPresent()) {
             return new ResponseDto("존재하지 않는 판매글입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
 
         Product findProduct = productOptional.get();
-
-
 
         if (memberId.equals(findProduct.getMember().getId())){
             findProduct.soldout();
@@ -141,22 +150,28 @@ public class ProductService {
         else {
             return new ResponseDto("판매글 작성자만 수정가능합니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
-
-
-
-
     }
 
 
 
 
     @Transactional
-    public ResponseDto deleteProduct(ProductDto productDto) {
-        Optional<Product> productOptional = productRepository.findById(productDto.getId());
+    public ResponseDto deleteProduct( long id) {
+        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
+        Long memberId = loggedInUser.getId();
+
+        Optional<Product> productOptional = productRepository.findById(id);
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
-            productRepository.delete(product);
-            return new ResponseDto("판매글삭제 성공", HttpStatus.OK.value());
+
+            if (memberId.equals(product.getMember().getId())) {
+                productRepository.delete(product);
+                return new ResponseDto("판매글삭제 성공", HttpStatus.OK.value());
+            }
+            else {
+                return new ResponseDto("판매글 작성자만 삭제가능합니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            }
+
         }
         else {
             return new ResponseDto("판매글삭제 실패", HttpStatus.INTERNAL_SERVER_ERROR.value());
