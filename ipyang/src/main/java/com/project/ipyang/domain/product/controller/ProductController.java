@@ -29,20 +29,8 @@ public class ProductController {
         @PostMapping(value = "/v1/product/{type}/write")
         public ResponseDto createProduct(@PathVariable("type")IpyangEnum.ProductType pT, InsertProductDto request) {
 
-                SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
-                if (loggedInUser == null) {
-                        return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-                }
-                Long memberId = loggedInUser.getId();
-
-                if (memberId == null) {
-                        return new ResponseDto("존재하지않는 회원입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-                }
-
-                return productService.createProduct(pT,request, memberId);
+                return productService.createProduct(pT,request);
         }
-
-
 
         //전체 상품 데이터 가져오기
         @GetMapping(value = "/v1/product")
@@ -64,42 +52,24 @@ public class ProductController {
         @PutMapping(value = "/v1/product/{id}")
         public ResponseDto<ProductDto> updateProduct(@PathVariable("id")Long id,@RequestBody UpdateProductDto request) {
 
-                SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
 
-                if (loggedInUser == null) {
-                        return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-                }
-                Long memberId = loggedInUser.getId();
-
-                if (memberId == null) {
-                        return new ResponseDto("존재하지않는 회원입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-                }
-                return new ResponseDto(productService.updateProduct(id,request,memberId));
+                return new ResponseDto(productService.updateProduct(id,request));
         }
 
         //판매완료  status N->Y
         @PutMapping(value = "/v1/product/{id}/soldout")
         public ResponseDto<ProductDto> soldProduct(@PathVariable("id")Long id ) {
-                SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
-
-                if (loggedInUser == null) {
-                        return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-                }
-                Long memberId = loggedInUser.getId();
-
-                if (memberId == null) {
-                        return new ResponseDto("존재하지않는 회원입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-                }
 
 
-                return productService.soldoutProduct(id,memberId);
+
+                return productService.soldoutProduct(id);
         }
 
 
         //판매글 삭제하기
-        @DeleteMapping(value = "/v1/product")
-        public ResponseDto<ProductDto> deleteBoard(ProductDto productDto) {
-                return new ResponseDto(productService.deleteProduct(productDto));
+        @DeleteMapping(value = "/v1/product/{id}")
+        public ResponseDto<ProductDto> deleteProduct(@PathVariable("id")Long id ) {
+                return  productService.deleteProduct(id);
         }
 
 

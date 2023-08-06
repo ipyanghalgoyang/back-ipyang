@@ -2,6 +2,7 @@ package com.project.ipyang.domain.board.service;
 
 import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.response.ResponseDto;
+import com.project.ipyang.common.util.S3Utils;
 import com.project.ipyang.config.SessionUser;
 import com.project.ipyang.domain.board.dto.*;
 import com.project.ipyang.domain.board.entity.Board;
@@ -28,10 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,8 +42,10 @@ public class BoardService {
     private final BoardImgRepository boardImgRepository;
     private final LikesRepository likesRepository;
     private final HttpSession session;
+    private final S3Utils s3Utils;
     @Transactional
     public ResponseDto writeBoard(IpyangEnum.BoardCategory sC, InsertBoardDto boardDto
+                                  //MultipartFile file
                                  ) throws IOException {
         SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
         Long memberId = loggedInUser.getId();
@@ -55,37 +55,33 @@ public class BoardService {
 
 
         //사진을 첨부하지아니할경우
-     //   if (boardDto.getBoardFile().isEmpty()) {
+        if (boardDto.getBoardFile().isEmpty()) {
             Board board = Board.builder().title(boardDto.getTitle())
                     .content(boardDto.getContent())
                     .category(sC)
                     .member(member.get())
                     .build();
              writeBoard = boardRepository.save(board);
-    //    }
-//        else {
-//            System.out.println("BoardService.이미지 첨부된글작성");
-//                Board board = Board.builder().title(boardDto.getTitle())
-//                        .content(boardDto.getContent())
-//                        .category(sC)
-//                        .member(member.get())
-//                        .build();
-//            writeBoard = boardRepository.save(board);
-//            Long savedId = writeBoard.getId();
-//            Board boardId =  boardRepository.findById(savedId).get();
-//
-//            for (MultipartFile boardFile : boardDto.getBoardFile()) {
-//                String imgOriginFile = boardFile.getOriginalFilename();
-//                String imgStoredFile = System.currentTimeMillis() + "_" + imgOriginFile;
-//
-//                String savePath = "C:/intelliJ/intelSrc/study/back-ipyang/ipyang/src/main/resources/static/images/" + imgStoredFile;
-//
-//                boardFile.transferTo(new File(savePath));
-//                BoardImg boardImg = BoardImg.toBoardImg(boardId,imgOriginFile,imgStoredFile);
-//               boardImgRepository.save(boardImg);
-//
-//            }
- //       }
+        }
+        else {
+            System.out.println("BoardService.이미지 첨부된글작성");
+                Board board = Board.builder().title(boardDto.getTitle())
+                        .content(boardDto.getContent())
+                        .category(sC)
+                        .member(member.get())
+                        .build();
+            writeBoard = boardRepository.save(board);
+            Long savedId = writeBoard.getId();
+            Board boardId =  boardRepository.findById(savedId).get();
+
+            for (MultipartFile boardFile : boardDto.getBoardFile()) {
+                String imgOriginFile = boardFile.getOriginalFilename();
+                String imgUrl = s3Utils.uploadFileToS3(boardFile,"board");
+
+                BoardImg boardImg = new BoardImg(imgOriginFile,imgUrl,boardId);
+                boardImgRepository.save(boardImg);
+            }
+        }
 
 
         if (writeBoard != null) {
@@ -181,7 +177,9 @@ public class BoardService {
 
     //게시글 수정
     @Transactional
-    public ResponseDto updateBoard(Long id,UpdateBoardDto request,Long memberId) {
+    public ResponseDto updateBoard(Long id,UpdateBoardDto request) {
+        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
+        Long memberId = loggedInUser.getId();
 
         Optional<Board> boardOptional = boardRepository.findById(id);
         if (!boardOptional.isPresent()) {
@@ -202,7 +200,9 @@ public class BoardService {
 
 
     @Transactional
-    public ResponseDto deleteBoard(Long id,Long memberId ) {
+    public ResponseDto deleteBoard(Long id ) {
+        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
+        Long memberId = loggedInUser.getId();
         Optional<Board> boardOptional = boardRepository.findById(id);
         if (!boardOptional.isPresent()) {
             return new ResponseDto("존재하지 않는 게시글입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
@@ -226,9 +226,12 @@ public class BoardService {
 
 
 
-    public ResponseDto likeBoard(Long id, Long memberId) {
+    public ResponseDto likeBoard(Long id ) {
+        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
+        Long memberId = loggedInUser.getId();
         Optional<Member> memberOptional = memberRepository.findById(memberId);
         Optional<Likes> likesOptional = likesRepository.findByTargetTypeAndTargetIdAndMember(IpyangEnum.LikeType.BOARD,id, memberOptional.get());
+
         if(likesOptional.isPresent()){
             likesRepository.delete(likesOptional.get());
             return new ResponseDto("게시글 좋아요취소 성공.", HttpStatus.OK.value());
@@ -245,12 +248,13 @@ public class BoardService {
 
 //===================댓글========================================
     @Transactional
-    public ResponseDto writeComment(Long boardId,InsertCommentDto request, Long memberId) {
-      //  Member member = memberRepository.findById(memberId).orElse(null);
+    public ResponseDto writeComment(Long boardId,InsertCommentDto request) {
+        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
+        Long memberId = loggedInUser.getId();
+
         Board board = boardRepository.findById(boardId).orElse(null);
 
         Optional<Member> memberOptional = memberRepository.findById(memberId);
-        if(!memberOptional.isPresent()) return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
 
         Comment comment = Comment.builder()
                 .content(request.getContent())
@@ -258,7 +262,6 @@ public class BoardService {
                 .member(memberOptional.get())
                 .board(board)
                 .build();
-        Long id = comment.getId();  // comment의 id 값을 가져옴
 
 
         Comment wrtieComment = commentRepository.save(comment);
@@ -270,7 +273,9 @@ public class BoardService {
                }
     }
     @Transactional
-    public ResponseDto updateComment(Long id, UpdateCommentDto request, Long memberId) {
+    public ResponseDto updateComment(Long id, UpdateCommentDto request ) {
+        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
+        Long memberId = loggedInUser.getId();
 
         Optional<Comment> commentOptional = commentRepository.findById(id);
         if (!commentOptional.isPresent()){
@@ -278,6 +283,7 @@ public class BoardService {
         }
 
         Comment findComment = commentOptional.get();
+
         if (memberId.equals(findComment.getMember().getId())){
                 findComment.updateComment(request.getContent());
             return new ResponseDto("댓글수정성공.", HttpStatus.OK.value());
@@ -289,7 +295,10 @@ public class BoardService {
     }
 
     @Transactional
-    public ResponseDto deleteComment(Long id, Long memberId) {
+    public ResponseDto deleteComment(Long id) {
+        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
+        Long memberId = loggedInUser.getId();
+
         Optional<Comment> commentOptional = commentRepository.findById(id);
         if (!commentOptional.isPresent()){
             return new ResponseDto("존재하지않는 댓글입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value());
@@ -307,7 +316,9 @@ public class BoardService {
 
     }
 
-    public ResponseDto likeComment(Long id, Long memberId) {
+    public ResponseDto likeComment(Long id) {
+        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
+        Long memberId = loggedInUser.getId();
         Optional<Member> memberOptional = memberRepository.findById(memberId);
         Optional<Likes> likesOptional = likesRepository.findByTargetTypeAndTargetIdAndMember(IpyangEnum.LikeType.COMMENT,id, memberOptional.get());
         if(likesOptional.isPresent()){
@@ -323,7 +334,6 @@ public class BoardService {
             return new ResponseDto("댓글 좋아요추가 성공.", HttpStatus.OK.value());
         }
     }
-
 }
 //쿠키로 좋아요 사용하는방법  반려사유: 쿠키는 기간제라 30일뒤면 좋아요누른 이력이 사라지기때문이다.
 //    public ResponseDto likeBoard(Long id ) {
