@@ -1,38 +1,33 @@
 package com.project.ipyang.domain.product.dto;
 
-import com.project.ipyang.common.entity.BaseEntity;
-import com.project.ipyang.domain.member.entity.Member;
-import com.project.ipyang.domain.product.entity.Product_Img;
-import lombok.Data;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.project.ipyang.common.IpyangEnum;
+import com.project.ipyang.domain.product.entity.Product;
+import com.project.ipyang.domain.product.entity.ProductImg;
+import lombok.*;
 
-import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-@Data
-@RequiredArgsConstructor
+@Setter
+@Getter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ProductDto   {
     private Long id;
     private String name;
-    private String status;
+    private IpyangEnum.Status status;
     private int price;
     private String type;
     private String loc;
-    private Member member;
-    private List<Product_Img> product_imgs = new ArrayList<>();
+    private Long memberId;
+    private List<ProductImg> productImgs = new ArrayList<>();
+    @JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
+    private LocalDateTime createdAt;
 
-    public ProductDto(Long id, String name, String status,
-                      int price, String type, String loc,
-                      Member member, List<Product_Img> product_imgs) {
-        this.id = id;
-        this.name = name;
-        this.status = status;
-        this.price = price;
-        this.type = type;
-        this.loc = loc;
-        this.member = member;
-        this.product_imgs = product_imgs;
-    }
+
+
+
 }

@@ -1,37 +1,46 @@
 package com.project.ipyang.domain.inquire.dto;
 
-import com.project.ipyang.domain.inquire.entity.Inquire_Img;
+import com.project.ipyang.common.IpyangEnum;
+import com.project.ipyang.domain.inquire.entity.Inquire;
+import com.project.ipyang.domain.inquire.entity.InquireImg;
 import com.project.ipyang.domain.member.entity.Member;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Setter
-@Getter
+@Data
 @RequiredArgsConstructor
-
+@AllArgsConstructor
+@Builder
 public class InquireDto {
     private Long id;
-
     private String title;
-
     private String content;
-
-    private int passwd;               //비밀번호 숫자4자리로만 받기
-
-    private int reply_yn;
-
-    private String  reply_content;
-
-    private String  common_inquire;
-
+    private String passwd;
+    private IpyangEnum.Status status;
+    private String replyContent;
     private Member member;
+    private List<InquireImgDto> inquireImgDtos = new ArrayList<>();
 
-    private List<Inquire_Img> inquire_imgs = new ArrayList<>();
+    public Inquire toEntity() {
+        List<InquireImg> inquireImgs = inquireImgDtos.stream().map(InquireImgDto::toEntity).collect(Collectors.toList());
+
+        return Inquire.builder()
+                .id(id)
+                .title(title)
+                .content(content)
+                .passwd(passwd)
+                .status(status)
+                .replyContent(replyContent)
+                .member(member)
+                .inquireImgs(inquireImgs)
+                .build();
+    }
 
 
 

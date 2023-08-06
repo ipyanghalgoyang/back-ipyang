@@ -1,3 +1,5 @@
+server:
+  port: 9000
 spring:
   jpa:
     database: mysql
@@ -11,7 +13,10 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: none
-
+  security:
+    user:
+      name: user
+      password: 1234
 ########### DB 설정####################
   profiles:
     include: aws
@@ -21,3 +26,17 @@ logging:
     org:
       hibernate:
         type: trace
+
+springdoc:
+  packages-to-scan: com.project.ipyang.domain
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: /
+    disable-swagger-default-url: true
+    display-request-duration: true
+    operations-sorter: alpha
+
+
+
+

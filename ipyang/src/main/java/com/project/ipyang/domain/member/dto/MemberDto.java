@@ -1,25 +1,24 @@
 package com.project.ipyang.domain.member.dto;
 
+import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.domain.board.entity.Board;
 import com.project.ipyang.domain.inquire.entity.Inquire;
+import com.project.ipyang.domain.member.entity.Member;
 import com.project.ipyang.domain.notice.entity.Notice;
 import com.project.ipyang.domain.point.entity.Point;
 import com.project.ipyang.domain.product.entity.Product;
 import com.project.ipyang.domain.warning.entity.Warning;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 
 @Setter
 @Getter
 @ToString
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class MemberDto {
     private Long id;
     private String email;
@@ -27,12 +26,13 @@ public class MemberDto {
     private String passwd;
     private String name;
     private String phone;
-    private String common_role;
+    private IpyangEnum.MemberRoleType memberRole;
+    private IpyangEnum.Status delYn;
     private String address;
-    private String point;
-    private String img_context;
-    private String original_file;
-    private String img_stored_file;
+    private int point;
+    private String imgContext;
+    private String imgOriginFile;
+    private String imgStoredFile;
     private List<Point> points = new ArrayList<>();
     private List<Product> products = new ArrayList<>();
     private List<Board> boards = new ArrayList<>();
@@ -40,29 +40,33 @@ public class MemberDto {
     private List<Notice> notices = new ArrayList<>();
     private List<Warning> warnings = new ArrayList<>();
 
-
-    public MemberDto(Long id, String email, String nickname, String passwd, String name,
-                     String phone, String common_role, String address, String point,
-                     String img_context, String original_file, String img_stored_file,
-                     List<Point> points, List<Product> products, List<Board> boards,
-                     List<Inquire> inquires, List<Notice> notices, List<Warning> warnings) {
-        this.id = id;
-        this.email = email;
-        this.nickname = nickname;
-        this.passwd = passwd;
-        this.name = name;
-        this.phone = phone;
-        this.common_role = common_role;
-        this.address = address;
-        this.point = point;
-        this.img_context = img_context;
-        this.original_file = original_file;
-        this.img_stored_file = img_stored_file;
-        this.points = points;
-        this.products = products;
-        this.boards = boards;
-        this.inquires = inquires;
-        this.notices = notices;
-        this.warnings = warnings;
+    public Member toEntity(MemberDto dto){
+        return Member.builder()
+                .id(dto.getId())
+                .email(dto.getEmail())
+                .nickname(dto.getNickname())
+                .passwd(dto.getPasswd())
+                .name(dto.getName())
+                .phone(dto.getPhone())
+                .memberRole(dto.getMemberRole())
+                .address(dto.getAddress())
+                .point(dto.getPoint())
+                .build();
     }
+    public Member toEntity(){
+        return Member.builder()
+                .id(id)
+                .email(email)
+                .nickname(nickname)
+                .passwd(passwd)
+                .name(name)
+                .phone(phone)
+                .delYn(delYn)
+                .memberRole(memberRole)
+                .address(address)
+                .point(point)
+                .build();
+    }
+
+
 }

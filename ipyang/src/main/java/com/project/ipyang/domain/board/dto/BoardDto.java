@@ -1,58 +1,43 @@
 package com.project.ipyang.domain.board.dto;
 
-import com.project.ipyang.domain.board.entity.Board_Img;
+import com.project.ipyang.common.IpyangEnum;
+import com.project.ipyang.domain.board.entity.Board;
+import com.project.ipyang.domain.board.entity.BoardImg;
 import com.project.ipyang.domain.member.entity.Member;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Setter
 @Getter
-
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class BoardDto {
 
     private Long id;
-
-
     private String title;
-
-
     private String content;
+    private int viewCnt;
+    private IpyangEnum.BoardCategory category;
+    private Member memberId;
+    private List<BoardImg> boardImgs = new ArrayList<>();
 
 
-    private int view_cnt;
 
-    private int like_cnt;
-
-    private String common_board;
-
-    private int ref;
-
-    private int re_step;
-
-    private int re_level;
-
-    private Member member;
-
-    private List<Board_Img> board_imgs = new ArrayList<>();
-
-    public BoardDto(Long id, String title, String content, int view_cnt,
-                    int like_cnt, String common_board, int ref, int re_step,
-                    int re_level, Member member, List<Board_Img> board_imgs) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.view_cnt = view_cnt;
-        this.like_cnt = like_cnt;
-        this.common_board = common_board;
-        this.ref = ref;
-        this.re_step = re_step;
-        this.re_level = re_level;
-        this.member = member;
-        this.board_imgs = board_imgs;
+    public Board toEntity() {
+        return Board.builder()
+                .id(id)
+                .title(title)
+                .content(content)
+                .viewCnt(viewCnt)
+                .category(category)
+                .member(memberId)
+                .build();
     }
+
+
+
 }
