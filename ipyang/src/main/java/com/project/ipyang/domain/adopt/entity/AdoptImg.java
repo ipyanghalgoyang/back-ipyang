@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Table(name = "adopt_img")
 @Builder
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 public class AdoptImg extends BaseEntity {
     @Id
@@ -17,7 +17,7 @@ public class AdoptImg extends BaseEntity {
     @Column(name = "img_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "adopt_id")
     private Adopt adopt;
 
@@ -27,13 +27,10 @@ public class AdoptImg extends BaseEntity {
     @Column(name = "img_stored_file")
     private String imgStoredFile;
 
-    public static AdoptImg convertImgEntity(Adopt adopt, String imgOriginFile, String imgStoredFile) {
-        AdoptImg adoptImg = AdoptImg.builder()
-                                            .imgOriginFile(imgOriginFile)
-                                            .imgStoredFile(imgStoredFile)
-                                            .adopt(adopt)
-                                            .build();
-        return adoptImg;
+    public AdoptImg(String imgOriginFile, String imgStoredFile, Adopt adopt) {
+        this.imgOriginFile = imgOriginFile;
+        this.imgStoredFile = imgStoredFile;
+        this.adopt = adopt;
     }
 
 

@@ -92,4 +92,26 @@ public class LoginCheckAspect {
 
         return proceedingJoinPoint.proceed();
     }
+
+    @Around("execution(* com.project.ipyang.domain.adopt.controller.*.*(..))")
+    public Object aroundAdoptMethod(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+
+        MethodSignature methodSignature = (MethodSignature) proceedingJoinPoint.getSignature();
+        String methodName = methodSignature.getName();
+
+        if (methodName.equals("getAdoptList") || methodName.equals("adoptDetail") || methodName.equals("filterAdopt") ) {
+            return proceedingJoinPoint.proceed();
+        }
+
+        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return new ResponseDto("로그인이 필요합니다", HttpStatus.UNAUTHORIZED.value());
+        }
+        Long memberId = loggedInUser.getId();
+        if (memberId == null) {
+            return new ResponseDto("존재하지 않는 회원입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+
+        return proceedingJoinPoint.proceed();
+    }
 }

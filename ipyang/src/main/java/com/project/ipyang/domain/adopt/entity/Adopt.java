@@ -18,7 +18,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Adopt extends BaseEntity {
@@ -67,8 +67,8 @@ public class Adopt extends BaseEntity {
     @JoinColumn(name = "cat_id")
     private CatType catType;
 
-    @OneToMany(mappedBy = "adopt", cascade = CascadeType.ALL)
-    @OrderColumn(name = "adopt_img_order")
+    @OneToMany(mappedBy = "adopt", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    /*@OrderColumn(name = "adopt_img_order")*/
     private List<AdoptImg> adoptImgs = new ArrayList<>();
 
     @OneToMany(mappedBy = "adopt")
@@ -100,24 +100,24 @@ public class Adopt extends BaseEntity {
     }
 
     public SelectAdoptDto convertDto() {
-        return new SelectAdoptDto().builder()
-                                            .id(id)
-                                            .title(title)
-                                            .content(content)
-                                            .viewCnt(viewCnt)
-                                            .name(name)
-                                            .gender(gender)
-                                            .weight(weight)
-                                            .gender(gender)
-                                            .age(age)
-                                            .neu(neu)
-                                            .status(status)
-                                            .createdAt(getCreatedAt())
-                                            .adoptImgs(convertImgDto())
-                                            .memberId(member.getId())
-                                            .vacName(vaccine.getName())
-                                            .catType(catType.getType())
-                                            .build();
+        return SelectAdoptDto.builder()
+                                    .id(id)
+                                    .title(title)
+                                    .content(content)
+                                    .viewCnt(viewCnt)
+                                    .name(name)
+                                    .gender(gender)
+                                    .weight(weight)
+                                    .gender(gender)
+                                    .age(age)
+                                    .neu(neu)
+                                    .status(status)
+                                    .createdAt(getCreatedAt())
+                                    //.adoptImgs(convertImgDto())
+                                    .memberId(member.getId())
+                                    .vacName(vaccine.getName())
+                                    .catType(catType.getType())
+                                    .build();
     }
 
 

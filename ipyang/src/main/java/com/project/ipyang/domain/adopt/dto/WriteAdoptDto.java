@@ -35,12 +35,8 @@ public class WriteAdoptDto {
     private String age;
     private String neu;
     private IpyangEnum.Status status;
-    //private List<AdoptImgDto> adoptImgDtos = new ArrayList<>();
 
-    //private List<MultipartFile> adoptFile;
-    //private List<String> imgOriginFile;   //원본 파일 이름
-    //private List<String> imgStoredFile;   //서버에 저장된 파일 이름
-    //private int fileAttached;     //파일 첨부 여부
-
-
+    private List<MultipartFile> adoptFile;
+    private List<String> imgOriginFile;   //원본 파일 이름
+    private List<String> imgStoredFile;   //서버에 저장된 파일 이름
 }
