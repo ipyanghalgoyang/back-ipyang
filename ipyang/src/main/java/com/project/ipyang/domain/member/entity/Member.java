@@ -129,5 +129,17 @@ public class Member extends BaseEntity {
     public void withdraw( ){
         this.delYn = IpyangEnum.Status.Y;
     }
+
+    public void charge(Long pointHistory) {
+        this.point += pointHistory;
+    }
+
+    public void expense(Long pointHistory) {
+        this.point -= pointHistory;
+    }
+
+    public void income(Long pointHistory) {
+        this.point += pointHistory;
+    }
 }
 

@@ -1,5 +1,6 @@
 package com.project.ipyang.domain.board.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.domain.board.entity.Comment;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ public class SelectCommentDto {
     private long likeCnt;
     private long memberId;
     private long boardId;
+    @JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
 

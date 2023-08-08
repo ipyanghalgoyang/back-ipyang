@@ -42,70 +42,17 @@ import java.util.Optional;
 public class BoardController {
     private final BoardService boardService;
     private final SessionService sessionService;
+    private final HttpSession session;
 
-    @ApiOperation(
-            value = "게시물 작성"
-            , notes = "사용자의 ID를 가지고  게시물을 작성한다.")
-//    @PostMapping(value = "/v1/board/{category}/write", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public ResponseDto<BoardDto> writeBoard(@PathVariable("category") IpyangEnum.BoardCategory sC,
-//                                              @RequestPart(name = "file") MultipartFile file,
-//                                           @ModelAttribute @RequestPart(name = "request") InsertBoardDto request,
-//                                             HttpSession session) throws IOException {
-//        System.out.println("BoardController.createBoard");
-//        System.out.println( " request = " + request );
-//
-//        List<MultipartFile> imgFile = Collections.singletonList(file);
-//        System.out.println("과연 전송이 됐을까? = " + imgFile);
-//            request.setBoardFile(imgFile);
-//
-//
-//        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
-//        if (loggedInUser == null) {
-//            return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-//        }
-//        Long memberId = loggedInUser.getId();
-//        if (memberId == null) {
-//            return new ResponseDto("존재하지 않는 회원입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-//        }
-//
-//        return boardService.writeBoard(sC, request, memberId);
-//    }
-
-    @PostMapping(value = "/v1/board/{category}/write")
+    @PostMapping(value = "/v1/board/{category}/write",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDto<BoardDto> writeBoard(@PathVariable("category") IpyangEnum.BoardCategory sC,
-                                             @RequestBody  InsertBoardDto request,
-                                             HttpSession session) throws IOException {
+                                             @ModelAttribute  InsertBoardDto request
+//                                            @RequestPart(required = false) MultipartFile file
+    ) throws IOException {
 
-
-
-        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
-        if (loggedInUser == null) {
-            return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
-        Long memberId = loggedInUser.getId();
-        if (memberId == null) {
-            return new ResponseDto("존재하지 않는 회원입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
-
-        return boardService.writeBoard(sC, request, memberId);
+        return boardService.writeBoard(sC, request);
     }
-
-
-
-
-
-//세션한줄코딩?
-//    @PostMapping(value = "/v1/board/{category}/write")
-//    public ResponseDto<BoardDto> createBoard(@PathVariable("category")IpyangEnum.BoardCategory sC,
-//                                           @RequestBody InsertBoardDto request,
-//                                             HttpSession session) {
-//
-//      Long memberId = sessionService.validating(session);
-//
-//        return  boardService.writeBoard(sC,request,memberId);
-//    }
-
-
 
     @ApiOperation(
             value = "전체게시물 조회"
@@ -146,37 +93,16 @@ public class BoardController {
             value = "게시글 수정"
             , notes = "선택한 게시글 제목과 내용을 수정한다.")
     @PutMapping(value = "/v1/board/{id}")
-    public ResponseDto<BoardDto> updateBoard(@PathVariable("id")Long id,@RequestBody UpdateBoardDto request
-                                                ,HttpSession session) {
-        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
-
-        if (loggedInUser == null) {
-            return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
-        Long memberId = loggedInUser.getId();
-
-        if (memberId == null) {
-            return new ResponseDto("존재하지않는 회원입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
-        return boardService.updateBoard(id,request,memberId);
+    public ResponseDto<BoardDto> updateBoard(@PathVariable("id")Long id,@RequestBody UpdateBoardDto request) {
+        return boardService.updateBoard(id,request);
     }
 
     @ApiOperation(
             value = "게시글 삭제"
             , notes = "게시글과 게시글에있는 모든 댓글을 삭제한다")
     @DeleteMapping(value = "/v1/board/{id}")
-    public ResponseDto deleteBoard(@PathVariable("id")Long id,HttpSession session) {
-        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
-
-        if (loggedInUser == null) {
-            return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
-        Long memberId = loggedInUser.getId();
-        if (memberId == null) {
-            return new ResponseDto("존재하지않는 회원입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
-
-        return new ResponseDto(boardService.deleteBoard(id,memberId));
+    public ResponseDto deleteBoard(@PathVariable("id")Long id) {
+        return new ResponseDto(boardService.deleteBoard(id));
     }
 
 
@@ -184,19 +110,9 @@ public class BoardController {
             value = "게시글 좋아요버튼"
             , notes = "실행시키면 좋아요테이블에 데이터추가 한번더 실행시 데이터 제거")
     @PostMapping(value = "/v1/board/{id}/like")
-    public ResponseDto likeBoard(@PathVariable("id")Long id,HttpSession session) {
+    public ResponseDto likeBoard(@PathVariable("id")Long id) {
 
-        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
-
-        if (loggedInUser == null) {
-            return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
-        Long memberId = loggedInUser.getId();
-        if (memberId == null) {
-            return new ResponseDto("존재하지않는 회원입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
-
-        return  boardService.likeBoard(id,memberId);
+        return  boardService.likeBoard(id);
 
     }
 
@@ -205,48 +121,21 @@ public class BoardController {
             value = "댓글 작성"
             , notes = "게시글에 댓글을 작성한다")
     @PostMapping(value = "/v1/comment/{id}")
-    public ResponseDto writeComment(@PathVariable("id")Long id,@RequestBody InsertCommentDto request,
-                                             HttpSession session) {
+    public ResponseDto writeComment(@PathVariable("id")Long id,@RequestBody InsertCommentDto request) {
 
-        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
-        if (loggedInUser == null) {
-            return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
-
-        Long memberId = loggedInUser.getId();
-
-        if (memberId == null) {
-            return new ResponseDto("존재하지않는 회원입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
-        return  boardService.writeComment(id,request,memberId);
+        return  boardService.writeComment(id,request);
     }
 
     @PutMapping(value = "/v1/comment/{id}")
-    public ResponseDto updateComment(@PathVariable("id")Long id,@RequestBody UpdateCommentDto request,HttpSession session){
-        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
-        if (loggedInUser == null) {
-            return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
+    public ResponseDto updateComment(@PathVariable("id")Long id,@RequestBody UpdateCommentDto request){
 
-        Long memberId = loggedInUser.getId();
-        if (memberId == null) {
-            return new ResponseDto("존재하지않는 회원입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
-        return  boardService.updateComment(id,request,memberId);
+        return  boardService.updateComment(id,request);
     }
 
     @DeleteMapping(value = "/v1/comment/{id}")
-    public ResponseDto deleteComment(@PathVariable("id")Long id,HttpSession session){
-        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
-        if (loggedInUser == null) {
-            return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
+    public ResponseDto deleteComment(@PathVariable("id")Long id){
 
-        Long memberId = loggedInUser.getId();
-        if (memberId == null) {
-            return new ResponseDto("존재하지않는 회원입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
-        return boardService.deleteComment(id,memberId);
+        return boardService.deleteComment(id);
     }
 
 
@@ -255,19 +144,9 @@ public class BoardController {
             value = "댓글 좋아요버튼"
             , notes = "실행시키면 좋아요테이블에 데이터추가 한번더 실행시 데이터 제거")
     @PostMapping(value = "/v1/comment/{id}/like")
-    public ResponseDto likeComment(@PathVariable("id")Long id,HttpSession session) {
+    public ResponseDto likeComment(@PathVariable("id")Long id) {
 
-        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
-
-        if (loggedInUser == null) {
-            return new ResponseDto("로그인이 필요합니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
-        Long memberId = loggedInUser.getId();
-        if (memberId == null) {
-            return new ResponseDto("존재하지않는 회원입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
-
-        return  boardService.likeComment(id,memberId);
+        return  boardService.likeComment(id);
 
     }
 
