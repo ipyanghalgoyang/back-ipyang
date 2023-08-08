@@ -27,9 +27,14 @@ public class AdoptImg extends BaseEntity {
     @Column(name = "img_stored_file")
     private String imgStoredFile;
 
-    public AdoptImg(Long id, String imgOriginFile, String imgStoredFile) {
-        this.id = id;
-        this.imgOriginFile = imgOriginFile;
-        this.imgStoredFile = imgStoredFile;
+    public static AdoptImg convertImgEntity(Adopt adopt, String imgOriginFile, String imgStoredFile) {
+        AdoptImg adoptImg = AdoptImg.builder()
+                                            .imgOriginFile(imgOriginFile)
+                                            .imgStoredFile(imgStoredFile)
+                                            .adopt(adopt)
+                                            .build();
+        return adoptImg;
     }
+
+
 }

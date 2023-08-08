@@ -4,6 +4,8 @@ import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.domain.adopt.dto.*;
 import com.project.ipyang.domain.adopt.entity.Adopt;
+import com.project.ipyang.domain.adopt.entity.AdoptImg;
+import com.project.ipyang.domain.adopt.repository.AdoptImgRepository;
 import com.project.ipyang.domain.catType.entity.CatType;
 import com.project.ipyang.domain.vaccine.entity.Vaccine;
 import com.project.ipyang.domain.adopt.repository.AdoptRepository;
@@ -19,15 +21,20 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class AdoptService {
 
     private final AdoptRepository adoptRepository;
+    private final AdoptImgRepository adoptImgRepository;
     private final MemberRepository memberRepository;
     private final VaccineRepository vaccineRepository;
     private final CatTypeRepository catTypeRepository;
@@ -42,19 +49,19 @@ public class AdoptService {
         CatType catType = catTypeRepository.findById(request.getCatId()).orElseThrow(()->new IllegalArgumentException("데이터가 존재하지 않습니다."));
 
         Adopt adopt = Adopt.builder()
-                                    .title(request.getTitle())
-                                    .content(request.getContent())
-                                    .viewCnt(0)
-                                    .name(request.getName())
-                                    .gender(request.getGender())
-                                    .weight(request.getWeight())
-                                    .age(request.getAge())
-                                    .neu(request.getNeu())
-                                    .status(IpyangEnum.Status.N)
-                                    .member(member.get())
-                                    .vaccine(vaccine)
-                                    .catType(catType)
-                                    .build();
+                .title(request.getTitle())
+                .content(request.getContent())
+                .viewCnt(0)
+                .name(request.getName())
+                .gender(request.getGender())
+                .weight(request.getWeight())
+                .age(request.getAge())
+                .neu(request.getNeu())
+                .status(IpyangEnum.Status.N)
+                .member(member.get())
+                .vaccine(vaccine)
+                .catType(catType)
+                .build();
 
         Long savedId = adoptRepository.save(adopt).getId();
 
@@ -143,12 +150,14 @@ public class AdoptService {
 
     //입양 상태, 고양이 품종, 백신 종류에 따라 필터링
     @Transactional
-    public ResponseDto filterAdopt(String adopted, List<Long> catIds, List<Long> vacIds, Pageable pageable) {
+    public ResponseDto filterAdopt(String adopted, List<Long> catIds, List<Long> vacIds,
+                                   String searchKeyword, String searchType, Pageable pageable) {
         int page = pageable.getPageNumber() - 1;                        //요청 받은 페이지
         int blockLimit = 5;                                             //한번에 5개의 페이지만 노출
         pageable = PageRequest.of(page, 10, pageable.getSort());   //페이지당 최대 10개의 데이터 노출
 
-        Page<AdoptDto> adoptDtos = adoptRepository.findFilteredAdopt(adopted, catIds, vacIds, page, pageable);
+        Page<AdoptDto> adoptDtos = adoptRepository.findFilteredAdopt(adopted, catIds, vacIds, page,
+                                                                     searchKeyword, searchType, pageable);
 
         if(!adoptDtos.isEmpty()) {
             int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1;

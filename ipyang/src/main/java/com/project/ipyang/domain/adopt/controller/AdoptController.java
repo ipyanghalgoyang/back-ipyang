@@ -10,10 +10,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -73,12 +76,21 @@ public class AdoptController {
 
 
     //입양 상태, 고양이 품종, 백신 종류에 따라 필터링
+    /*
+    * searchType
+    * ---------------------
+    * total    |   전체
+    * title    |   제목
+    * content  |   내용
+    * */
     @GetMapping(value = "/v1/adopt/filter")
     public ResponseDto filterAdopt(@RequestParam(required = false) String adopted,
                                    @RequestParam(required = false) List<Long> catIds,
                                    @RequestParam(required = false) List<Long> vacIds,
+                                   @RequestParam(required = false) String searchKeyword,
+                                   @RequestParam(required = false) String searchType,
                                    @PageableDefault(page = 1) Pageable pageable) {
-        return adoptService.filterAdopt(adopted, catIds, vacIds, pageable);
+        return adoptService.filterAdopt(adopted, catIds, vacIds, searchKeyword, searchType, pageable);
     }
 
 }

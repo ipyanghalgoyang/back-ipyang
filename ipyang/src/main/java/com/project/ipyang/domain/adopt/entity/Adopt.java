@@ -92,7 +92,7 @@ public class Adopt extends BaseEntity {
                                             .age(age)
                                             .neu(neu)
                                             .status(IpyangEnum.Status.N)
-                                            .adoptImgDtos(convertImgDto())
+                                            //.adoptImgDtos(convertImgDto())
                                             .memberId(memberId)
                                             .vacId(vaccine.getId())
                                             .catId(catType.getId())
