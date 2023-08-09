@@ -22,6 +22,7 @@ public class SelectCommentDto {
     private long boardId;
     @JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
+    private String nickname;
 
 
 
@@ -32,6 +33,7 @@ public class SelectCommentDto {
         this.content = comment.getContent();
         this.likeCnt = likeCnt;
         this.memberId = comment.getMember().getId();
+        this.nickname = comment.getMember().getNickname();
         this.boardId = comment.getBoard().getId();
         this.createdAt = comment.getCreatedAt();
 
