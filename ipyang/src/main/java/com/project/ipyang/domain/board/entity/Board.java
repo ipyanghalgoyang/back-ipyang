@@ -61,6 +61,7 @@ public class Board extends BaseEntity {   //공유하기 제보하기  홍보하
                                      .category(category)
                                     .memberId(member.getId())
                                     .createdAt(getCreatedAt())
+                                      .nickname(member.getNickname())
                                      .build();
     }
 
