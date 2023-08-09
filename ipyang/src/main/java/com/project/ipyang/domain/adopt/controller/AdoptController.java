@@ -5,15 +5,12 @@ import com.project.ipyang.config.SessionUser;
 import com.project.ipyang.domain.adopt.dto.*;
 import com.project.ipyang.domain.adopt.service.AdoptService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -24,12 +21,11 @@ public class AdoptController {
     private final HttpSession session;
 
     //입양글 작성
-    @PostMapping(value = "/v1/adopt/write")
-    public ResponseDto<WriteAdoptDto> createAdopt(@RequestBody WriteAdoptDto request) {
-        SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
-        Long memberId = loggedInUser.getId();
+    @PostMapping(value = "/v1/adopt/write",
+                 consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseDto createAdopt(@ModelAttribute WriteAdoptDto request) throws IOException {
 
-        return adoptService.createAdopt(request, memberId);
+        return adoptService.createAdopt(request);
     }
 
 
@@ -72,13 +68,23 @@ public class AdoptController {
     }
 
 
-    //입양 상태, 고양이 품종, 백신 종류에 따라 필터링
+    //입양 상태, 고양이 품종, 백신 종류에 따라 필터링 및 검색
+    /*
+    * searchType
+    * ---------------------
+    * total    |   전체
+    * title    |   제목
+    * content  |   내용
+    * ---------------------
+    * */
     @GetMapping(value = "/v1/adopt/filter")
     public ResponseDto filterAdopt(@RequestParam(required = false) String adopted,
                                    @RequestParam(required = false) List<Long> catIds,
                                    @RequestParam(required = false) List<Long> vacIds,
+                                   @RequestParam(required = false) String searchKeyword,
+                                   @RequestParam(required = false) String searchType,
                                    @PageableDefault(page = 1) Pageable pageable) {
-        return adoptService.filterAdopt(adopted, catIds, vacIds, pageable);
+        return adoptService.filterAdopt(adopted, catIds, vacIds, searchKeyword, searchType, pageable);
     }
 
 }

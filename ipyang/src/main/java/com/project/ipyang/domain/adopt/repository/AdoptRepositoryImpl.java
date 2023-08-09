@@ -27,7 +27,9 @@ public class AdoptRepositoryImpl implements AdoptRepositoryCustom {
 
     //입양 상태, 고양이 품종, 백신 종류에 따라 필터링
     @Override
-    public Page<AdoptDto> findFilteredAdopt(String adopted, List<Long> catIds, List<Long> vacIds, int page, Pageable pageable) {
+    public Page<AdoptDto> findFilteredAdopt(String adopted, List<Long> catIds, List<Long> vacIds,
+                                            int page, String searchKeyword, String searchType,
+                                            Pageable pageable) {
 
         int pageSize = pageable.getPageSize();
         int offset = page * pageSize;
@@ -42,7 +44,8 @@ public class AdoptRepositoryImpl implements AdoptRepositoryCustom {
                                               .leftJoin(adopt.vaccine, vaccine)
                                               .where(eqAdopted(adopted),
                                                      inCatType(catIds),
-                                                     inVaccine(vacIds))
+                                                     inVaccine(vacIds),
+                                                      containKeyword(searchKeyword, searchType))
                                               .orderBy(adopt.id.desc())
                                               .offset(offset)
                                               .limit(pageSize)
@@ -81,6 +84,21 @@ public class AdoptRepositoryImpl implements AdoptRepositoryCustom {
     private BooleanExpression inVaccine(List<Long> vacIds) {
         if(vacIds != null && !vacIds.isEmpty()) {
             return adopt.vaccine.id.in(vacIds);
+        }
+        return null;
+    }
+
+    //카테고리별 검색
+    private BooleanExpression containKeyword(String searchKeyword, String searchType) {
+        if(searchType.equals("total")) {
+            return adopt.title.contains(searchKeyword)
+                    .or(adopt.content.contains(searchKeyword));
+        }
+        if(searchType.equals("title")) {
+            return adopt.title.contains(searchKeyword);
+        }
+        if(searchType.equals("content")) {
+            return adopt.content.contains(searchKeyword);
         }
         return null;
     }

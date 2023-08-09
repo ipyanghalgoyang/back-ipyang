@@ -1,5 +1,6 @@
 package com.project.ipyang.domain.adopt.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.entity.BaseEntity;
 import com.project.ipyang.domain.adopt.entity.Adopt;
@@ -30,10 +31,12 @@ public class SelectAdoptDto {
     private String age;
     private String neu;
     private IpyangEnum.Status status;
-    private List<AdoptImgDto> adoptImgs = new ArrayList<>();
+    private List<String> adoptImgs;
     private Long memberId;
     private String vacName;
     private String catType;
+
+    @JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
     public SelectAdoptDto(Adopt adopt) {
@@ -47,7 +50,6 @@ public class SelectAdoptDto {
         this.age = adopt.getAge();
         this.neu = adopt.getNeu();
         this.status = adopt.getStatus();
-        this.adoptImgs = adopt.convertImgDto();
         this.memberId = adopt.getMember().getId();
         this.vacName = adopt.getVaccine().getName();
         this.catType = adopt.getCatType().getType();

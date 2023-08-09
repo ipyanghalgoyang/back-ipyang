@@ -19,12 +19,12 @@ import java.util.List;
 public class NoticeController {
 
     private final NoticeService noticeService;
+    private final HttpSession session;
 
     //안내글 작성
     @PostMapping(value = "/v1/notice/{category}/write")
     public ResponseDto<WriteNoticeDto> createNotice(@PathVariable("category") IpyangEnum.NoticeCategory selectedCategory,
-                                                    @RequestBody WriteNoticeDto request,
-                                                    HttpSession session) {
+                                                    @RequestBody WriteNoticeDto request) {
         SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
         Long memberId = loggedInUser.getId();
 

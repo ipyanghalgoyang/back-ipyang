@@ -9,5 +9,7 @@ import java.util.List;
 
 public interface AdoptRepositoryCustom {
 
-    Page<AdoptDto> findFilteredAdopt(String adopted, List<Long> catIds, List<Long> vacIds, int page, Pageable pageable);
+    Page<AdoptDto> findFilteredAdopt(String adopted, List<Long> catIds, List<Long> vacIds, int page,
+                                     String searchKeyword, String searchType,
+                                     Pageable pageable);
 }
