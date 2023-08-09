@@ -52,7 +52,6 @@ public class BoardService {
         Optional<Member> member = memberRepository.findById(memberId);
         Board writeBoard = null;
 
-        //한번 테스트 해봐 사진올려바
 
         //사진을 첨부하지아니할경우
         if (boardDto.getBoardFile().isEmpty()) {
