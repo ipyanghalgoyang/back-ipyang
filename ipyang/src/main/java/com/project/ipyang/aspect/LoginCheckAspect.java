@@ -25,9 +25,7 @@ public class LoginCheckAspect {
     }
 
 
-@Around("execution(* com.project.ipyang.domain.*.controller.*.*(..)) "
-
-                                                                                )
+@Around("execution(* com.project.ipyang.domain.*.controller.*.*(..)) ")
     public Object aroundBoardMethod(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 
         MethodSignature methodSignature = (MethodSignature) proceedingJoinPoint.getSignature();
