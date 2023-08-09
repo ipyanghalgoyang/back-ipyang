@@ -24,8 +24,10 @@ public class LoginCheckAspect {
         this.session = session;
     }
 
-    @Around("execution(* com.project.ipyang.domain.board.controller.*.*(..)) || " +
-            "execution(* com.project.ipyang.domain.product.controller.*.*(..))"
+/*    @Around("execution(* com.project.ipyang.domain.board.controller.*.*(..)) || " +
+            "execution(* com.project.ipyang.domain.product.controller.*.*(..))"*/
+@Around("execution(* com.project.ipyang.domain.*.controller.*.*(..)) "
+
                                                                                 )
     public Object aroundBoardMethod(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 
