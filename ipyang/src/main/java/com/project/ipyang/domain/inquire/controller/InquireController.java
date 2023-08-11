@@ -19,11 +19,12 @@ import java.util.List;
 public class InquireController {
 
     private final InquireService inquireService;
+    private final HttpSession session;
     private final PasswordEncoder passwordEncoder;
 
     //문의글 작성
     @PostMapping(value = "/v1/inquire/write")
-    public ResponseDto<WriteInquireDto> createInquire(@RequestBody WriteInquireDto request, HttpSession session) {
+    public ResponseDto<WriteInquireDto> createInquire(@RequestBody WriteInquireDto request) {
         SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
         Long memberId = loggedInUser.getId();
 
