@@ -25,7 +25,7 @@ public class LoginCheckAspect {
     }
 
 
-    @Around("execution(* com.project.ipyang.domain.*.controller.*.*(..)) ")
+@Around("execution(* com.project.ipyang.domain.*.controller.*.*(..)) ")
     public Object aroundBoardMethod(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 
         MethodSignature methodSignature = (MethodSignature) proceedingJoinPoint.getSignature();
@@ -39,6 +39,12 @@ public class LoginCheckAspect {
                 || methodName.equals("getAdoptList")
                 || methodName.equals("adoptDetail")
                 || methodName.equals("filterAdopt")
+                || methodName.equals("createMember")
+                || methodName.equals("selectAllMember")
+                || methodName.equals("duplicateMember")
+                || methodName.equals("duplicateNickname")
+                || methodName.equals("loginMember")
+                || methodName.equals("signUp")
 
 
         ) {
