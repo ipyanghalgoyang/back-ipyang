@@ -3,38 +3,19 @@ package com.project.ipyang.domain.board.controller;
 import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.config.SessionService;
-import com.project.ipyang.config.SessionUser;
 import com.project.ipyang.domain.board.dto.*;
-import com.project.ipyang.domain.board.entity.Board;
-import com.project.ipyang.domain.board.repository.BoardRepository;
 import com.project.ipyang.domain.board.service.BoardService;
-import com.project.ipyang.domain.member.dto.UpdateMemberDto;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,7 +27,7 @@ public class BoardController {
 
     @PostMapping(value = "/v1/board/{category}/write",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDto<BoardDto> writeBoard(@PathVariable("category") IpyangEnum.BoardCategory sC,
+    public ResponseDto writeBoard(@PathVariable("category") IpyangEnum.BoardCategory sC,
                                              @ModelAttribute  InsertBoardDto request
 //                                            @RequestPart(required = false) MultipartFile file
     ) throws IOException {

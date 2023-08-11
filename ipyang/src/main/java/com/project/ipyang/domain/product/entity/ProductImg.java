@@ -30,4 +30,10 @@ public class ProductImg extends BaseEntity {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    public ProductImg(String imgOriginFile, String imgStoredFile, Product product) {
+        this.imgOriginFile = imgOriginFile;
+        this.imgStoredFile = imgStoredFile;
+        this.product = product;
+
+    }
 }
