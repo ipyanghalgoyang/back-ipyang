@@ -25,7 +25,7 @@ public class ReadProductDto {
     private String loc;
     private Long memberId;
     private String nickname;
-    private List<ProductImg> imageFiles;
+    private List<String> imgList;
     @JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 }

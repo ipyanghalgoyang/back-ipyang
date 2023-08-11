@@ -2,6 +2,7 @@ package com.project.ipyang.domain.product.service;
 
 import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.response.ResponseDto;
+import com.project.ipyang.common.util.S3Utils;
 import com.project.ipyang.config.SessionUser;
 import com.project.ipyang.domain.board.entity.Board;
 import com.project.ipyang.domain.member.entity.Member;
@@ -19,9 +20,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,24 +37,56 @@ public class ProductService {
     private final MemberRepository memberRepository;
     private final ProductImgRepository productImgRepository;
     private final HttpSession session;
+    private final S3Utils s3Utils;
 
     @Transactional
     public ResponseDto createProduct(IpyangEnum.ProductType pT,InsertProductDto request) {
         SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
         Long memberId = loggedInUser.getId();
+
+
         Member member = memberRepository.findById(memberId).orElse(null);
+        Product createProduct = null;
 
-        Product product = Product.builder()
-                .name(request.getName())
-                .content(request.getContent())
-                .status(IpyangEnum.Status.N)
-                .price(request.getPrice())
-                .type(pT)
-                .loc(request.getLoc())
-                .member(member)
-                .build();
+        if(request.getImageFiles().isEmpty()){
+            Product product = Product.builder()
+                    .name(request.getName())
+                    .content(request.getContent())
+                    .status(IpyangEnum.Status.N)
+                    .price(request.getPrice())
+                    .type(pT)
+                    .loc(request.getLoc())
+                    .member(member)
+                    .build();
 
-        productRepository.save(product);
+            productRepository.save(product);
+        }
+        else {
+            Product product = Product.builder()
+                    .name(request.getName())
+                    .content(request.getContent())
+                    .status(IpyangEnum.Status.N)
+                    .price(request.getPrice())
+                    .type(pT)
+                    .loc(request.getLoc())
+                    .member(member)
+                    .build();
+
+            createProduct =   productRepository.save(product);
+            Long savedId = createProduct.getId();
+            Product productId = productRepository.findById(savedId).get();
+            for (MultipartFile productFile : request.getImageFiles() ) {
+                String imgOriginFile = productFile.getOriginalFilename();
+                String imgUrl = s3Utils.uploadFileToS3(productFile,"product");
+
+                ProductImg productImg = new ProductImg(imgOriginFile,imgUrl,productId);
+                productImgRepository.save(productImg);
+
+            }
+
+
+        }
+
 
         return new ResponseDto("판매글 작성성공", HttpStatus.OK.value());
     }
@@ -98,6 +133,12 @@ public class ProductService {
         }
         Product findProduct = productOptional.get();
         ReadProductDto readProductDto = findProduct.convertReadDto();
+        List<String> imgList = new ArrayList<>();
+        for (ProductImg productImg : findProduct.getProductImgs()) {
+            imgList.add(productImg.getImgStoredFile());
+        }
+        if(!imgList.isEmpty()) readProductDto.setImgList(imgList);
+
         return new ResponseDto(readProductDto,HttpStatus.OK.value());
     }
 
