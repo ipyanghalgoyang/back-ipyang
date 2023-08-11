@@ -24,6 +24,7 @@ public class ReadProductDto {
     private IpyangEnum.ProductType type;
     private String loc;
     private Long memberId;
+    private String nickname;
     private List<ProductImg> imageFiles;
     @JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;

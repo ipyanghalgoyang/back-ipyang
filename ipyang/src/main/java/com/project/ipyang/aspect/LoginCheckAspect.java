@@ -36,6 +36,12 @@ public class LoginCheckAspect {
                 || methodName.equals("readBoard")
                 || methodName.equals("selectAllProduct")
                 || methodName.equals("readProduct")
+                || methodName.equals("createMember")
+                || methodName.equals("selectAllMember")
+                || methodName.equals("duplicateMember")
+                || methodName.equals("duplicateNickname")
+                || methodName.equals("loginMember")
+                || methodName.equals("signUp")
 
 
         ) {

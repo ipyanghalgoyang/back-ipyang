@@ -65,8 +65,6 @@ public class ProductService {
         int blockLimit = 5;
         Page<Product> products = productRepository.findAll( PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
 
-
-
         Page<SelectProductDto> selectProductDtos = products.map(product -> new SelectProductDto(
             product.getId(),
             product.getName(),
