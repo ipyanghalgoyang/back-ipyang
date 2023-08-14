@@ -29,4 +29,10 @@ public class InquireImg extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "inquire_id")
     private Inquire inquire;
+
+    public InquireImg(String imgOriginFile, String imgStoredFile, Inquire inquire) {
+        this.imgOriginFile = imgOriginFile;
+        this.imgStoredFile = imgStoredFile;
+        this.inquire = inquire;
+    }
 }

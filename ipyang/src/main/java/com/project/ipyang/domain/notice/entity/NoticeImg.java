@@ -27,4 +27,10 @@ public class NoticeImg extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "notice_id")
     private Notice notice;
+
+    public NoticeImg(String imgOriginFile, String imgStoredFile, Notice notice) {
+        this.imgOriginFile = imgOriginFile;
+        this.imgStoredFile = imgStoredFile;
+        this.notice = notice;
+    }
 }

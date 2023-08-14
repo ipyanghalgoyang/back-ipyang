@@ -9,9 +9,12 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +23,19 @@ import java.util.List;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class WriteInquireDto {
+    @NotEmpty(message = "제목을 입력해주십시오")
     private String title;
+
+    @NotEmpty(message = "내용을 입력해주십시오")
     private String content;
+
+    @NotEmpty(message = "비밀번호를 입력해주십시오")
+    @Size(min = 4, max = 4, message = "비밀번호는 4자리로 입력해주십시오")
     private String passwd;
+
     private IpyangEnum.Status status;
-    private Long memberId;
-    private List<InquireImgDto> inquireImgDtos = new ArrayList<>();
+    private List<MultipartFile> inquireFile;
+    private List<String> imgOriginFile;   //원본 파일 이름
+    private List<String> imgStoredFile;   //서버에 저장된 파일 이름
 
 }

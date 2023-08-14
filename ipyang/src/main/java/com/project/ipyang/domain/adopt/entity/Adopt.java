@@ -81,24 +81,6 @@ public class Adopt extends BaseEntity {
 
     //------------- Entity → DTO --------------------------------------------------------------------------------
 
-    public WriteAdoptDto convertWriteDto(Long memberId) {
-        return new WriteAdoptDto().builder()
-                                            .title(title)
-                                            .content(content)
-                                            .view(0)
-                                            .name(name)
-                                            .gender(gender)
-                                            .weight(weight)
-                                            .age(age)
-                                            .neu(neu)
-                                            .status(IpyangEnum.Status.N)
-                                            //.adoptImgDtos(convertImgDto())
-                                            .memberId(memberId)
-                                            .vacId(vaccine.getId())
-                                            .catId(catType.getId())
-                                            .build();
-    }
-
     public SelectAdoptDto convertDto() {
         return SelectAdoptDto.builder()
                                     .id(id)
@@ -113,7 +95,6 @@ public class Adopt extends BaseEntity {
                                     .neu(neu)
                                     .status(status)
                                     .createdAt(getCreatedAt())
-                                    //.adoptImgs(convertImgDto())
                                     .memberId(member.getId())
                                     .vacName(vaccine.getName())
                                     .catType(catType.getType())

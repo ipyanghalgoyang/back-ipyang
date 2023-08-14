@@ -36,6 +36,13 @@ public class LoginCheckAspect {
                 || methodName.equals("readBoard")
                 || methodName.equals("selectAllProduct")
                 || methodName.equals("readProduct")
+                || methodName.equals("getAdoptList")
+                || methodName.equals("adoptDetail")
+                || methodName.equals("filterAdopt")
+                || methodName.equals("selectAllNotice")
+                || methodName.equals("noticeDetail")
+                || methodName.equals("selectAllInquire")
+                || methodName.equals("searchInquire")
 
 
         ) {

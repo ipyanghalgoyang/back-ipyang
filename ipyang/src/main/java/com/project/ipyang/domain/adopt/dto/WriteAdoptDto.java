@@ -18,14 +18,12 @@ import java.util.List;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class WriteAdoptDto {
-
     @NotEmpty(message = "제목을 입력해주십시오")
     private String title;
 
     @NotEmpty(message = "내용을 입력해주십시오")
     private String content;
 
-    private Long memberId;
     private Long vacId;
     private Long catId;
     private int view;

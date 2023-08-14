@@ -18,13 +18,11 @@ import java.util.List;
 public class AdoptController {
 
     private final AdoptService adoptService;
-    private final HttpSession session;
 
     //입양글 작성
     @PostMapping(value = "/v1/adopt/write",
                  consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDto createAdopt(@ModelAttribute WriteAdoptDto request) throws IOException {
-
         return adoptService.createAdopt(request);
     }
 
