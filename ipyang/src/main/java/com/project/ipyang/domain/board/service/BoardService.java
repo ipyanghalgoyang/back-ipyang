@@ -63,7 +63,6 @@ public class BoardService {
              writeBoard = boardRepository.save(board);
         }
         else {
-            System.out.println("BoardService.이미지 첨부된글작성");
                 Board board = Board.builder().title(boardDto.getTitle())
                         .content(boardDto.getContent())
                         .category(sC)
