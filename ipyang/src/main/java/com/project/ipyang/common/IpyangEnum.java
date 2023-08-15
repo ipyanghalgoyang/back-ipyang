@@ -44,6 +44,9 @@ public class IpyangEnum {
 
     }
 
+    public enum MessageType {
+        ENTER, TALK, QUIT
+    }
 
 
 }

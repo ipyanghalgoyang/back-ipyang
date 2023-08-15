@@ -45,7 +45,7 @@ public class AdoptRepositoryImpl implements AdoptRepositoryCustom {
                                               .where(eqAdopted(adopted),
                                                      inCatType(catIds),
                                                      inVaccine(vacIds),
-                                                      containKeyword(searchKeyword, searchType))
+                                                     containKeyword(searchKeyword, searchType))
                                               .orderBy(adopt.id.desc())
                                               .offset(offset)
                                               .limit(pageSize)
@@ -58,7 +58,8 @@ public class AdoptRepositoryImpl implements AdoptRepositoryCustom {
                                         .leftJoin(adopt.vaccine, vaccine)
                                         .where(eqAdopted(adopted),
                                                 inCatType(catIds),
-                                                inVaccine(vacIds));
+                                                inVaccine(vacIds),
+                                                containKeyword(searchKeyword, searchType));
 
         return PageableExecutionUtils.getPage(content, pageable, count::fetchOne);
 

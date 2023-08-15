@@ -61,25 +61,15 @@ public class Inquire extends BaseEntity {
                                     .build();
     }
 
-    public WriteInquireDto convertWriteDto(Long memberId) {
-        return new WriteInquireDto().builder()
-                .title(title)
-                .content(content)
-                .passwd(passwd)
-                .status(IpyangEnum.Status.N)
-                .memberId(memberId)
-                .inquireImgDtos(convertImgDto())
-                .build();
-    }
 
     public SelectInquireDto convertSelectDto() {
         return new SelectInquireDto().builder()
                                                 .id(id)
-                                                .memberId(member.getId())
+                                                .email(member.getEmail())
+                                                .nickName(member.getNickname())
                                                 .title(title)
                                                 .content(content)
                                                 .replyContent(replyContent)
-                                                .inquireImgDtos(convertImgDto())
                                                 .createdAt(getCreatedAt())
                                                 .build();
     }

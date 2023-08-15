@@ -1,6 +1,7 @@
 package com.project.ipyang.domain.adopt.service;
 
 import com.project.ipyang.common.IpyangEnum;
+import com.project.ipyang.common.dto.PageDto;
 import com.project.ipyang.common.response.ResponseDto;
 import com.project.ipyang.config.SessionUser;
 import com.project.ipyang.domain.adopt.dto.*;
@@ -101,11 +102,9 @@ public class AdoptService {
                 adoptImgRepository.save(adoptImg);
             }
         }
-        if(writeAdopt != null) {
-            return new ResponseDto("게시글을 작성했습니다", HttpStatus.OK.value());
-        } else {
-            return new ResponseDto("에러가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
+        if(writeAdopt != null) return new ResponseDto("게시글을 작성했습니다", HttpStatus.OK.value());
+         else return new ResponseDto("에러가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+
     }
 
 
@@ -126,7 +125,7 @@ public class AdoptService {
             int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1;
             int endPage = ((startPage + blockLimit - 1) < adoptDtos.getTotalPages()) ? startPage + blockLimit - 1 : adoptDtos.getTotalPages();
 
-            AdoptPageDto adoptPage = new AdoptPageDto(adoptDtos, startPage, endPage);
+            PageDto adoptPage = new PageDto(adoptDtos, startPage, endPage);
 
             return new ResponseDto(adoptPage, HttpStatus.OK.value());
         }
@@ -209,7 +208,7 @@ public class AdoptService {
         if(!adoptDtos.isEmpty()) {
             int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1;
             int endPage = ((startPage + blockLimit - 1) < adoptDtos.getTotalPages()) ? startPage + blockLimit - 1 : adoptDtos.getTotalPages();
-            AdoptPageDto adoptFilterPage = new AdoptPageDto(adoptDtos, startPage, endPage);
+            PageDto adoptFilterPage = new PageDto(adoptDtos, startPage, endPage);
 
             return new ResponseDto(adoptFilterPage, HttpStatus.OK.value());
         }

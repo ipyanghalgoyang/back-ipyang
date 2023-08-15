@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,12 +23,7 @@ import java.util.List;
 public class WriteNoticeDto {
     private String title;
     private String content;
-    private Long memberId;
-    private List<NoticeImgDto> noticeImgs = new ArrayList<>();
-
-    @JsonIgnore
-    public HttpSession getSession() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        return request.getSession();
-    }
+    private List<MultipartFile> noticeFile;
+    private List<String> imgOriginFile;   //원본 파일 이름
+    private List<String> imgStoredFile;   //서버에 저장된 파일 이름
 }

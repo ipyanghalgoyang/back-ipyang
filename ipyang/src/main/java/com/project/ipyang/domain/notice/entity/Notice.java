@@ -42,41 +42,13 @@ public class Notice extends BaseEntity {
     private List<NoticeImg> noticeImgs = new ArrayList<>();
 
 
-    public List<NoticeImgDto> convertImgDto() {
-        if(noticeImgs == null || noticeImgs.isEmpty()) return Collections.emptyList();
-
-        List<NoticeImgDto>  noticeImgDtoList = new ArrayList<>();
-        NoticeImgDto noticeImgDto = null;
-
-        for(NoticeImg noticeImg : noticeImgs) {
-            noticeImgDtoList.add(noticeImgDto.builder()
-                                                    .id(noticeImg.getId())
-                                                    .imgOriginFile(noticeImg.getImgOriginFile())
-                                                    .imgStoredFile(noticeImg.getImgStoredFile())
-                                                    .build());
-
-        }
-        return noticeImgDtoList;
-    }
-
-
     public SelectNoticeDto convertSelectDto() {
-        return new SelectNoticeDto().builder()
-                .id(id)
-                .category(category)
-                .title(title)
-                .content(content)
-                .build();
-    }
-
-
-    public WriteNoticeDto convertWriteDto(Long memberId) {
-        return new WriteNoticeDto().builder()
-                                            .title(title)
-                                            .content(content)
-                                            .memberId(memberId)
-                                            .noticeImgs(convertImgDto())
-                                            .build();
+        return SelectNoticeDto.builder()
+                                        .id(id)
+                                        .category(category)
+                                        .title(title)
+                                        .content(content)
+                                        .build();
     }
 
 
