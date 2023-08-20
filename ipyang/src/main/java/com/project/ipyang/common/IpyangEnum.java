@@ -21,6 +21,10 @@ public class IpyangEnum {
         FOOD,TOY,SNACK,SAND,BEAUTY,ETC
     }
 
+  public enum ProductUsed{
+       USED,UNUSED
+    }
+
 
     public enum NoticeCategory {
         NOTICE,

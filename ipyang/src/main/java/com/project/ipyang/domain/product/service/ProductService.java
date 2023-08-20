@@ -13,6 +13,7 @@ import com.project.ipyang.domain.product.entity.ProductImg;
 import com.project.ipyang.domain.product.repository.ProductRepository;
 import com.project.ipyang.domain.product.repository.ProductImgRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,12 +27,14 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductService {
 
     private final ProductRepository productRepository;
@@ -56,6 +59,7 @@ public class ProductService {
                     .status(IpyangEnum.Status.N)
                     .price(request.getPrice())
                     .type(request.getType())
+                    .used(request.getUsed())
                     .loc(request.getLoc())
                     .member(member)
                     .build();
@@ -69,6 +73,7 @@ public class ProductService {
                     .status(IpyangEnum.Status.N)
                     .price(request.getPrice())
                     .type(request.getType())
+                    .used(request.getUsed())
                     .loc(request.getLoc())
                     .member(member)
                     .build();
@@ -100,19 +105,18 @@ public class ProductService {
         int pageLimit = 10;
         int blockLimit = 5;
         Page<Product> products = productRepository.findAll( PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
-
-        Page<SelectProductDto> selectProductDtos = products.map(product -> new SelectProductDto(
-            product.getId(),
-            product.getName(),
-            product.getStatus(),
-            product.getPrice(),
-            product.getType(),
-            product.getLoc(),
-            product.getMember().getId(),
-            product.getMember().getNickname(),
-            product.getCreatedAt()
-        ));
-
+        List<ProductImg> imageFiles = productImgRepository.findAll();
+        Page<SelectProductDto> selectProductDtos = products.map(product -> {
+                List<String> imageFileList = imageFiles.stream()
+                        .filter(image -> product.getId() == image.getProduct().getId())
+                        .map(data -> data.getImgStoredFile())
+                        .collect(Collectors.toList());
+                if(imageFileList.size()==0){
+                    imageFileList = Arrays.asList("https://ipyang-bucket.s3.ap-northeast-2.amazonaws.com/common/image.png");
+                }
+                return new SelectProductDto(product,imageFileList);
+            }
+        );
                 //products.stream().map(SelectProductDto::new).collect(Collectors.toList());
 
 
@@ -139,6 +143,8 @@ public class ProductService {
             imgList.add(productImg.getImgStoredFile());
         }
         if(!imgList.isEmpty()) readProductDto.setImgList(imgList);
+        else  readProductDto.setImgList(Arrays.asList("https://ipyang-bucket.s3.ap-northeast-2.amazonaws.com/common/image.png"));
+
 
         return new ResponseDto(readProductDto,HttpStatus.OK.value());
     }

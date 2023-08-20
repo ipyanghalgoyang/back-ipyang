@@ -22,10 +22,11 @@ public class SelectProductDto  {
     private IpyangEnum.Status status;
     private int price;
     private IpyangEnum.ProductType type;
+    private IpyangEnum.ProductUsed used;
     private String loc;
     private Long memberId;
     private String nickname;
-    private List<ProductImg> imageFiles;
+    private List<String> imageFiles;
     @JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
@@ -35,6 +36,7 @@ public class SelectProductDto  {
         this.status = product.getStatus();
         this.price = product.getPrice();
         this.type = product.getType();
+        this.used = product.getUsed();
         this.loc = product.getLoc();
         this.memberId = product.getMember().getId();
     }
@@ -50,5 +52,17 @@ public class SelectProductDto  {
         this.memberId = memberId;
         this.nickname = nickname;
         this.createdAt = createdAt;
+    }
+    public SelectProductDto(Product product , List<String> imageList) {
+        this.id = product.getId();
+        this.name = product.getName();
+        this.status = product.getStatus();
+        this.price = product.getPrice();
+        this.type = product.getType();
+        this.loc = product.getLoc();
+        this.memberId = product.getMember().getId();
+        this.nickname = product.getMember().getNickname();
+        this.createdAt = product.getCreatedAt();
+        this.imageFiles = imageList;
     }
 }

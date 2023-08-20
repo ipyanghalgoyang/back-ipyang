@@ -29,6 +29,10 @@ public class Product extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private IpyangEnum.Status status;
 
+    @Column(name = "p_used")//중고인지 새거인지
+    @Enumerated(EnumType.STRING)
+    private IpyangEnum.ProductUsed used;
+
     @Column(name = "p_price")
     private int price;
 
@@ -85,6 +89,7 @@ public class Product extends BaseEntity {
                 .status(status)
                 .price(price)
                 .type(type)
+                .used(used)
                 .loc(loc)
                 .memberId(member.getId())
                 .nickname(member.getNickname())
