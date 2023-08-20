@@ -44,7 +44,7 @@ public class BoardService {
     private final HttpSession session;
     private final S3Utils s3Utils;
     @Transactional
-    public ResponseDto writeBoard(IpyangEnum.BoardCategory sC, InsertBoardDto boardDto
+    public ResponseDto writeBoard( InsertBoardDto boardDto
                                   //MultipartFile file
                                  ) throws IOException {
         SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
@@ -59,7 +59,7 @@ public class BoardService {
 
             Board board = Board.builder().title(boardDto.getTitle())
                     .content(boardDto.getContent())
-                    .category(sC)
+                    .category(boardDto.getCategory())
                     .member(member.get())
                     .build();
              writeBoard = boardRepository.save(board);
@@ -69,7 +69,7 @@ public class BoardService {
 
             Board board = Board.builder().title(boardDto.getTitle())
                         .content(boardDto.getContent())
-                        .category(sC)
+                        .category(boardDto.getCategory())
                         .member(member.get())
                         .build();
             writeBoard = boardRepository.save(board);
