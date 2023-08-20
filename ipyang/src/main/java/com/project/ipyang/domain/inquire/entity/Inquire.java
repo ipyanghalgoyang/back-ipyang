@@ -48,19 +48,6 @@ public class Inquire extends BaseEntity {
     @OneToMany(mappedBy = "inquire")
     private List<InquireImg> inquireImgs = new ArrayList<>();
 
-    public InquireDto convertDto() {
-        return InquireDto.builder()
-                                    .id(id)
-                                    .title(title)
-                                    .content(content)
-                                    .passwd(passwd)
-                                    .status(status)
-                                    .replyContent(replyContent)
-                                    .member(member)
-                                    .inquireImgDtos(convertImgDto())
-                                    .build();
-    }
-
 
     public SelectInquireDto convertSelectDto() {
         return new SelectInquireDto().builder()
@@ -72,23 +59,6 @@ public class Inquire extends BaseEntity {
                                                 .replyContent(replyContent)
                                                 .createdAt(getCreatedAt())
                                                 .build();
-    }
-
-
-    public List<InquireImgDto> convertImgDto() {
-        if(inquireImgs == null || inquireImgs.isEmpty()) return Collections.emptyList();
-
-        List<InquireImgDto> inquireImgDtoList = new ArrayList<>();
-        InquireImgDto inquireImgDto = null;
-
-        for(InquireImg inquireImg : inquireImgs) {
-            inquireImgDtoList.add(inquireImgDto.builder()
-                                                        .id(inquireImg.getId())
-                                                        .imgOriginFile(inquireImg.getImgOriginFile())
-                                                        .imgStoredFile(inquireImg.getImgStoredFile())
-                                                        .build());
-        }
-        return inquireImgDtoList;
     }
 
 
