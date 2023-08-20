@@ -52,9 +52,11 @@ public class BoardService {
         Optional<Member> member = memberRepository.findById(memberId);
         Board writeBoard = null;
 
-
+        log.info("조건문 들어가기전 어디가 문제일까" );
+        log.info("조건문 들어가기전 어디가 문제일까 boardDto.getBoardFile().size()->"+ boardDto.getBoardFile() );
         //사진을 첨부하지아니할경우
-        if (boardDto.getBoardFile().isEmpty()) {
+        if (boardDto.getBoardFile()== null || boardDto.getBoardFile().isEmpty()) {
+
             Board board = Board.builder().title(boardDto.getTitle())
                     .content(boardDto.getContent())
                     .category(sC)
@@ -63,7 +65,9 @@ public class BoardService {
              writeBoard = boardRepository.save(board);
         }
         else {
-                Board board = Board.builder().title(boardDto.getTitle())
+            log.info(" 이미지가 있는경우 boardDto.getBoardFile().size()->"+  boardDto.getBoardFile().size());
+
+            Board board = Board.builder().title(boardDto.getTitle())
                         .content(boardDto.getContent())
                         .category(sC)
                         .member(member.get())
