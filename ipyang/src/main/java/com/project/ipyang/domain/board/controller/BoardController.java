@@ -10,10 +10,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -28,9 +31,14 @@ public class BoardController {
     @PostMapping(value = "/v1/board/{category}/write",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDto writeBoard(@PathVariable("category") IpyangEnum.BoardCategory sC,
-                                             @ModelAttribute  InsertBoardDto request
-//                                            @RequestPart(required = false) MultipartFile file
+                                             @ModelAttribute @Valid InsertBoardDto request,
+                                            BindingResult bindingResult
     ) throws IOException {
+
+        if(bindingResult.hasErrors()){
+            log.info("result : {}",bindingResult);
+            return new ResponseDto("게시글을 작성 에러.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
 
         return boardService.writeBoard(sC, request);
     }
@@ -51,12 +59,7 @@ public class BoardController {
     @GetMapping(value = "/v1/board/{category}")
     public ResponseDto<List<SelectBoardDto>> selectSomeBoard(@PathVariable ("category") IpyangEnum.BoardCategory sC
     ,@PageableDefault(page = 1) Pageable pageable) {
-        System.out.println("pageable은?"+pageable);
-
-
         return boardService.selectSomeBoard(sC,pageable);
-
-
     }
 
     @ApiOperation(
