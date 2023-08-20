@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,12 +43,11 @@ public class NoticeService {
 
     //안내글 작성
     @Transactional
-    public ResponseDto createNotice(IpyangEnum.NoticeCategory selectedCategory, WriteNoticeDto request) {
+    public ResponseDto createNotice(IpyangEnum.NoticeCategory selectedCategory, WriteNoticeDto request) throws IOException {
         SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
         Long memberId = loggedInUser.getId();
 
         Optional<Member> member = memberRepository.findById(memberId);
-
         Notice writeNotice = null;
 
         //파일 미첨부
@@ -117,7 +117,7 @@ public class NoticeService {
         }
 
         Notice findNotice = notice.get();
-        SelectNoticeDto detailNotice = notice.get().convertSelectDto();
+        SelectNoticeDto detailNotice = findNotice.convertSelectDto();
 
         List<String> noticeImgs = new ArrayList<>();
 

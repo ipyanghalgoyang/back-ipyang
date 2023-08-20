@@ -17,13 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Builder
-@AllArgsConstructor
-@RequiredArgsConstructor
 public class WriteNoticeDto {
     private String title;
     private String content;
     private List<MultipartFile> noticeFile;
-    private List<String> imgOriginFile;   //원본 파일 이름
-    private List<String> imgStoredFile;   //서버에 저장된 파일 이름
 }
