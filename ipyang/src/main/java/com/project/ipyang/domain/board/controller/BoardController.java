@@ -28,10 +28,9 @@ public class BoardController {
     private final SessionService sessionService;
     private final HttpSession session;
 
-    @PostMapping(value = "/v1/board/{category}/write",
+    @PostMapping(value = "/v1/board/write",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDto writeBoard(@PathVariable("category") IpyangEnum.BoardCategory sC,
-                                             @ModelAttribute @Valid InsertBoardDto request,
+    public ResponseDto writeBoard(@ModelAttribute @Valid InsertBoardDto request,
                                             BindingResult bindingResult
     ) throws IOException {
 
@@ -40,7 +39,7 @@ public class BoardController {
             return new ResponseDto("게시글을 작성 에러.", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
 
-        return boardService.writeBoard(sC, request);
+        return boardService.writeBoard( request);
     }
 
     @ApiOperation(

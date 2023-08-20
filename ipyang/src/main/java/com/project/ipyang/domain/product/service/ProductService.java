@@ -13,6 +13,7 @@ import com.project.ipyang.domain.product.entity.ProductImg;
 import com.project.ipyang.domain.product.repository.ProductRepository;
 import com.project.ipyang.domain.product.repository.ProductImgRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,7 +41,7 @@ public class ProductService {
     private final S3Utils s3Utils;
 
     @Transactional
-    public ResponseDto createProduct(IpyangEnum.ProductType pT,InsertProductDto request) {
+    public ResponseDto createProduct(InsertProductDto request) {
         SessionUser loggedInUser = (SessionUser) session.getAttribute("loggedInUser");
         Long memberId = loggedInUser.getId();
 
@@ -48,13 +49,13 @@ public class ProductService {
         Member member = memberRepository.findById(memberId).orElse(null);
         Product createProduct = null;
 
-        if(request.getImageFiles().isEmpty()){
+        if(ObjectUtils.isEmpty(request.getImageFiles())){
             Product product = Product.builder()
                     .name(request.getName())
                     .content(request.getContent())
                     .status(IpyangEnum.Status.N)
                     .price(request.getPrice())
-                    .type(pT)
+                    .type(request.getType())
                     .loc(request.getLoc())
                     .member(member)
                     .build();
@@ -67,7 +68,7 @@ public class ProductService {
                     .content(request.getContent())
                     .status(IpyangEnum.Status.N)
                     .price(request.getPrice())
-                    .type(pT)
+                    .type(request.getType())
                     .loc(request.getLoc())
                     .member(member)
                     .build();

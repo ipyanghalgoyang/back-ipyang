@@ -28,12 +28,11 @@ public class ProductController {
         private final ProductService productService;
         private final HttpSession session;
 
-        @PostMapping(value = "/v1/product/{type}/write",
+        @PostMapping(value = "/v1/product/write",
                 consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-        public ResponseDto createProduct(@PathVariable("type")IpyangEnum.ProductType pT,
-                                         @ModelAttribute InsertProductDto request)
+        public ResponseDto createProduct(@ModelAttribute InsertProductDto request)
                 throws IOException {
-                return productService.createProduct(pT,request);
+                return productService.createProduct(request);
         }
 
         //전체 상품 데이터 가져오기
