@@ -22,6 +22,7 @@ public class ReadProductDto {
     private IpyangEnum.Status status;
     private int price;
     private IpyangEnum.ProductType type;
+    private IpyangEnum.ProductUsed used;
     private String loc;
     private Long memberId;
     private String nickname;

@@ -17,6 +17,7 @@ public class InsertProductDto  {
     private int price;
     private String loc;
     private  IpyangEnum.ProductType type;
+    private  IpyangEnum.ProductUsed used;
     private String content;
     private List<MultipartFile> imageFiles;
 
