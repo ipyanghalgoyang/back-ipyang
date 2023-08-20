@@ -36,6 +36,7 @@ public class InquireService {
     private final InquireRepository inquireRepository;
     private final InquireImgRepository inquireImgRepository;
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
     private final HttpSession session;
     private final S3Utils s3Utils;
 
@@ -115,7 +116,7 @@ public class InquireService {
     public ResponseDto<SelectInquireDto> selectInquire(Long id, String inputPasswd) {
         Inquire inquire = inquireRepository.findById(id).orElseThrow(()->new IllegalArgumentException("문의글이 존재하지 않습니다."));
 
-        if(inquire != null && inquire.getPasswd().equals(inputPasswd)) {
+        if(inquire != null && passwordEncoder.matches(inputPasswd, inquire.getPasswd())) {
             SelectInquireDto detailInquire = inquire.convertSelectDto();
 
             List<String> inquireImgs = new ArrayList<>();
