@@ -5,16 +5,21 @@ import com.project.ipyang.config.SessionUser;
 import com.project.ipyang.domain.adopt.dto.*;
 import com.project.ipyang.domain.adopt.service.AdoptService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class AdoptController {
 
     private final AdoptService adoptService;
@@ -22,7 +27,12 @@ public class AdoptController {
     //입양글 작성
     @PostMapping(value = "/v1/adopt/write",
                  consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDto createAdopt(@ModelAttribute WriteAdoptDto request) throws IOException {
+    public ResponseDto createAdopt(@ModelAttribute @Valid WriteAdoptDto request,
+                                   BindingResult bindingResult) throws IOException {
+        if(bindingResult.hasErrors()) {
+            log.info("result : " + bindingResult);
+            return new ResponseDto("게시물 작성 에러", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
         return adoptService.createAdopt(request);
     }
 

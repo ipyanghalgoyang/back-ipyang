@@ -56,7 +56,7 @@ public class AdoptService {
         Adopt writeAdopt = null;
 
         //파일 미첨부
-        if(request.getAdoptFile().isEmpty()) {
+        if(request.getAdoptFile().isEmpty() || request.getAdoptFile() == null) {
             Adopt adopt = Adopt.builder()
                                         .title(request.getTitle())
                                         .content(request.getContent())

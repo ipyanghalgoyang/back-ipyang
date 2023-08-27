@@ -35,7 +35,4 @@ public class WriteInquireDto {
 
     private IpyangEnum.Status status;
     private List<MultipartFile> inquireFile;
-    private List<String> imgOriginFile;   //원본 파일 이름
-    private List<String> imgStoredFile;   //서버에 저장된 파일 이름
-
 }

@@ -45,20 +45,23 @@ public class Inquire extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "inquire")
+    @OneToMany(mappedBy = "inquire", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<InquireImg> inquireImgs = new ArrayList<>();
 
 
     public SelectInquireDto convertSelectDto() {
-        return new SelectInquireDto().builder()
-                                                .id(id)
-                                                .email(member.getEmail())
-                                                .nickName(member.getNickname())
-                                                .title(title)
-                                                .content(content)
-                                                .replyContent(replyContent)
-                                                .createdAt(getCreatedAt())
-                                                .build();
+        SelectInquireDto dto = new SelectInquireDto();
+        dto.setId(id);
+        dto.setEmail(member.getEmail());
+        dto.setNickName(member.getNickname());
+        dto.setTitle(title);
+        dto.setContent(content);
+        dto.setCreatedAt(getCreatedAt());
+
+        if(replyContent == null) dto.setReplyContent("답변이 등록되지 않았습니다");
+        else dto.setReplyContent(replyContent);
+
+        return dto;
     }
 
 
@@ -72,6 +75,11 @@ public class Inquire extends BaseEntity {
     public void update(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    //기존 이미지 제거
+    public void deleteImgs() {
+        inquireImgs.clear();
     }
 
 
