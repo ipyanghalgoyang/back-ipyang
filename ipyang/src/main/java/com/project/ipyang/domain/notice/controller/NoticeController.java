@@ -2,23 +2,24 @@ package com.project.ipyang.domain.notice.controller;
 
 import com.project.ipyang.common.IpyangEnum;
 import com.project.ipyang.common.response.ResponseDto;
-import com.project.ipyang.config.SessionUser;
-import com.project.ipyang.domain.notice.dto.SelectNoticeDto;
 import com.project.ipyang.domain.notice.dto.UpdateNoticeDto;
 import com.project.ipyang.domain.notice.dto.WriteNoticeDto;
-import com.project.ipyang.domain.notice.dto.NoticeDto;
 import com.project.ipyang.domain.notice.service.NoticeService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class NoticeController {
 
     private final NoticeService noticeService;
@@ -27,7 +28,12 @@ public class NoticeController {
     @PostMapping(value = "/v1/notice/{category}/write",
                 consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDto createNotice(@PathVariable("category") IpyangEnum.NoticeCategory selectedCategory,
-                                    @ModelAttribute WriteNoticeDto request) throws IOException {
+                                    @ModelAttribute @Valid WriteNoticeDto request,
+                                    BindingResult bindingResult) throws IOException {
+        if(bindingResult.hasErrors()) {
+            log.info("result : {}", bindingResult);
+            return new ResponseDto("게시글 작성 에러 발생", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
         return noticeService.createNotice(selectedCategory, request);
     }
 

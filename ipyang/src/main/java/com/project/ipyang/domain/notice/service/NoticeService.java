@@ -51,7 +51,7 @@ public class NoticeService {
         Notice writeNotice = null;
 
         //파일 미첨부
-        if(request.getNoticeFile().isEmpty()) {
+        if(request.getNoticeFile() == null || request.getNoticeFile().isEmpty()) {
             Notice notice = Notice.builder()
                                             .title(request.getTitle())
                                             .content(request.getContent())

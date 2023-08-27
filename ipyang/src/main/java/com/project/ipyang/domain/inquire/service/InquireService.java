@@ -50,7 +50,7 @@ public class InquireService {
         Inquire writeInquire = null;
 
         //파일 미첨부
-        if(request.getInquireFile().isEmpty()) {
+        if(request.getInquireFile() == null || request.getInquireFile().isEmpty()) {
             Inquire inquire = Inquire.builder()
                                             .title(request.getTitle())
                                             .content(request.getContent())
@@ -132,22 +132,31 @@ public class InquireService {
 
 
     //특정 문의글 수정
-    /*
-    * 현재 이미지 수정은 제외하였음
-    * */
     @Transactional
     public ResponseDto updateInquire(Long id, UpdateInquireDto request) {
         Optional<Inquire> inquire = inquireRepository.findById(id);
-        if(!inquire.isPresent()) {
+        if (!inquire.isPresent()) {
             return new ResponseDto("존재하지 않는 글입니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
 
-        if(inquire.get().isPasswordMatch(request.getPasswd())) {
-            inquire.get().update(request.getTitle(), request.getContent());
-            return new ResponseDto("수정되었습니다", HttpStatus.OK.value());
-        }
-        else return new ResponseDto("비밀번호가 일치하지 않습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        if (passwordEncoder.matches(request.getPasswd(), inquire.get().getPasswd())) {
+            //파일 미첨부
+            if (request.getInquireFile() == null || request.getInquireFile().isEmpty()) {
+                inquire.get().update(request.getTitle(), request.getContent());
+            } else {
+                inquire.get().update(request.getTitle(), request.getContent());
+                inquire.get().deleteImgs();    //기존 파일 제거
+                for (MultipartFile newFile : request.getInquireFile()) {
+                    String imgOriginFile = newFile.getOriginalFilename();
+                    String imgUrl = s3Utils.uploadFileToS3(newFile, "inquire");
 
+                    InquireImg newInquireImg = new InquireImg(imgOriginFile, imgUrl, inquire.get());
+                    inquireImgRepository.save(newInquireImg);
+                }
+                return new ResponseDto("수정되었습니다", HttpStatus.OK.value());
+            }
+        }
+        return new ResponseDto("비밀번호가 일치하지 않습니다", HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
 
